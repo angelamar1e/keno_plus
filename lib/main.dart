@@ -1,7 +1,14 @@
-import 'package:flutter/material.dart';
+import 'shared/app/app_imports.dart';
 
 void main() {
-  runApp(const MainApp());
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Lock orientation to portrait only
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((
+    _,
+  ) {
+    runApp(const MainApp());
+  });
 }
 
 class MainApp extends StatelessWidget {
@@ -9,12 +16,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+    return MaterialApp.router(
+      title: AppStrings.appName,
+      theme: ThemeData(
+        scaffoldBackgroundColor: AppColors.primary,
+        fontFamily: AppFonts.grandstander,
+        textTheme: TextTheme(
+          displayLarge: TextStyle(fontFamily: AppFonts.inter),
         ),
       ),
+      debugShowCheckedModeBanner: false,
+      routerConfig: router,
     );
   }
 }
