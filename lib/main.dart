@@ -1,4 +1,4 @@
-import 'shared/app/app_imports.dart';
+import 'core/values/app_imports.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,10 +20,7 @@ class MainApp extends StatelessWidget {
       title: AppStrings.appName,
       theme: ThemeData(
         scaffoldBackgroundColor: AppColors.primary,
-        fontFamily: AppFonts.grandstander,
-        textTheme: TextTheme(
-          displayLarge: TextStyle(fontFamily: AppFonts.inter),
-        ),
+        fontFamily: AppFonts.inter,
       ),
       debugShowCheckedModeBanner: false,
       routerConfig: router,
