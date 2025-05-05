@@ -2,7 +2,7 @@
 class User {
   final String firstName;
   final String lastName;
-  final DateTime birthdate;
+  final String birthdate;
   final int age;
   final String phoneNumber;
   final String email;
@@ -24,7 +24,7 @@ class User {
     return {
       'firstName': firstName,
       'lastName': lastName,
-      'birthdate': birthdate.toIso8601String(),
+      'birthdate': birthdate,
       'age': age,
       'phoneNumber': phoneNumber,
       'email': email,
