@@ -4,8 +4,8 @@ sealed class AuthenticationEvent {
   const AuthenticationEvent();
 }
 
-class OnCreatingUser extends AuthenticationEvent {
+class CreatingUser extends AuthenticationEvent {
   final User user;
 
-  OnCreatingUser({required this.user});
+  CreatingUser({required this.user});
 }
