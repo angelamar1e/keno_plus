@@ -1,5 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:keno_plus/core/utils/password_utils.dart';
 import 'package:keno_plus/features/authentication/domain/models/user.dart';
 import 'package:keno_plus/features/authentication/presentation/bloc/authentication_bloc.dart';
 
@@ -9,6 +12,7 @@ class TextFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
   final Function()? onTap;
   final Function(String)? onChanged;
+  final TapRegionCallback? onTapOutside;
 
   const TextFieldWidget({
     super.key,
@@ -17,6 +21,7 @@ class TextFieldWidget extends StatelessWidget {
     this.controller,
     this.onTap,
     this.onChanged,
+    this.onTapOutside,
   });
 
   @override
@@ -31,6 +36,8 @@ class TextFieldWidget extends StatelessWidget {
         controller: controller,
         onTap: onTap,
         onChanged: onChanged,
+        onTapOutside: onTapOutside,
+        // TODO: Add validation logic onTapOutside of the TextField
       ),
     );
   }
@@ -46,19 +53,20 @@ class Spacer extends StatelessWidget {
 }
 
 Future<List<String>> _showDatePicker(BuildContext context) async {
-  late DateTime dateOfBirth;
+  late String dateOfBirth;
   late int age;
 
   final DateTime? picked = await showDatePicker(
     context: context,
-    initialDate: DateTime.now(),
+    // initialDate: DateTime.now(),
     firstDate: DateTime(1900),
-    lastDate: DateTime.now(),
+    // latest valid date is at least 18 years from now
+    lastDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
   );
 
   if (picked != null) {
-    dateOfBirth = picked;
-    age = DateTime.now().year - dateOfBirth.year;
+    dateOfBirth = '${picked.month + picked.day + picked.year}';
+    age = DateTime.now().year - picked.year;
   }
 
   return [dateOfBirth.toString(), age.toString()];
@@ -126,6 +134,7 @@ class SignUpScreen extends StatelessWidget {
                   isReadOnly: true,
                   onTap:
                       () => _showDatePicker(context).then((value) {
+                        // Set the date of birth and age returned from the date picker
                         birthdateController.text = value.first;
                         ageController.text = value.last;
                       }),
@@ -176,7 +185,9 @@ class SignUpScreen extends StatelessWidget {
                     final age = ageController.text;
                     final phoneNumber = phoneNumberController.text;
                     final username = usernameController.text;
-                    final password = passwordController.text;
+                    final password = PasswordUtils.hashPassword(
+                      passwordController.text,
+                    );
                     // final confirmPassword = confirmPasswordController.text;
 
                     User newUser = User(
