@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/core/router/router.dart';
+import 'package:keno_plus/core/utils/injections.dart';
 import 'package:keno_plus/features/authentication/domain/use_cases/create_user.dart';
 import 'package:keno_plus/features/authentication/presentation/bloc/authentication_bloc.dart';
-import 'package:keno_plus/features/authentication/user_injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initAuthInjections();
+  await initInjections();
   runApp(const MainApp());
 }
 

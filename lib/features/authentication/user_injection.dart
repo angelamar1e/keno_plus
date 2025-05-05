@@ -6,7 +6,7 @@ import 'package:keno_plus/features/authentication/data/repository/user_repositor
 import 'package:keno_plus/features/authentication/domain/repository/user_repository.dart';
 import 'package:keno_plus/features/authentication/domain/use_cases/create_user.dart';
 
-final GetIt sl = GetIt.instance;
+final sl = GetIt.instance;
 
 initAuthInjections() async {
   // Initialize the database
