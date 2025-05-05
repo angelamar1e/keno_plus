@@ -9,12 +9,12 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl(this.userDataSource);
 
   @override
-  Future<Either<Fail<dynamic>, void>> createUser(User user) async {
+  Future<Either<Fail, void>> createUser(User user) async {
     try {
       await userDataSource.createUser(user);
       return Right(null);
     } catch (e) {
-      return Left(Fail(e));
+      return Left(Fail(e.toString()));
     }
   }
 }
