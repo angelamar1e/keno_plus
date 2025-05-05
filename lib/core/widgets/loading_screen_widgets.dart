@@ -6,7 +6,7 @@ class ShowLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircularProgressIndicator.adaptive(
-      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
     );
   }
 }

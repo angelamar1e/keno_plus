@@ -5,6 +5,6 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(content: Placeholder());
+    return KenoMainLayout(content: Placeholder());
   }
 }

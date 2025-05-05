@@ -1,3 +1,5 @@
+import 'package:keno_plus/core/themes/app_theme.dart';
+
 import 'core/values/app_imports.dart';
 
 void main() {
@@ -18,10 +20,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: AppStrings.appName,
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.primary,
-        fontFamily: AppFonts.inter,
-      ),
+      theme: AppTheme.theme,
       debugShowCheckedModeBanner: false,
       routerConfig: router,
     );

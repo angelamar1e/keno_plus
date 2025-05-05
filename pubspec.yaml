@@ -27,15 +27,17 @@ flutter:
 
   assets:
     - assets/images/kenoplus_logo.png
-    - assets/images/menu_background.png
+    - assets/images/menu_bg.png
+    - assets/images/classic_keno_bg.png
+    - assets/images/mini_keno_bg.png
+    - assets/images/kenoplus_element_bg.png
 
   fonts:
     - family: Grandstander
       fonts:
-        - asset: assets\fonts\grandstander\Grandstander-Italic-VariableFont_wght.ttf
-        - asset: assets\fonts\grandstander\Grandstander-VariableFont_wght.ttf
+        - asset: assets/fonts/grandstander/Grandstander-Italic-VariableFont_wght.ttf
+        - asset: assets/fonts/grandstander/Grandstander-VariableFont_wght.ttf
     - family: Inter
       fonts:
-        - asset: assets\fonts\inter\Inter-Italic-VariableFont_opsz,wght.ttf
-
-        - asset: assets\fonts\inter\Inter-VariableFont_opsz,wght.ttf
+        - asset: assets/fonts/inter/Inter-Italic-VariableFont_opsz,wght.ttf
+        - asset: assets/fonts/inter/Inter-VariableFont_opsz,wght.ttf

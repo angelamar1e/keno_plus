@@ -1,22 +1,169 @@
-import '../values/app_imports.dart';
+import 'package:keno_plus/core/values/app_imports.dart';
 
-class MainLayout extends StatelessWidget {
+class KenoMainLayout extends StatelessWidget {
   final Widget content;
 
-  const MainLayout({super.key, required this.content});
+  const KenoMainLayout({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
-        const MainBackground(),
-        SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: content,
-          ),
-        ),
-      ],
+      children: [const KenoMainBackground(), content],
+    );
+  }
+}
+
+class KenoMainButton extends StatefulWidget {
+  final VoidCallback? onPressed;
+  final String text;
+  final String? fontFamily;
+  final double? fontSize;
+  final FontWeight? fontWeight;
+  final bool? italic;
+  final Color? textColor;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final EdgeInsets? padding;
+  final IconData? icon;
+  final double? iconSize;
+  final Color? iconColor;
+  final bool showGlow;
+
+  const KenoMainButton({
+    super.key,
+    this.onPressed,
+    required this.text,
+    this.fontFamily,
+    this.fontSize,
+    this.fontWeight,
+    this.italic,
+    this.textColor,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.padding,
+    this.icon,
+    this.iconSize,
+    this.iconColor,
+    this.showGlow = true,
+  });
+
+  @override
+  State<KenoMainButton> createState() => _KenoMainButtonState();
+}
+
+class _KenoMainButtonState extends State<KenoMainButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _shadowAlphaAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+
+    // Scale animation: normal to expanded
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    // Shadow alpha animation: increase visibility when pressed
+    _shadowAlphaAnimation = Tween<double>(
+      begin: 100,
+      end: 200,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerDown: (_) => _controller.forward(),
+      onPointerUp: (_) => _controller.reverse(),
+      onPointerCancel: (_) => _controller.reverse(),
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              decoration:
+                  widget.showGlow
+                      ? BoxDecoration(
+                        borderRadius: BorderRadius.circular(32.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.white.withAlpha(
+                              _shadowAlphaAnimation.value.toInt(),
+                            ),
+                            blurRadius: 16.0,
+                            spreadRadius: 2.0,
+                            offset: Offset.zero,
+                          ),
+                        ],
+                      )
+                      : null,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: widget.onPressed,
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                      widget.backgroundColor ?? AppColors.secondary,
+                    ),
+                    foregroundColor: WidgetStateProperty.all(
+                      widget.foregroundColor ?? AppColors.primary,
+                    ),
+                    padding: WidgetStateProperty.all(
+                      widget.padding ??
+                          EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 24.0,
+                          ),
+                    ),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32.0),
+                      ),
+                    ),
+                    elevation: WidgetStateProperty.all(0),
+                  ),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Row(
+                      children: [
+                        if (widget.icon != null) ...[
+                          Icon(
+                            widget.icon,
+                            size: widget.iconSize ?? 26.0,
+                            color: widget.iconColor,
+                          ),
+                          SizedBox(width: 8.0),
+                        ],
+                        KenoText(
+                          text: widget.text,
+                          fontFamily: widget.fontFamily ?? AppFonts.inter,
+                          fontSize: widget.fontSize ?? 16.0,
+                          color: widget.textColor,
+                          fontWeight: widget.fontWeight ?? FontWeight.w600,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -64,19 +211,20 @@ class KenoBottomNavBar extends StatelessWidget {
             icon: Icon(icon),
             iconSize: 32.0,
             color:
-                currentIndex == pageIndex ? AppColors.secondary : Colors.white,
+                currentIndex == pageIndex
+                    ? AppColors.secondary
+                    : AppColors.white,
             onPressed: () {
               onTap();
             },
           ),
-          Text(
-            label,
-            style: TextStyle(
-              color:
-                  currentIndex == pageIndex
-                      ? AppColors.secondary
-                      : Colors.white,
-            ),
+          KenoText(
+            text: label,
+            fontSize: 16.0,
+            color:
+                currentIndex == pageIndex
+                    ? AppColors.secondary
+                    : AppColors.white,
           ),
         ],
       ),
@@ -84,8 +232,94 @@ class KenoBottomNavBar extends StatelessWidget {
   }
 }
 
-class GradientBackground extends StatelessWidget {
-  const GradientBackground({super.key});
+class KenoText extends StatelessWidget {
+  final String text;
+  final double? fontSize;
+  final TextAlign? textAlign;
+  final FontWeight? fontWeight;
+  final bool? italic;
+  final Color? color;
+  final String? fontFamily;
+  final bool? glow;
+  final Color? glowColor;
+  final double? glowIntensity;
+
+  const KenoText({
+    super.key,
+    required this.text,
+    this.fontSize,
+    this.textAlign,
+    this.fontWeight,
+    this.italic,
+    this.color,
+    this.fontFamily,
+    this.glow,
+    this.glowColor,
+    this.glowIntensity,
+  });
+
+  double _getFontWeightValue(FontWeight? weight) {
+    if (weight == null) return 400;
+
+    switch (weight) {
+      case FontWeight.w100:
+        return 100;
+      case FontWeight.w200:
+        return 200;
+      case FontWeight.w300:
+        return 300;
+      case FontWeight.w400:
+        return 400;
+      case FontWeight.w500:
+        return 500;
+      case FontWeight.w600:
+        return 600;
+      case FontWeight.w700:
+        return 700;
+      case FontWeight.w800:
+        return 800;
+      case FontWeight.w900:
+        return 900;
+      default:
+        return 400;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontFamily: fontFamily ?? 'Inter',
+        fontSize: fontSize ?? 14.0,
+        color: color,
+        fontVariations: [
+          FontVariation('wght', _getFontWeightValue(fontWeight)),
+        ],
+        fontStyle: italic == true ? FontStyle.italic : FontStyle.normal,
+        shadows:
+            glow == true
+                ? [
+                  Shadow(
+                    color: (glowColor ?? color ?? Colors.white.withAlpha(200)),
+                    blurRadius: (glowIntensity ?? 20) * 0.5,
+                    offset: Offset(0, 0),
+                  ),
+                  Shadow(
+                    color: (glowColor ?? color ?? Colors.white).withAlpha(100),
+                    blurRadius: glowIntensity ?? 20,
+                    offset: Offset(0, 0),
+                  ),
+                ]
+                : null,
+      ),
+      textAlign: textAlign ?? TextAlign.center,
+    );
+  }
+}
+
+class KenoGradientBackground extends StatelessWidget {
+  const KenoGradientBackground({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -103,8 +337,8 @@ class GradientBackground extends StatelessWidget {
   }
 }
 
-class MainBackground extends StatelessWidget {
-  const MainBackground({super.key});
+class KenoMainBackground extends StatelessWidget {
+  const KenoMainBackground({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +347,7 @@ class MainBackground extends StatelessWidget {
         SizedBox(
           height: double.infinity,
           width: double.infinity,
-          child: Image.asset(AppImages.menuBackground, fit: BoxFit.cover),
+          child: Image.asset(AppImages.menuBg, fit: BoxFit.cover),
         ),
         Container(
           height: double.infinity,
@@ -121,9 +355,9 @@ class MainBackground extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Colors.black,
-                AppColors.gradientStart.withAlpha(127),
-                AppColors.gradientEnd.withAlpha(127),
+                AppColors.black.withAlpha(50),
+                AppColors.gradientStart.withAlpha(100),
+                AppColors.gradientEnd.withAlpha(150),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,

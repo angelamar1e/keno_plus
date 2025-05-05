@@ -35,7 +35,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          GradientBackground(),
+          KenoGradientBackground(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
