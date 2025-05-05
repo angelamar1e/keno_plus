@@ -1,10 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/features/authentication/domain/models/user.dart';
-import 'package:keno_plus/features/authentication/domain/use_cases/create_user.dart';
 import 'package:keno_plus/features/authentication/presentation/bloc/authentication_bloc.dart';
-import 'package:keno_plus/features/authentication/user_injection.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final String labelText;
@@ -44,11 +41,11 @@ class Spacer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(height: 20);
+    return const SizedBox(height: 7);
   }
 }
 
-Future<String> _showDatePicker(BuildContext context) async {
+Future<List<String>> _showDatePicker(BuildContext context) async {
   late DateTime dateOfBirth;
   late int age;
 
@@ -64,7 +61,7 @@ Future<String> _showDatePicker(BuildContext context) async {
     age = DateTime.now().year - dateOfBirth.year;
   }
 
-  return age.toString();
+  return [dateOfBirth.toString(), age.toString()];
 }
 
 class SignUpScreen extends StatelessWidget {
@@ -79,8 +76,7 @@ class SignUpScreen extends StatelessWidget {
   final confirmPasswordController = TextEditingController();
 
   void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
+    // Clean up the controller when the widget is removed from the widget tree.
     firstNameController.dispose();
     lastNameController.dispose();
     emailController.dispose();
@@ -99,7 +95,11 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
-        final authBloc = AuthenticationBloc(createUser: sl<CreateUser>());
+        // Check if the user is authenticated
+        if (state.isAuthenticated) {
+          return const Center(child: Text('User is already authenticated'));
+          // If authenticated, navigate to the home screen
+        }
 
         return Scaffold(
           appBar: AppBar(title: const Text('Sign Up')),
@@ -107,8 +107,6 @@ class SignUpScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Sign Up'),
-                Spacer(),
                 // Text field for first name
                 TextFieldWidget(
                   labelText: 'First Name',
@@ -124,11 +122,12 @@ class SignUpScreen extends StatelessWidget {
                 // Datepicker for date of birth
                 TextFieldWidget(
                   labelText: 'Date of Birth',
+                  controller: birthdateController,
                   isReadOnly: true,
                   onTap:
                       () => _showDatePicker(context).then((value) {
-                        birthdateController.text = value;
-                        ageController.text = value;
+                        birthdateController.text = value.first;
+                        ageController.text = value.last;
                       }),
                 ),
                 Spacer(),
@@ -178,12 +177,12 @@ class SignUpScreen extends StatelessWidget {
                     final phoneNumber = phoneNumberController.text;
                     final username = usernameController.text;
                     final password = passwordController.text;
-                    final confirmPassword = confirmPasswordController.text;
+                    // final confirmPassword = confirmPasswordController.text;
 
                     User newUser = User(
                       firstName: firstName,
                       lastName: lastName,
-                      birthdate: DateTime.parse(birthdate),
+                      birthdate: birthdate,
                       age: int.parse(age),
                       username: username,
                       email: email,
@@ -191,7 +190,10 @@ class SignUpScreen extends StatelessWidget {
                       phoneNumber: phoneNumber,
                     );
 
-                    authBloc.add(CreatingUser(user: newUser));
+                    // Trigger the CreatingUser event
+                    context.read<AuthenticationBloc>().add(
+                      CreatingUser(user: newUser),
+                    );
                   },
                   child: const Text('Sign Up'),
                 ),
