@@ -36,14 +36,17 @@ class _LoadingScreenState extends State<LoadingScreen> {
       body: Stack(
         children: [
           KenoGradientBackground(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ShowLogo(logo: AppImages.logo),
-              SizedBox(height: 32.0),
-              if (_showProgressIndicator) ShowLoading(),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(child: KenoShowLogo(logo: AppImages.logo)),
+                SizedBox(height: 32.0),
+                if (_showProgressIndicator) KenoShowLoading(),
+              ],
+            ),
           ),
         ],
       ),

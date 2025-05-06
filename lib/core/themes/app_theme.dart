@@ -14,6 +14,30 @@ class AppTheme {
         secondary: AppColors.secondary,
         tertiary: AppColors.tertiary,
       ),
+      // Add this InputDecorationTheme
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 18.0,
+          horizontal: 24.0,
+        ),
+        labelStyle: TextStyle(color: AppColors.black),
+        hintStyle: TextStyle(color: AppColors.black.withAlpha(100)),
+        suffixIconColor: AppColors.black,
+        prefixIconColor: AppColors.black,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(32.0),
+          borderSide: BorderSide(color: AppColors.black),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(32.0),
+          borderSide: BorderSide(color: AppColors.black),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(32.0),
+          borderSide: BorderSide(color: AppColors.secondary, width: 2),
+        ),
+        focusColor: AppColors.secondary,
+      ),
     );
   }
 

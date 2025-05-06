@@ -2,6 +2,7 @@ class AppStrings {
   static const String appName = 'Keno Plus';
   static const String home = 'Home';
   static const String profile = 'Profile';
+  static const String play = 'Start Playing';
   static const String learnKenoPlus = 'Learn How to Play Keno Plus';
   static const String gameMode = 'Game Mode';
   static const String homeMainText = 'Fast Picks, Big Wins!';

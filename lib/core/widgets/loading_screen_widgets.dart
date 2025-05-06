@@ -1,7 +1,7 @@
 import 'package:keno_plus/core/values/app_imports.dart';
 
-class ShowLoading extends StatelessWidget {
-  const ShowLoading({super.key});
+class KenoShowLoading extends StatelessWidget {
+  const KenoShowLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,18 +11,15 @@ class ShowLoading extends StatelessWidget {
   }
 }
 
-class ShowLogo extends StatelessWidget {
+class KenoShowLogo extends StatelessWidget {
+  final double? height;
+  final double? width;
   final String logo;
 
-  const ShowLogo({super.key, required this.logo});
+  const KenoShowLogo({super.key, required this.logo, this.height, this.width});
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Image.asset(logo),
-      ),
-    );
+    return SizedBox(height: height, width: width, child: Image.asset(logo));
   }
 }

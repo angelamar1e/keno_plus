@@ -12,7 +12,7 @@ export 'package:keno_plus/core/values/app_fonts.dart';
 export 'package:keno_plus/core/values/app_colors.dart';
 export 'package:keno_plus/core/values/app_images.dart';
 export 'package:keno_plus/core/values/app_game_modes.dart';
-export 'package:keno_plus/features/authentication/domain/models/game_mode.dart';
+export 'package:keno_plus/core/models/game_mode.dart';
 export 'package:keno_plus/core/widgets/loading_screen_widgets.dart';
 export 'package:keno_plus/core/widgets/loading_screen/loading_screen.dart';
 export 'package:keno_plus/core/widgets/home/home.dart';

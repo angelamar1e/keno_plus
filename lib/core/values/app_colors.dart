@@ -4,8 +4,8 @@ class AppColors {
   static const Color white = Colors.white;
   static const Color black = Colors.black;
   static const Color transparent = Colors.transparent;
-  static const Color primary = Color(0xFF_05033D);
-  static const Color secondary = Color(0xFF_FCD119);
+  static const Color primary = Color(0xFF_060351);
+  static const Color secondary = Color(0xFF_F8AB00);
   static const Color tertiary = Color(0xFF_683FEA);
   static const Color selected = Color(0xFF_4337C1);
   static const Color cardPrimary = Color(0xFF_846CCF);

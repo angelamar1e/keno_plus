@@ -23,7 +23,7 @@ final GoRouter router = GoRouter(
         }
 
         return Scaffold(
-          body: KenoMainLayout(content: child),
+          body: KenoMainWidget(content: child),
           bottomNavigationBar: KenoBottomNavBar(currentIndex: currentIndex),
         );
       },

@@ -1,15 +1,83 @@
 import 'package:keno_plus/core/values/app_imports.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  Widget build(BuildContext context) {
+    return KenoMainWidget(content: KenoStartLayout() /*KenoGameModeLayout()*/);
+  }
 }
 
-class _HomeState extends State<Home> {
-  final PageController _pageController = PageController();
+// SECOND PAGE
+class KenoGameModeLayout extends StatefulWidget {
+  const KenoGameModeLayout({super.key});
+
+  @override
+  State<KenoGameModeLayout> createState() => _KenoGameModeLayoutState();
+}
+
+class _KenoGameModeLayoutState extends State<KenoGameModeLayout> {
   int _currentPage = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        // Background carousel
+        KenoGameCarousel(
+          initialPage: _currentPage,
+          onPageChanged: (index) {
+            setState(() {
+              _currentPage = index;
+            });
+          },
+        ),
+
+        // Main layout
+        Column(
+          children: [
+            KenoTopBar(
+              text: AppStrings.gameMode,
+              textColor: AppColors.secondary,
+            ),
+            Spacer(),
+            KenoGameBar(
+              gameMode: AppGameModes.modes[_currentPage],
+              currentPage: _currentPage,
+              color: AppColors.secondary,
+              shadowColor: AppColors.black,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class KenoGameCarousel extends StatefulWidget {
+  final Function(int) onPageChanged;
+  final int initialPage;
+
+  const KenoGameCarousel({
+    super.key,
+    required this.onPageChanged,
+    this.initialPage = 0,
+  });
+
+  @override
+  State<KenoGameCarousel> createState() => _KenoGameCarouselState();
+}
+
+class _KenoGameCarouselState extends State<KenoGameCarousel> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: widget.initialPage);
+  }
 
   @override
   void dispose() {
@@ -19,89 +87,54 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return KenoMainLayout(
-      content: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Background carousel
-          PageView.builder(
-            controller: _pageController,
-            itemCount: AppGameModes.modes.length,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-              });
-            },
-            itemBuilder: (context, index) {
-              return KenoGameBg(imagePath: AppGameModes.modes[index].image);
-            },
-          ),
-
-          Column(
-            children: [
-              KenoTopBar(),
-              Spacer(),
-              // Bottom bar that changes with the carousel
-              KenoGameBar(gameMode: AppGameModes.modes[_currentPage]),
-            ],
-          ),
-
-          // Page indicator dots
-          Positioned(
-            bottom: 200, // Position above the game bar
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                AppGameModes.modes.length,
-                (index) => Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4),
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color:
-                        _currentPage == index
-                            ? AppColors.secondary
-                            : AppColors.white.withOpacity(0.5),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return PageView.builder(
+      controller: _pageController,
+      itemCount: AppGameModes.modes.length,
+      onPageChanged: widget.onPageChanged,
+      itemBuilder: (context, index) {
+        return KenoGameBg(imagePath: AppGameModes.modes[index].image);
+      },
     );
   }
 }
 
 class KenoGameBar extends StatelessWidget {
   final GameMode gameMode;
+  final int _currentPage;
+  final Color color;
+  final Color shadowColor;
 
-  const KenoGameBar({super.key, required this.gameMode});
+  const KenoGameBar({
+    super.key,
+    required this.gameMode,
+    required int currentPage,
+    required this.color,
+    required this.shadowColor,
+  }) : _currentPage = currentPage;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.secondary,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+        color: color,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withAlpha(100),
-            blurRadius: 16.0,
-            spreadRadius: 4.0,
-            offset: Offset(0, -10),
+            color: shadowColor.withAlpha(100),
+            blurRadius: 32.0,
+            spreadRadius: 8.0,
+            offset: Offset(0, -16),
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 26.0, horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            KenoPageIndicator(currentPage: _currentPage),
+            SizedBox(height: 8.0),
             KenoText(
               text: gameMode.title,
               fontWeight: FontWeight.w900,
@@ -113,13 +146,14 @@ class KenoGameBar extends StatelessWidget {
             SizedBox(height: 16.0),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 18.0),
-              child: KenoMainButton(
+              child: KenoButton(
                 text: gameMode.buttonText,
                 icon: Icons.play_arrow_rounded,
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
                 iconColor: AppColors.secondary,
-                showGlow: false,
+                isGlow: true,
+                glowColor: AppColors.primary,
                 onPressed: () {},
               ),
             ),
@@ -130,13 +164,45 @@ class KenoGameBar extends StatelessWidget {
   }
 }
 
+class KenoPageIndicator extends StatelessWidget {
+  final int _currentPage;
+
+  const KenoPageIndicator({super.key, required int currentPage})
+    : _currentPage = currentPage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        AppGameModes.modes.length,
+        (index) => Container(
+          margin: EdgeInsets.symmetric(horizontal: 4),
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color:
+                _currentPage == index
+                    ? AppColors.primary
+                    : AppColors.white.withAlpha(150),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class KenoTopBar extends StatelessWidget {
-  const KenoTopBar({super.key});
+  final String text;
+  final Color textColor;
+
+  const KenoTopBar({super.key, required this.text, required this.textColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 30.0),
+      padding: EdgeInsets.only(bottom: 128.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [AppColors.primary, AppColors.transparent],
@@ -151,15 +217,14 @@ class KenoTopBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               KenoText(
-                text: AppStrings.gameMode,
+                text: text,
                 fontFamily: AppFonts.grandstander,
                 textAlign: TextAlign.start,
                 fontWeight: FontWeight.w900,
                 fontSize: 36.0,
-                color: AppColors.secondary,
-                glow: true,
+                color: textColor,
+                isGlow: true,
               ),
-              const SizedBox(height: 8.0),
             ],
           ),
         ),
@@ -193,7 +258,7 @@ class KenoStartLayout extends StatelessWidget {
     return Stack(
       children: [
         Positioned(bottom: 0, left: 0, right: 0, child: KenoElementBg()),
-        Positioned(top: 72, left: 0, right: 0, child: KenoStart()),
+        Positioned(top: 160, left: 0, right: 0, child: KenoStart()),
       ],
     );
   }
@@ -225,21 +290,34 @@ class KenoStart extends StatelessWidget {
             fontWeight: FontWeight.w900,
             fontSize: 36.0,
             color: AppColors.secondary,
+            isGlow: true,
           ),
           const SizedBox(height: 8.0),
           KenoText(
             text: AppStrings.homeSubText,
             fontFamily: AppFonts.inter,
             textAlign: TextAlign.center,
+            fontSize: 14.0,
           ),
-          const SizedBox(height: 100.0),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 28.0),
-            child: KenoMainButton(
-              text: AppStrings.learnKenoPlus,
-              icon: Icons.play_arrow_rounded,
-              onPressed: () {}, // CHANGE LAYOUT TO GAME MODE
-            ),
+          const SizedBox(height: 62.0),
+          KenoButton(
+            text: AppStrings.play,
+            icon: Icons.play_arrow_rounded,
+            isGlow: true,
+            margin: 18.0,
+            onPressed: () {}, // CHANGE LAYOUT TO GAME MODE
+          ),
+          const SizedBox(height: 16.0),
+          KenoButton(
+            text: AppStrings.learnKenoPlus,
+            icon: Icons.question_mark_rounded,
+            iconSize: 20.0,
+            foregroundColor: AppColors.secondary,
+            backgroundColor: AppColors.transparent,
+            hasBorder: true,
+            borderColor: AppColors.secondary,
+            margin: 18.0,
+            onPressed: () {}, // CHANGE LAYOUT TO GAME MODE
           ),
         ],
       ),

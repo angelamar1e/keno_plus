@@ -1,19 +1,17 @@
 import 'package:keno_plus/core/values/app_imports.dart';
 
-class KenoMainLayout extends StatelessWidget {
+class KenoMainWidget extends StatelessWidget {
   final Widget content;
 
-  const KenoMainLayout({super.key, required this.content});
+  const KenoMainWidget({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [const KenoMainBackground(), content],
-    );
+    return Stack(children: [const KenoMainBackground(), content]);
   }
 }
 
-class KenoMainButton extends StatefulWidget {
+class KenoButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final String text;
   final String? fontFamily;
@@ -27,9 +25,14 @@ class KenoMainButton extends StatefulWidget {
   final IconData? icon;
   final double? iconSize;
   final Color? iconColor;
-  final bool showGlow;
+  final bool isGlow;
+  final Color? glowColor;
+  final bool hasBorder;
+  final Color? borderColor;
+  final double? borderWidth;
+  final double? margin;
 
-  const KenoMainButton({
+  const KenoButton({
     super.key,
     this.onPressed,
     required this.text,
@@ -44,14 +47,19 @@ class KenoMainButton extends StatefulWidget {
     this.icon,
     this.iconSize,
     this.iconColor,
-    this.showGlow = true,
+    this.isGlow = false,
+    this.glowColor,
+    this.hasBorder = false,
+    this.borderColor,
+    this.borderWidth,
+    this.margin,
   });
 
   @override
-  State<KenoMainButton> createState() => _KenoMainButtonState();
+  State<KenoButton> createState() => _KenoButtonState();
 }
 
-class _KenoMainButtonState extends State<KenoMainButton>
+class _KenoButtonState extends State<KenoButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -96,23 +104,27 @@ class _KenoMainButtonState extends State<KenoMainButton>
           return Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
+              margin: EdgeInsets.symmetric(horizontal: widget.margin ?? 0.0),
               decoration:
-                  widget.showGlow
+                  widget.isGlow
                       ? BoxDecoration(
-                        borderRadius: BorderRadius.circular(32.0),
+                        borderRadius: BorderRadius.circular(24.0),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.white.withAlpha(
-                              _shadowAlphaAnimation.value.toInt(),
-                            ),
-                            blurRadius: 16.0,
-                            spreadRadius: 2.0,
+                            color:
+                                widget.glowColor ??
+                                AppColors.white.withAlpha(
+                                  _shadowAlphaAnimation.value.toInt(),
+                                ),
+                            blurRadius: 8.0,
+                            spreadRadius: 1.0,
                             offset: Offset.zero,
                           ),
                         ],
                       )
                       : null,
               child: SizedBox(
+                height: 50,
                 child: ElevatedButton(
                   onPressed: widget.onPressed,
                   style: ButtonStyle(
@@ -131,32 +143,38 @@ class _KenoMainButtonState extends State<KenoMainButton>
                     ),
                     shape: WidgetStateProperty.all(
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0),
+                        borderRadius: BorderRadius.circular(24.0),
+                        side:
+                            widget.hasBorder
+                                ? BorderSide(
+                                  color: widget.borderColor ?? AppColors.white,
+                                  width: widget.borderWidth ?? 2.0,
+                                )
+                                : BorderSide.none,
                       ),
                     ),
                     elevation: WidgetStateProperty.all(0),
                   ),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Row(
-                      children: [
-                        if (widget.icon != null) ...[
-                          Icon(
-                            widget.icon,
-                            size: widget.iconSize ?? 26.0,
-                            color: widget.iconColor,
-                          ),
-                          SizedBox(width: 8.0),
-                        ],
-                        KenoText(
-                          text: widget.text,
-                          fontFamily: widget.fontFamily ?? AppFonts.inter,
-                          fontSize: widget.fontSize ?? 16.0,
-                          color: widget.textColor,
-                          fontWeight: widget.fontWeight ?? FontWeight.w600,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (widget.icon != null) ...[
+                        Icon(
+                          widget.icon,
+                          size: widget.iconSize ?? 26.0,
+                          color: widget.iconColor,
                         ),
+                        SizedBox(width: 8.0),
                       ],
-                    ),
+                      KenoText(
+                        text: widget.text,
+                        fontFamily: widget.fontFamily ?? AppFonts.inter,
+                        fontSize: widget.fontSize ?? 16.0,
+                        color: widget.textColor,
+                        fontWeight: widget.fontWeight ?? FontWeight.w600,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -237,10 +255,13 @@ class KenoText extends StatelessWidget {
   final double? fontSize;
   final TextAlign? textAlign;
   final FontWeight? fontWeight;
+  final TextDecoration? textDecoration;
+  final double? decorationThickness;
+  final Color? decorationColor;
   final bool? italic;
   final Color? color;
   final String? fontFamily;
-  final bool? glow;
+  final bool? isGlow;
   final Color? glowColor;
   final double? glowIntensity;
 
@@ -250,10 +271,13 @@ class KenoText extends StatelessWidget {
     this.fontSize,
     this.textAlign,
     this.fontWeight,
+    this.textDecoration,
+    this.decorationThickness,
+    this.decorationColor,
     this.italic,
     this.color,
     this.fontFamily,
-    this.glow,
+    this.isGlow,
     this.glowColor,
     this.glowIntensity,
   });
@@ -298,7 +322,7 @@ class KenoText extends StatelessWidget {
         ],
         fontStyle: italic == true ? FontStyle.italic : FontStyle.normal,
         shadows:
-            glow == true
+            isGlow == true
                 ? [
                   Shadow(
                     color: (glowColor ?? color ?? Colors.white.withAlpha(200)),
@@ -312,6 +336,9 @@ class KenoText extends StatelessWidget {
                   ),
                 ]
                 : null,
+        decoration: textDecoration ?? TextDecoration.none,
+        decorationThickness: decorationThickness ?? 2.0,
+        decorationColor: decorationColor ?? color,
       ),
       textAlign: textAlign ?? TextAlign.center,
     );
