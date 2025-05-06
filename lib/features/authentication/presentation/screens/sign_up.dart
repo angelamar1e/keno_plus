@@ -1,10 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:keno_plus/core/utils/password_utils.dart';
+import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/domain/models/user.dart';
-import 'package:keno_plus/features/authentication/presentation/bloc/authentication_bloc.dart';
+import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final String labelText;
@@ -105,7 +103,7 @@ class SignUpScreen extends StatelessWidget {
       builder: (context, state) {
         // Check if the user is authenticated
         if (state.isAuthenticated) {
-          return const Center(child: Text('User is already authenticated'));
+          context.goNamed(AppRoutes.home);
           // If authenticated, navigate to the home screen
         }
 
