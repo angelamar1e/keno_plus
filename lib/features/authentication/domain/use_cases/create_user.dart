@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:keno_plus/features/authentication/domain/models/user.dart';
+import 'package:keno_plus/features/authentication/data/models/user_model.dart';
 import 'package:keno_plus/features/authentication/domain/repository/user_repository.dart';
 
 class CreateUser {
@@ -7,7 +7,7 @@ class CreateUser {
 
   CreateUser(this.userRepository);
 
-  Future<Either<Fail, void>> call(User user) async {
+  Future<Either<Fail, void>> call(UserModel user) async {
     try {
       await userRepository.createUser(user);
       return Right(null);

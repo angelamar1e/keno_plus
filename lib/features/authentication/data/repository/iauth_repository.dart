@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
-import 'package:keno_plus/features/authentication/data/data_source/user_datasource.dart';
-import 'package:keno_plus/features/authentication/domain/models/user.dart';
+import 'package:keno_plus/features/authentication/data/datasources/auth_datasource.dart';
+import 'package:keno_plus/features/authentication/data/models/user_model.dart';
 import 'package:keno_plus/features/authentication/domain/repository/user_repository.dart';
 
-class UserRepositoryImpl extends UserRepository {
+class IUserRepository extends UserRepository {
   final UserDataSource userDataSource;
 
-  UserRepositoryImpl(this.userDataSource);
+  IUserRepository(this.userDataSource);
 
   @override
-  Future<Either<Fail, void>> createUser(User user) async {
+  Future<Either<Fail, void>> createUser(UserModel user) async {
     try {
       await userDataSource.createUser(user);
       return Right(null);

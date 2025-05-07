@@ -10,14 +10,15 @@ final class SignUpState {
   });
 
   final SignUpStatus status;
-  final User? user;
+  final UserModel? user;
   final String? errorMessage;
 
-  bool get isAuthenticated => status == SignUpStatus.success;
+  bool get isSignedUp => status == SignUpStatus.success;
+  bool get isFailedSignUp => status == SignUpStatus.failure;
 
   SignUpState copyWith({
     SignUpStatus? status,
-    User? user,
+    UserModel? user,
     String? errorMessage,
   }) {
     return SignUpState(

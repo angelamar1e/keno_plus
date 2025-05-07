@@ -4,7 +4,7 @@ enum AuthenticationStatus { initial, authenticated, unauthenticated }
 
 class AuthenticationState {
   final AuthenticationStatus status;
-  final User? user;
+  final UserModel? user;
 
   const AuthenticationState({
     this.status = AuthenticationStatus.initial,
@@ -13,7 +13,10 @@ class AuthenticationState {
 
   bool get isAuthenticated => status == AuthenticationStatus.authenticated;
 
-  AuthenticationState copyWith({AuthenticationStatus? status, User? user}) {
+  AuthenticationState copyWith({
+    AuthenticationStatus? status,
+    UserModel? user,
+  }) {
     return AuthenticationState(
       status: status ?? this.status,
       user: user ?? this.user,

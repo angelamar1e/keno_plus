@@ -5,7 +5,7 @@ sealed class AuthenticationEvent {}
 final class CheckAuthenticationStatus extends AuthenticationEvent {}
 
 final class AuthenticationSucceeded extends AuthenticationEvent {
-  final User user;
+  final UserModel user;
 
   AuthenticationSucceeded({required this.user});
 }

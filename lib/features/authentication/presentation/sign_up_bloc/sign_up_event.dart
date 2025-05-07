@@ -5,7 +5,7 @@ sealed class SignUpEvent {
 }
 
 class CreatingUser extends SignUpEvent {
-  final User user;
+  final UserModel user;
 
   CreatingUser({required this.user});
 }

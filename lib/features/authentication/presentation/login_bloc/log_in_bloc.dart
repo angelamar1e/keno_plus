@@ -5,8 +5,6 @@ part 'log_in_state.dart';
 
 class LogInBloc extends Bloc<LogInEvent, LogInState> {
   LogInBloc() : super(LogInState()) {
-    on<LogInEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<LogInEvent>((event, emit) {});
   }
 }
