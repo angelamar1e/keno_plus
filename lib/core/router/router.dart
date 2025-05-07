@@ -1,5 +1,8 @@
+import 'package:keno_plus/core/utils/injections.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
+import 'package:keno_plus/features/authentication/domain/use_cases/create_user.dart';
 import 'package:keno_plus/features/authentication/presentation/screens/sign_up.dart';
+import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/${AppRoutes.loadingScreen}',
@@ -13,7 +16,12 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/${AppRoutes.signUp}',
       name: AppRoutes.signUp,
-      builder: (context, state) => SignUpScreen(),
+      builder: (context, state) {
+        return BlocProvider(
+          create: (context) => SignUpBloc(createUser: sl<CreateUser>()),
+          child: SignUpScreen(),
+        );
+      },
     ),
 
     ShellRoute(
