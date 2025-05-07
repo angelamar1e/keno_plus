@@ -3,6 +3,7 @@ import 'package:keno_plus/core/utils/password_utils.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/domain/models/user.dart';
 import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
+import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final String labelText;
@@ -99,118 +100,122 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        // Check if the user is authenticated
-        if (state.isAuthenticated) {
-          context.goNamed(AppRoutes.home);
-          // If authenticated, navigate to the home screen
-        }
-
-        return Scaffold(
-          appBar: AppBar(title: const Text('Sign Up')),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Text field for first name
-                TextFieldWidget(
-                  labelText: 'First Name',
-                  controller: firstNameController,
-                ),
-                Spacer(),
-                // Text field for last name
-                TextFieldWidget(
-                  labelText: 'Last Name',
-                  controller: lastNameController,
-                ),
-                Spacer(),
-                // Datepicker for date of birth
-                TextFieldWidget(
-                  labelText: 'Date of Birth',
-                  controller: birthdateController,
-                  isReadOnly: true,
-                  onTap:
-                      () => _showDatePicker(context).then((value) {
-                        // Set the date of birth and age returned from the date picker
-                        birthdateController.text = value.first;
-                        ageController.text = value.last;
-                      }),
-                ),
-                Spacer(),
-                // date for age
-                TextFieldWidget(
-                  labelText: 'Age',
-                  controller: ageController,
-                  isReadOnly: true,
-                ),
-                // text field for phone number
-                TextFieldWidget(
-                  labelText: 'Phone Number',
-                  controller: phoneNumberController,
-                ),
-                // Text field for email
-                TextFieldWidget(
-                  labelText: 'Email',
-                  controller: emailController,
-                ),
-                Spacer(),
-                // text field for username
-                TextFieldWidget(
-                  labelText: 'Username',
-                  controller: usernameController,
-                ),
-                // Text field for password
-                TextFieldWidget(
-                  labelText: 'Password',
-                  controller: passwordController,
-                ),
-                Spacer(),
-                // Text field for confirm password
-                TextFieldWidget(
-                  labelText: 'Confirm Password',
-                  controller: confirmPasswordController,
-                ),
-                Spacer(),
-                // Sign Up button
-                ElevatedButton(
-                  onPressed: () {
-                    // Access the text from the controllers
-                    final firstName = firstNameController.text;
-                    final lastName = lastNameController.text;
-                    final email = emailController.text;
-                    final birthdate = birthdateController.text;
-                    final age = ageController.text;
-                    final phoneNumber = phoneNumberController.text;
-                    final username = usernameController.text;
-                    final password = PasswordUtils.hashPassword(
-                      passwordController.text,
-                    );
-                    // final confirmPassword = confirmPasswordController.text;
-
-                    User newUser = User(
-                      firstName: firstName,
-                      lastName: lastName,
-                      birthdate: birthdate,
-                      age: int.parse(age),
-                      username: username,
-                      email: email,
-                      password: password,
-                      phoneNumber: phoneNumber,
-                    );
-
-                    // Trigger the CreatingUser event
-                    context.read<AuthenticationBloc>().add(
-                      CreatingUser(user: newUser),
-                    );
-                  },
-                  child: const Text('Sign Up'),
-                ),
-              ],
-            ),
-          ),
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      bloc: context.read<AuthenticationBloc>(),
+      listener: (context, state) {
+        print(
+          'AuthenticationBloc instance in Sign up Screen: ${context.read<AuthenticationBloc>().hashCode}',
         );
+        if (state.isAuthenticated) {
+          // Navigate to home screen
+          context.goNamed(AppRoutes.home);
+        }
       },
+      child: BlocBuilder<SignUpBloc, SignUpState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Sign Up')),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Text field for first name
+                  TextFieldWidget(
+                    labelText: 'First Name',
+                    controller: firstNameController,
+                  ),
+                  Spacer(),
+                  // Text field for last name
+                  TextFieldWidget(
+                    labelText: 'Last Name',
+                    controller: lastNameController,
+                  ),
+                  Spacer(),
+                  // Datepicker for date of birth
+                  TextFieldWidget(
+                    labelText: 'Date of Birth',
+                    controller: birthdateController,
+                    isReadOnly: true,
+                    onTap:
+                        () => _showDatePicker(context).then((value) {
+                          // Set the date of birth and age returned from the date picker
+                          birthdateController.text = value.first;
+                          ageController.text = value.last;
+                        }),
+                  ),
+                  Spacer(),
+                  // date for age
+                  TextFieldWidget(
+                    labelText: 'Age',
+                    controller: ageController,
+                    isReadOnly: true,
+                  ),
+                  // text field for phone number
+                  TextFieldWidget(
+                    labelText: 'Phone Number',
+                    controller: phoneNumberController,
+                  ),
+                  // Text field for email
+                  TextFieldWidget(
+                    labelText: 'Email',
+                    controller: emailController,
+                  ),
+                  Spacer(),
+                  // text field for username
+                  TextFieldWidget(
+                    labelText: 'Username',
+                    controller: usernameController,
+                  ),
+                  // Text field for password
+                  TextFieldWidget(
+                    labelText: 'Password',
+                    controller: passwordController,
+                  ),
+                  Spacer(),
+                  // Text field for confirm password
+                  TextFieldWidget(
+                    labelText: 'Confirm Password',
+                    controller: confirmPasswordController,
+                  ),
+                  Spacer(),
+                  // Sign Up button
+                  ElevatedButton(
+                    onPressed: () {
+                      // Access the text from the controllers
+                      final firstName = firstNameController.text;
+                      final lastName = lastNameController.text;
+                      final email = emailController.text;
+                      final birthdate = birthdateController.text;
+                      final age = ageController.text;
+                      final phoneNumber = phoneNumberController.text;
+                      final username = usernameController.text;
+                      final password = passwordController.text;
+                      // final confirmPassword = confirmPasswordController.text;
+
+                      User newUser = User(
+                        firstName: firstName,
+                        lastName: lastName,
+                        birthdate: birthdate,
+                        age: int.parse(age),
+                        username: username,
+                        email: email,
+                        password: password,
+                        phoneNumber: phoneNumber,
+                      );
+
+                      // Trigger the CreatingUser event
+                      context.read<SignUpBloc>().add(
+                        CreatingUser(user: newUser),
+                      );
+                    },
+                    child: const Text('Sign Up'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
