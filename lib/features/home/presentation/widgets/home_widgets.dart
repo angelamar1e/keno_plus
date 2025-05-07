@@ -1,15 +1,6 @@
-import 'package:keno_plus/core/values/app_imports.dart';
-
-class Home extends StatelessWidget {
-  const Home({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return KenoMainWidget(content: KenoStartLayout() /*KenoGameModeLayout()*/);
-  }
-}
-
 // SECOND PAGE
+import '../../../../core/values/app_imports.dart';
+
 class KenoGameModeLayout extends StatefulWidget {
   const KenoGameModeLayout({super.key});
 
@@ -251,14 +242,20 @@ class KenoGameBg extends StatelessWidget {
 
 // FIRST PAGE
 class KenoStartLayout extends StatelessWidget {
-  const KenoStartLayout({super.key});
+  final VoidCallback onPlayPressed;
+  const KenoStartLayout({super.key, required this.onPlayPressed});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Positioned(bottom: 0, left: 0, right: 0, child: KenoElementBg()),
-        Positioned(top: 160, left: 0, right: 0, child: KenoStart()),
+        Positioned(
+          top: 160,
+          left: 0,
+          right: 0,
+          child: KenoStart(onPlayPressed: onPlayPressed),
+        ),
       ],
     );
   }
@@ -274,7 +271,9 @@ class KenoElementBg extends StatelessWidget {
 }
 
 class KenoStart extends StatelessWidget {
-  const KenoStart({super.key});
+  final VoidCallback onPlayPressed;
+
+  const KenoStart({super.key, required this.onPlayPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +304,7 @@ class KenoStart extends StatelessWidget {
             icon: Icons.play_arrow_rounded,
             isGlow: true,
             margin: 18.0,
-            onPressed: () {}, // CHANGE LAYOUT TO GAME MODE
+            onPressed: onPlayPressed, // CHANGE LAYOUT TO GAME MODE
           ),
           const SizedBox(height: 16.0),
           KenoButton(
@@ -317,7 +316,7 @@ class KenoStart extends StatelessWidget {
             hasBorder: true,
             borderColor: AppColors.secondary,
             margin: 18.0,
-            onPressed: () {}, // CHANGE LAYOUT TO GAME MODE
+            onPressed: () {}, // CHANGE LAYOUT TO TUTORIAL
           ),
         ],
       ),

@@ -1,4 +1,4 @@
-import 'package:keno_plus/core/values/app_imports.dart';
+import 'app_imports.dart';
 
 class AppGameModes {
   static const List<GameMode> modes = [

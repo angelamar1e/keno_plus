@@ -16,4 +16,14 @@ class AppStrings {
   static const String miniKenoDesc =
       'Pick up to 10 numbers from 40 for quick play and better odds. A perfect choice for rapid-fire fun!';
   static const String playMiniKeno = 'Play Mini Keno';
+  static const String userLabel = 'Username/email';
+  static const String userHint = 'Enter your username or email';
+  static const String passLabel = 'Password';
+  static const String passHint = 'Enter your password';
+  static const String welcomeTitle = 'Welcome to Keno Plus!';
+  static const String welcomeDesc =
+      'Step right in and let the numbers work their magic. Log in now to play and feel the thrill!';
+  static const String forgetPass = 'Forget password?';
+  static const String login = 'Login';
+  static const String dontHaveAcc = 'Don\'t have an account?';
 }

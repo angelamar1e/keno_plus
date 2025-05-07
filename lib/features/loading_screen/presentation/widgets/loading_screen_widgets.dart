@@ -1,4 +1,4 @@
-import 'package:keno_plus/core/values/app_imports.dart';
+import '../../../../core/values/app_imports.dart';
 
 class KenoShowLoading extends StatelessWidget {
   const KenoShowLoading({super.key});

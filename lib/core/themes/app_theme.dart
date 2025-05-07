@@ -14,33 +14,10 @@ class AppTheme {
         secondary: AppColors.secondary,
         tertiary: AppColors.tertiary,
       ),
-      // Add this InputDecorationTheme
-      inputDecorationTheme: InputDecorationTheme(
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 18.0,
-          horizontal: 24.0,
-        ),
-        labelStyle: TextStyle(color: AppColors.black),
-        hintStyle: TextStyle(color: AppColors.black.withAlpha(100)),
-        suffixIconColor: AppColors.black,
-        prefixIconColor: AppColors.black,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
-          borderSide: BorderSide(color: AppColors.black),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
-          borderSide: BorderSide(color: AppColors.black),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
-          borderSide: BorderSide(color: AppColors.secondary, width: 2),
-        ),
-        focusColor: AppColors.secondary,
-      ),
+      inputDecorationTheme: _createDarkInputDecorationTheme(),
     );
   }
-
+ 
   static ThemeData get lightTheme {
     return ThemeData(
       scaffoldBackgroundColor: AppColors.white,
@@ -51,6 +28,7 @@ class AppTheme {
         primary: AppColors.secondary,
         secondary: AppColors.primary,
       ),
+      inputDecorationTheme: _createLightInputDecorationTheme(),
     );
   }
 
@@ -92,6 +70,52 @@ class AppTheme {
       headlineLarge: TextStyle(color: AppColors.black),
       headlineMedium: TextStyle(color: AppColors.black),
       headlineSmall: TextStyle(color: AppColors.black),
+    );
+  }
+
+  static InputDecorationTheme _createLightInputDecorationTheme() {
+    return InputDecorationTheme(
+      contentPadding: EdgeInsets.symmetric(vertical: 18.0, horizontal: 24.0),
+      labelStyle: TextStyle(color: AppColors.white),
+      hintStyle: TextStyle(color: AppColors.white.withAlpha(100)),
+      suffixIconColor: AppColors.white,
+      prefixIconColor: AppColors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(24.0),
+        borderSide: BorderSide(color: AppColors.white),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(24.0),
+        borderSide: BorderSide(color: AppColors.white),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(24.0),
+        borderSide: BorderSide(color: AppColors.secondary, width: 2),
+      ),
+      focusColor: AppColors.secondary,
+    );
+  }
+
+  static InputDecorationTheme _createDarkInputDecorationTheme() {
+    return InputDecorationTheme(
+      contentPadding: EdgeInsets.symmetric(vertical: 18.0, horizontal: 24.0),
+      labelStyle: TextStyle(color: AppColors.black),
+      hintStyle: TextStyle(color: AppColors.black.withAlpha(100)),
+      suffixIconColor: AppColors.black,
+      prefixIconColor: AppColors.black,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(24.0),
+        borderSide: BorderSide(color: AppColors.black),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(24.0),
+        borderSide: BorderSide(color: AppColors.black),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(24.0),
+        borderSide: BorderSide(color: AppColors.secondary, width: 2),
+      ),
+      focusColor: AppColors.secondary,
     );
   }
 }
