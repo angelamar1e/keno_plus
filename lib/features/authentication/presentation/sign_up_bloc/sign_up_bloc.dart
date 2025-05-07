@@ -2,7 +2,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:keno_plus/features/authentication/data/models/user_model.dart';
-import 'package:keno_plus/features/authentication/domain/use_cases/create_user.dart';
+import 'package:keno_plus/features/authentication/domain/usecases/create_user_usecase.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';

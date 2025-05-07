@@ -1,7 +1,7 @@
 import 'package:keno_plus/core/utils/injections.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
-import 'package:keno_plus/features/authentication/domain/use_cases/create_user.dart';
-import 'package:keno_plus/features/authentication/presentation/screens/sign_up.dart';
+import 'package:keno_plus/features/authentication/domain/usecases/create_user_usecase.dart';
+import 'package:keno_plus/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
 final GoRouter router = GoRouter(

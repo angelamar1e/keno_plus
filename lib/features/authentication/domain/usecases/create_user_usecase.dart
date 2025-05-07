@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:keno_plus/features/authentication/data/models/user_model.dart';
-import 'package:keno_plus/features/authentication/domain/repository/user_repository.dart';
+import 'package:keno_plus/features/authentication/domain/repository/auth_repository.dart';
 
 class CreateUser {
   final UserRepository userRepository;

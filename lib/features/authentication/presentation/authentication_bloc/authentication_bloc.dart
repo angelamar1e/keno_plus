@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/core/utils/injections.dart';
-import 'package:keno_plus/features/authentication/domain/models/user.dart';
+import 'package:keno_plus/features/authentication/data/models/user_model.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
