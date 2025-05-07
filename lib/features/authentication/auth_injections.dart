@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:keno_plus/features/authentication/data/repository/user_repository_impl.dart';
 import 'package:keno_plus/features/authentication/domain/repository/user_repository.dart';
 import 'package:keno_plus/features/authentication/domain/use_cases/create_user.dart';
+import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -20,4 +21,7 @@ initAuthInjections() async {
 
   // Register CreateUser use case
   sl.registerSingleton<CreateUser>(CreateUser(sl()));
+
+  // Register AuthenticationBloc
+  sl.registerSingleton<AuthenticationBloc>(AuthenticationBloc());
 }
