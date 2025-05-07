@@ -1,11 +1,10 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'log_in_event.dart';
 part 'log_in_state.dart';
 
 class LogInBloc extends Bloc<LogInEvent, LogInState> {
-  LogInBloc() : super(LogInInitial()) {
+  LogInBloc() : super(LogInState()) {
     on<LogInEvent>((event, emit) {
       // TODO: implement event handler
     });
