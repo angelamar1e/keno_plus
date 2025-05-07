@@ -1,11 +1,13 @@
+import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
+
 import 'core/values/app_imports.dart';
 import 'package:keno_plus/core/router/router.dart';
 import 'package:keno_plus/core/utils/injections.dart';
-import 'package:keno_plus/features/authentication/domain/use_cases/create_user.dart';
-import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // initialize the dependency injection
   await initInjections();
 
   // Lock orientation to portrait only
@@ -15,7 +17,7 @@ void main() async {
     runApp(
       BlocProvider(
         // global access to AuthenticationBloc
-        create: (context) => AuthenticationBloc(createUser: sl<CreateUser>()),
+        create: (context) => sl<AuthenticationBloc>(),
         child: const KenoPlus(),
       ),
     );
