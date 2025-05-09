@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return KenoMainWidget(
+    return KenoMainLayout(
       content:
           _showGameMode
               ? KenoGameModeLayout()

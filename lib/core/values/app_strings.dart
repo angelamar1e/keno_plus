@@ -26,4 +26,5 @@ class AppStrings {
   static const String forgetPass = 'Forget password?';
   static const String login = 'Login';
   static const String dontHaveAcc = 'Don\'t have an account?';
+  static const String signUp = 'Sign up';
 }

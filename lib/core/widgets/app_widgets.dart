@@ -1,9 +1,9 @@
 import 'package:keno_plus/core/values/app_imports.dart';
 
-class KenoMainWidget extends StatelessWidget {
+class KenoMainLayout extends StatelessWidget {
   final Widget content;
 
-  const KenoMainWidget({super.key, required this.content});
+  const KenoMainLayout({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {

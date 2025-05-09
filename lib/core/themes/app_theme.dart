@@ -12,12 +12,11 @@ class AppTheme {
         brightness: Brightness.dark,
         primary: AppColors.primary,
         secondary: AppColors.secondary,
-        tertiary: AppColors.tertiary,
       ),
       inputDecorationTheme: _createDarkInputDecorationTheme(),
     );
   }
- 
+
   static ThemeData get lightTheme {
     return ThemeData(
       scaffoldBackgroundColor: AppColors.white,
@@ -25,8 +24,8 @@ class AppTheme {
       textTheme: _createLightTextTheme(),
       colorScheme: ColorScheme.light(
         brightness: Brightness.light,
-        primary: AppColors.secondary,
-        secondary: AppColors.primary,
+        primary: AppColors.primary,
+        secondary: AppColors.secondary,
       ),
       inputDecorationTheme: _createLightInputDecorationTheme(),
     );
@@ -92,7 +91,10 @@ class AppTheme {
         borderRadius: BorderRadius.circular(24.0),
         borderSide: BorderSide(color: AppColors.secondary, width: 2),
       ),
+      floatingLabelStyle: TextStyle(color: AppColors.black),
+      iconColor: AppColors.black,
       focusColor: AppColors.secondary,
+      filled: true,
     );
   }
 
@@ -115,7 +117,10 @@ class AppTheme {
         borderRadius: BorderRadius.circular(24.0),
         borderSide: BorderSide(color: AppColors.secondary, width: 2),
       ),
+      floatingLabelStyle: TextStyle(color: AppColors.black),
+      iconColor: AppColors.black,
       focusColor: AppColors.secondary,
+      filled: true,
     );
   }
 }
