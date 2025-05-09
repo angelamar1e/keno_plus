@@ -9,10 +9,10 @@ class IUserRepository extends UserRepository {
   IUserRepository(this.userDataSource);
 
   @override
-  Future<Either<Fail, void>> createUser(UserModel user) async {
+  Future<Either<Fail, UserModel>> createUser(UserModel user) async {
     try {
       await userDataSource.createUser(user);
-      return Right(null);
+      return Right(user);
     } catch (e) {
       return Left(Fail(e.toString()));
     }

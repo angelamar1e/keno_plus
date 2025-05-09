@@ -6,12 +6,14 @@ class UserDataSource {
 
   UserDataSource(this.database);
 
-  Future<void> createUser(UserModel user) async {
+  Future<UserModel> createUser(UserModel user) async {
     await database.insert(
       'users',
       user.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+
+    return user;
   }
 
   Future<List<String>> getUsers() async {
