@@ -1,6 +1,7 @@
 import 'package:keno_plus/core/utils/injections.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/domain/usecases/create_user_usecase.dart';
+import 'package:keno_plus/features/authentication/domain/usecases/get_users_usecase.dart';
 import 'package:keno_plus/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
@@ -18,8 +19,12 @@ final GoRouter router = GoRouter(
       name: AppRoutes.signUp,
       builder: (context, state) {
         return BlocProvider(
-          create: (context) => SignUpBloc(createUser: sl<CreateUser>()),
-          child: SignUpScreen(),
+          create:
+              (context) => SignUpBloc(
+                createUser: sl<CreateUser>(),
+                getUsers: sl<GetUsers>(),
+              ),
+          child: SignUpPage(),
         );
       },
     ),

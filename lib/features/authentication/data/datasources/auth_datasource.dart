@@ -13,4 +13,11 @@ class UserDataSource {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<List<String>> getUsers() async {
+    final List<Map<String, Object?>> maps = await database.query('users');
+    return List.generate(maps.length, (i) {
+      return maps[i]['username'] as String;
+    });
+  }
 }

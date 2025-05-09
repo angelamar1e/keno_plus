@@ -17,4 +17,14 @@ class IUserRepository extends UserRepository {
       return Left(Fail(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Fail, List<String>>> getUsers() async {
+    try {
+      final users = await userDataSource.getUsers();
+      return Right(users);
+    } catch (e) {
+      return Left(Fail(e.toString()));
+    }
+  }
 }
