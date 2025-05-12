@@ -1,5 +1,3 @@
-import 'package:keno_plus/core/themes/app_theme.dart';
-
 import 'core/values/app_imports.dart';
 
 void main() {
