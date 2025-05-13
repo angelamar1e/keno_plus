@@ -10,15 +10,16 @@ import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_f
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/email_address_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/loading_indicator.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/name_field.dart';
-import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/password_field.dart';
+import 'package:keno_plus/features/authentication/presentation/widgets/auth_form_widgets/password_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/phone_number_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/sign_up_button.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/sign_up_form_widgets.dart';
-import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/username_field.dart';
+import 'package:keno_plus/features/authentication/presentation/widgets/auth_form_widgets/username_field.dart';
 
 class SignUpForm extends StatelessWidget {
   SignUpForm({super.key});
   final authBloc = sl<AuthenticationBloc>();
+  final AuthFormType formType = AuthFormType.signUp;
 
   @override
   Widget build(BuildContext context) {
@@ -114,14 +115,14 @@ class SignUpForm extends StatelessWidget {
                             horizontal: 10,
                             vertical: 30,
                           ),
-                          child: UserNameField(),
+                          child: UserNameField(formType),
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 30,
                           ),
-                          child: PasswordField(formType: AuthFormType.signUp),
+                          child: PasswordField(formType),
                         ),
                         SizedBox(height: 30),
                         SignUpButton(),
