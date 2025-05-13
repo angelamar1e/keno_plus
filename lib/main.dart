@@ -1,4 +1,4 @@
-import 'core/values/app_imports.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/core/router/router.dart';
 import 'package:keno_plus/core/utils/injections.dart';
@@ -8,14 +8,7 @@ import 'package:keno_plus/features/authentication/presentation/bloc/authenticati
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initInjections();
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Lock orientation to portrait only
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((
-    _,
-  ) {
-    runApp(const MainApp());
-  });
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -29,8 +22,6 @@ class MainApp extends StatelessWidget {
       child: MaterialApp.router(
         routerConfig: router, // Use the GoRouter configuration
       ),
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
     );
   }
 }

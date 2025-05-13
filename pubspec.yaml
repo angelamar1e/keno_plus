@@ -1,6 +1,6 @@
 name: keno_plus
 description: "A new Flutter project."
-publish_to: "none"
+publish_to: 'none'
 version: 0.1.0
 
 environment:
@@ -25,18 +25,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-  assets:
-    - assets/images/kenoplus_logo.png
-    - assets/images/menu_background.png
-
-  fonts:
-    - family: Grandstander
-      fonts:
-        - asset: assets\fonts\grandstander\Grandstander-Italic-VariableFont_wght.ttf
-        - asset: assets\fonts\grandstander\Grandstander-VariableFont_wght.ttf
-    - family: Inter
-      fonts:
-        - asset: assets\fonts\inter\Inter-Italic-VariableFont_opsz,wght.ttf
-
-        - asset: assets\fonts\inter\Inter-VariableFont_opsz,wght.ttf
