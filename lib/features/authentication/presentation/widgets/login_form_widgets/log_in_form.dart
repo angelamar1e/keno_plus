@@ -2,6 +2,7 @@
 
 import 'package:keno_plus/core/utils/auth_form_type.dart';
 import 'package:keno_plus/core/utils/injections.dart';
+import 'package:keno_plus/core/validation/auth_failure.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
 import 'package:keno_plus/features/authentication/presentation/login_bloc/log_in_bloc.dart';
@@ -27,11 +28,17 @@ class LogInForm extends StatelessWidget {
             status.fold(
               (failure) => {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(failure.failure.toString())),
+                  SnackBar(
+                    content: switch (failure) {
+                      UserDoesNotExist() => Text('User does not exist'),
+                      WrongPassword() => Text('Incorrect password'),
+                      _ => Text(''),
+                    },
+                  ),
                 ),
               },
-              (newUser) => {
-                authBloc.add(AuthenticationSucceeded(user: newUser)),
+              (user) => {
+                authBloc.add(AuthenticationSucceeded(user: user)),
 
                 // navigate to home if sign up is successful
                 context.goNamed(AppRoutes.home),
