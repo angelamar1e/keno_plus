@@ -1,44 +1,23 @@
-// log in screen
-import 'package:flutter/material.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:keno_plus/core/values/app_imports.dart';
+import 'package:keno_plus/features/authentication/presentation/widgets/login_form_widgets/log_in_form.dart';
 
-// create widget for log in screen
-class LogInScreen extends StatelessWidget {
-  const LogInScreen({super.key});
+class LogInPage extends StatelessWidget {
+  const LogInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Log In')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Log In'),
-            const SizedBox(height: 20),
-            // text field for email
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Email',
-              ),
-            ),
-            const SizedBox(height: 20),
-            // text field for password
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Handle login logic here
-              },
-              child: const Text('Log In'),
-            ),
-          ],
+    return GestureDetector(
+      onTap: () => WidgetsBinding.instance.focusManager.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Log In')),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(
+              16.0,
+            ), // Add padding for better layout
+            child: LogInForm(),
+          ),
         ),
       ),
     );

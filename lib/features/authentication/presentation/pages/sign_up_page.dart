@@ -10,7 +10,7 @@ class SignUpPage extends StatelessWidget {
     return GestureDetector(
       onTap: () => WidgetsBinding.instance.focusManager.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Sign In Form')),
+        appBar: AppBar(title: const Text('Sign Up')),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(
