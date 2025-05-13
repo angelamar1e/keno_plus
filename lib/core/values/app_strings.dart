@@ -16,8 +16,8 @@ class AppStrings {
   static const String miniKenoDesc =
       'Pick up to 10 numbers from 40 for quick play and better odds. A perfect choice for rapid-fire fun!';
   static const String playMiniKeno = 'Play Mini Keno';
-  static const String userLabel = 'Username/email';
-  static const String userHint = 'Enter your username or email';
+  static const String emailLabel = 'Email';
+  static const String emailHint = 'Enter you email';
   static const String passLabel = 'Password';
   static const String passHint = 'Enter your password';
   static const String welcomeTitle = 'Welcome to Keno Plus!';
@@ -27,4 +27,18 @@ class AppStrings {
   static const String login = 'Login';
   static const String dontHaveAcc = 'Don\'t have an account?';
   static const String signUp = 'Sign up';
+  static const String alreadyAuth = 'User is already authenticated';
+  static const String register = 'Register';
+  static const String alreadyHaveAcc = 'Already have an account?';
+  static const String signIn = 'Sign in';
+  static const String userNameLabel = 'Username';
+  static const String userNameHint = 'Enter your username';
+  static const String phoneLabel = 'Phone Number';
+  static const String phoneHint = 'Enter your phone number';
+  static const String ageHint = 'Age';
+  static const String birthDateHint = 'Birthdate';
+  static const String lastNameLabel = 'Last Name';
+  static const String lastNameHint = 'Enter your last name';
+  static const String firstNameLabel = 'First Name';
+  static const String firstNameHint = 'Enter your first name';
 }

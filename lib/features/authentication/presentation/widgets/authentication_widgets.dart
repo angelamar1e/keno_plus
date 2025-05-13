@@ -26,66 +26,80 @@ class KenoFormDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [_buildHeader(), _buildContent()],
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24.0),
-          topRight: Radius.circular(24.0),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.85,
         ),
-        color:
-            headerBackgroundColor?.withAlpha(150) ??
-            AppColors.black.withAlpha(150),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 32.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (logo != null) ...[
-              KenoShowLogo(logo: logo!, height: 32.0),
-              const SizedBox(height: 16.0),
-            ],
-            KenoText(
-              text: headerTitleText,
-              fontFamily: AppFonts.grandstander,
-              fontWeight: FontWeight.w900,
-              fontSize: 32.0,
-              color: headerTitleColor,
-              isGlow: true,
+            // Fixed header
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(24.0),
+                  topRight: Radius.circular(24.0),
+                ),
+                color:
+                    headerBackgroundColor?.withAlpha(150) ??
+                    AppColors.black.withAlpha(150),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 32.0,
+                ),
+                child: Column(
+                  children: [
+                    if (logo != null) ...[
+                      KenoShowLogo(logo: logo!, height: 32.0),
+                      const SizedBox(height: 16.0),
+                    ],
+                    KenoText(
+                      text: headerTitleText,
+                      fontFamily: AppFonts.grandstander,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 32.0,
+                      color: headerTitleColor,
+                      isGlow: true,
+                    ),
+                    KenoText(
+                      text: headerSubText,
+                      fontSize: 12.0,
+                      color: headerSubColor,
+                    ),
+                  ],
+                ),
+              ),
             ),
-            KenoText(
-              text: headerSubText,
-              fontSize: 12.0,
-              color: headerSubColor,
+            // Scrollable content area
+            Flexible(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(24.0),
+                    bottomRight: Radius.circular(24.0),
+                  ),
+                  color: contentBackgroundColor ?? AppColors.white,
+                ),
+                child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 32.0,
+                    ),
+                    child: content,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildContent() {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(24.0),
-          bottomRight: Radius.circular(24.0),
-        ),
-        color: contentBackgroundColor ?? AppColors.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 32.0),
-        child: content,
       ),
     );
   }
@@ -95,9 +109,11 @@ class KenoFormField extends StatelessWidget {
   final TextEditingController fieldController;
   final FocusNode fieldFocus;
   final bool isFieldFocused;
-  final String label;
-  final String hint;
+  final bool? readOnly;
+  final String? label;
+  final String? hint;
   final bool isPassword;
+  final bool isBirthdate;
   final bool isPasswordVisible;
   final Color? textColor;
   final Color? color;
@@ -107,14 +123,18 @@ class KenoFormField extends StatelessWidget {
   final VoidCallback? onTogglePasswordVisibility;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
+  final void Function()? onTap;
+  final TextInputType? keyboardType;
 
   const KenoFormField({
     super.key,
     required this.fieldController,
     required this.fieldFocus,
-    required this.label,
-    required this.hint,
+    this.label,
+    this.hint,
     this.isPassword = false,
+    this.isBirthdate = false,
+    this.readOnly,
     required this.isFieldFocused,
     this.isPasswordVisible = false,
     this.textColor,
@@ -125,6 +145,8 @@ class KenoFormField extends StatelessWidget {
     this.onTogglePasswordVisibility,
     this.onChanged,
     this.validator,
+    this.keyboardType,
+    this.onTap,
   });
 
   @override
@@ -143,28 +165,40 @@ class KenoFormField extends StatelessWidget {
           color: isFieldFocused ? color : AppColors.black,
           fontWeight: focusedLabelWeight ?? FontWeight.w400,
         ),
-        suffixIcon: _buildSuffixIcon(),
+        prefixIcon:
+            !isBirthdate
+                ? null
+                : IconButton(
+                  icon:
+                      isBirthdate
+                          ? Icon(Icons.calendar_month_rounded)
+                          : Icon(icon),
+                  color: isFieldFocused ? color : AppColors.black,
+                  onPressed: () {},
+                ),
+        suffixIcon:
+            fieldController.text.isEmpty
+                ? null
+                : IconButton(
+                  icon:
+                      isPassword
+                          ? Icon(
+                            isPasswordVisible
+                                ? Icons.visibility_off_rounded
+                                : Icons.visibility_rounded,
+                          )
+                          : Icon(icon),
+                  color: isFieldFocused ? color : AppColors.black,
+                  onPressed:
+                      isPassword ? onTogglePasswordVisibility : iconPressed,
+                ),
         fillColor: AppColors.white,
       ),
-    );
-  }
-
-  Widget? _buildSuffixIcon() {
-    if (fieldController.text.isEmpty) {
-      return null;
-    }
-
-    return IconButton(
-      icon:
-          isPassword
-              ? Icon(
-                isPasswordVisible
-                    ? Icons.visibility_off_rounded
-                    : Icons.visibility_rounded,
-              )
-              : Icon(icon),
-      color: isFieldFocused ? color : AppColors.black,
-      onPressed: isPassword ? onTogglePasswordVisibility : iconPressed,
+      readOnly: readOnly ?? false,
+      keyboardType: keyboardType,
+      textInputAction:
+          !isPassword ? TextInputAction.next : TextInputAction.done,
+      onTap: onTap,
     );
   }
 }

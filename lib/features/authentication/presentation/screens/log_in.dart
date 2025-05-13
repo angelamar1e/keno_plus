@@ -1,10 +1,10 @@
 import 'package:keno_plus/core/values/app_imports.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return const KenoLoginWidget();
   }
 }

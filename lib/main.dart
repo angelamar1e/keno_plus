@@ -1,6 +1,8 @@
 import 'core/values/app_imports.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initInjections();
   WidgetsFlutterBinding.ensureInitialized();
 
   // Lock orientation to portrait only
@@ -16,11 +18,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: AppStrings.appName,
-      theme: AppTheme.theme,
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
+    return BlocProvider(
+      create: (context) => AuthenticationBloc(createUser: sl<CreateUser>()),
+      child: MaterialApp.router(
+        title: AppStrings.appName,
+        theme: AppTheme.theme,
+        debugShowCheckedModeBanner: false,
+        routerConfig: router,
+      ),
     );
   }
 }
