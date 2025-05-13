@@ -1,6 +1,6 @@
 import 'package:keno_plus/core/values/app_imports.dart';
 
-class KenoFormDialogWidget extends StatelessWidget {
+class KenoFormDialog extends StatelessWidget {
   final String? logo;
   final Color? headerBackgroundColor;
   final Color? headerTitleColor;
@@ -10,7 +10,7 @@ class KenoFormDialogWidget extends StatelessWidget {
   final String headerSubText;
   final Widget content;
 
-  const KenoFormDialogWidget({
+  const KenoFormDialog({
     super.key,
     this.logo,
     this.headerBackgroundColor,
