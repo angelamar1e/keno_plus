@@ -38,20 +38,29 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     final String password = state.password.value.getOrElse(() => '');
 
     if (isUsernameValid && isPasswordValid) {
+      emit(state.copyWith(isSubmitting: true, status: null));
+
       await Future.delayed(const Duration(seconds: 1));
     }
 
     // get user by username
     final result = await getUserByUsername.call(username);
 
-    result.fold((authFail) => (emit(state.copyWith(status: Left(authFail)))), (
-      user,
-    ) {
-      if (user.password == password) {
-        emit(state.copyWith(status: Right(user)));
-      } else {
-        emit(state.copyWith(status: Left(AuthFailure.wrongPassword(password))));
-      }
-    });
+    result.fold(
+      (authFail) =>
+          (emit(state.copyWith(isSubmitting: false, status: Left(authFail)))),
+      (user) {
+        if (user.password == password) {
+          emit(state.copyWith(isSubmitting: false, status: Right(user)));
+        } else {
+          emit(
+            state.copyWith(
+              isSubmitting: false,
+              status: Left(AuthFailure.wrongPassword(password)),
+            ),
+          );
+        }
+      },
+    );
   }
 }

@@ -4,25 +4,25 @@ class LogInState {
   const LogInState({
     required this.username,
     required this.password,
-    required this.isCorrectPassword,
+    required this.isSubmitting,
     required this.status,
   });
 
   final Username username;
   final Password password;
-  final bool? isCorrectPassword;
+  final bool isSubmitting;
   final Either<AuthFailure, UserModel>? status;
 
   LogInState copyWith({
     Username? username,
     Password? password,
-    bool? isPasswordCorrect,
+    bool? isSubmitting,
     Either<AuthFailure, UserModel>? status,
   }) {
     return LogInState(
       username: username ?? this.username,
       password: password ?? this.password,
-      isCorrectPassword: isPasswordCorrect ?? this.isCorrectPassword,
+      isSubmitting: isSubmitting ?? this.isSubmitting,
       status: status ?? this.status,
     );
   }
@@ -31,7 +31,7 @@ class LogInState {
     return LogInState(
       username: Username(''),
       password: Password(''),
-      isCorrectPassword: null,
+      isSubmitting: false,
       status: null,
     );
   }

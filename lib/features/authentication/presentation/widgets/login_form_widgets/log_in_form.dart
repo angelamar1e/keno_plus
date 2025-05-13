@@ -9,7 +9,7 @@ import 'package:keno_plus/features/authentication/presentation/login_bloc/log_in
 import 'package:keno_plus/features/authentication/presentation/widgets/auth_form_widgets/CTA_button.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/login_form_widgets/password_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/login_form_widgets/username_field.dart';
-import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/loading_indicator.dart';
+import 'package:keno_plus/features/authentication/presentation/widgets/auth_form_widgets/loading_indicator.dart';
 
 class LogInForm extends StatelessWidget {
   LogInForm({super.key});
@@ -76,7 +76,7 @@ class LogInForm extends StatelessWidget {
                         SizedBox(height: 30),
                         CTAButton(formType),
                         SizedBox(height: 15),
-                        LoadingIndicator(),
+                        LoadingIndicator(isSubmitting: state.isSubmitting),
                       ],
                     ),
                   ),
