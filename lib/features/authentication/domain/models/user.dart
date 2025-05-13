@@ -2,34 +2,34 @@
 class User {
   final String firstName;
   final String lastName;
-  final DateTime birthdate;
+  final String birthdate;
   final int age;
-  final String username;
-  final String email;
-  final String password;
   final String phoneNumber;
+  final String email;
+  final String username;
+  final String password;
 
   User({
     required this.firstName,
     required this.lastName,
     required this.birthdate,
     required this.age,
-    required this.username,
-    required this.email,
-    required this.password,
     required this.phoneNumber,
+    required this.email,
+    required this.username,
+    required this.password,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'firstName': firstName,
       'lastName': lastName,
-      'birthdate': birthdate.toIso8601String(),
+      'birthdate': birthdate,
       'age': age,
-      'username': username,
-      'email': email,
-      'password': password,
       'phoneNumber': phoneNumber,
+      'email': email,
+      'username': username,
+      'password': password,
     };
   }
 }
