@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import
 
+import 'package:keno_plus/core/utils/auth_form_type.dart';
 import 'package:keno_plus/core/utils/injections.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
@@ -120,7 +121,7 @@ class SignUpForm extends StatelessWidget {
                             horizontal: 10,
                             vertical: 30,
                           ),
-                          child: PasswordField(),
+                          child: PasswordField(formType: AuthFormType.signUp),
                         ),
                         SizedBox(height: 30),
                         SignUpButton(),
