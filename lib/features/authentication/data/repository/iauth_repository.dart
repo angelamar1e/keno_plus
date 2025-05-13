@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:keno_plus/core/validation/auth_failure.dart';
 import 'package:keno_plus/features/authentication/data/datasources/auth_datasource.dart';
 import 'package:keno_plus/features/authentication/data/models/user_model.dart';
 import 'package:keno_plus/features/authentication/domain/repository/auth_repository.dart';
@@ -26,5 +27,13 @@ class IUserRepository extends UserRepository {
     } catch (e) {
       return Left(Fail(e.toString()));
     }
+  }
+
+  @override
+  Future<Either<AuthFailure, UserModel>> getUserByUsername(
+    String username,
+  ) async {
+    final result = await userDataSource.getUserByUsername(username);
+    return result.fold((authFail) => (Left(authFail)), (user) => (Right(user)));
   }
 }
