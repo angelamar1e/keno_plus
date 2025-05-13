@@ -9,23 +9,25 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((
     _,
   ) {
-    runApp(const MainApp());
+    runApp(
+      BlocProvider(
+        create: (context) => sl<AuthenticationBloc>(),
+        child: const KenoPlus(),
+      ),
+    );
   });
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class KenoPlus extends StatelessWidget {
+  const KenoPlus({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthenticationBloc(createUser: sl<CreateUser>()),
-      child: MaterialApp.router(
-        title: AppStrings.appName,
-        theme: AppTheme.theme,
-        debugShowCheckedModeBanner: false,
-        routerConfig: router,
-      ),
+    return MaterialApp.router(
+      title: AppStrings.appName,
+      theme: AppTheme.theme,
+      debugShowCheckedModeBanner: false,
+      routerConfig: router,
     );
   }
 }
