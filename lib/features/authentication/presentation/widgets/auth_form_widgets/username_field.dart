@@ -1,11 +1,13 @@
+import 'package:keno_plus/core/utils/auth_form_type.dart';
 import 'package:keno_plus/core/validation/value_failure.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
 class UserNameField extends StatelessWidget {
-  const UserNameField({super.key});
+  const UserNameField(this.formType, {super.key});
 
   final String fieldName = 'Username';
+  final AuthFormType formType;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class UserNameField extends StatelessWidget {
           validator: (_) {
             String? error;
 
-            if (state.isUsernameUnique) {
+            if (state.isUsernameUnique && formType == AuthFormType.signUp) {
               state.username.value.fold(
                 (fail) {
                   switch (fail) {
@@ -47,6 +49,21 @@ class UserNameField extends StatelessWidget {
                 },
                 (success) {
                   error = null; // No error if validation succeeds
+                },
+              );
+            } else if (formType == AuthFormType.login) {
+              state.username.value.fold(
+                (fail) {
+                  switch (fail) {
+                    case Empty():
+                      error = '$fieldName is required';
+                      break;
+                    default:
+                      error = null;
+                  }
+                },
+                (success) {
+                  return null;
                 },
               );
             } else {
