@@ -1,4 +1,4 @@
-import '../../../../core/values/app_imports.dart';
+import 'package:keno_plus/core/values/app_imports.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
