@@ -19,8 +19,8 @@ class UserNameField extends StatelessWidget {
             ),
           ),
           autocorrect: false,
-          // onChanged:
-          // (value) => context.read<SignUpBloc>().add(UsernameChanged(value)),
+          onChanged:
+              (value) => context.read<LogInBloc>().add(UsernameChanged(value)),
           validator: (_) {
             return state.username.value.fold(
               (fail) => switch (fail) {
@@ -30,7 +30,10 @@ class UserNameField extends StatelessWidget {
               (success) => null, // No error if validation succeeds
             );
           },
-          autovalidateMode: AutovalidateMode.onUnfocus,
+          autovalidateMode:
+              state.showErrors
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
         );
       },
     );

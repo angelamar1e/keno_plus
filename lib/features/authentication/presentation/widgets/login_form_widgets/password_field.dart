@@ -30,7 +30,10 @@ class PasswordField extends StatelessWidget {
               (success) => null,
             );
           },
-          autovalidateMode: AutovalidateMode.onUnfocus,
+          autovalidateMode:
+              state.showErrors
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
         );
       },
     );
