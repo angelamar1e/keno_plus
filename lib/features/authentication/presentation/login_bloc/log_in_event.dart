@@ -16,9 +16,4 @@ class PasswordChanged extends LogInEvent {
   const PasswordChanged(this.password);
 }
 
-class LoggingIn extends LogInEvent {
-  final String username;
-  final String password;
-
-  const LoggingIn(this.username, this.password);
-}
+class LoggingIn extends LogInEvent {}
