@@ -1,7 +1,10 @@
 import 'package:keno_plus/core/utils/injections.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/domain/usecases/create_user_usecase.dart';
+import 'package:keno_plus/features/authentication/domain/usecases/get_by_username_usecase.dart';
 import 'package:keno_plus/features/authentication/domain/usecases/get_users_usecase.dart';
+import 'package:keno_plus/features/authentication/presentation/login_bloc/log_in_bloc.dart';
+import 'package:keno_plus/features/authentication/presentation/pages/log_in_page.dart';
 import 'package:keno_plus/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
@@ -25,6 +28,19 @@ final GoRouter router = GoRouter(
                 getUsers: sl<GetUsers>(),
               ),
           child: SignUpPage(),
+        );
+      },
+    ),
+    // Log in route
+    GoRoute(
+      path: '/${AppRoutes.login}',
+      name: AppRoutes.login,
+      builder: (context, state) {
+        return BlocProvider(
+          create:
+              (context) =>
+                  LogInBloc(getUserByUsername: sl<GetUserByUsername>()),
+          child: LogInPage(),
         );
       },
     ),
