@@ -54,7 +54,10 @@ class UserNameField extends StatelessWidget {
             }
             return error;
           },
-          autovalidateMode: AutovalidateMode.onUnfocus,
+          autovalidateMode:
+              (state.showError
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled),
         );
       },
     );

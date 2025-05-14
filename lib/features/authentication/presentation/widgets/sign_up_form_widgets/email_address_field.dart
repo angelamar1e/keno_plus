@@ -30,7 +30,10 @@ class EmailAddressField extends StatelessWidget {
                 },
                 (success) => null,
               ),
-          autovalidateMode: AutovalidateMode.onUnfocus,
+          autovalidateMode:
+              state.showError
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
         );
       },
     );

@@ -45,7 +45,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       state.copyWith(
         birthdate: Birthdate(event.birthdate),
         age: Age(event.birthdate),
-        showError: true,
       ),
     );
   }
@@ -81,6 +80,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }
 
   void _onCreatingUser(CreatingUser event, Emitter<SignUpState> emit) async {
+    Either<Fail, UserModel>? result;
+
     final isFirstNameValid = state.firstName.value.isRight();
     final isLastNameValid = state.lastName.value.isRight();
     final isAgeValid = state.age.value.isRight();
@@ -120,11 +121,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         isUsernameValid &&
         isPasswordValid) {
       emit(state.copyWith(isSubmitting: true, status: null));
+      result = await createUser(user);
 
       await Future.delayed(const Duration(seconds: 1));
     }
 
-    final result = await createUser(user);
-    emit(state.copyWith(isSubmitting: false, status: result));
+    emit(state.copyWith(isSubmitting: false, status: result, showError: true));
   }
 }
