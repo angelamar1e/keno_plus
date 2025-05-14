@@ -1,5 +1,7 @@
 // ignore_for_file: unused_import
 
+import 'dart:io';
+
 import 'package:keno_plus/core/utils/auth_form_type.dart';
 import 'package:keno_plus/core/utils/injections.dart';
 import 'package:keno_plus/core/validation/auth_failure.dart';
@@ -24,6 +26,7 @@ class LogInForm extends StatelessWidget {
         listener: (context, state) {
           final status = state.status;
 
+          // show error via a snackbar or navigate to home
           if (status != null) {
             status.fold(
               (failure) => {
@@ -77,6 +80,22 @@ class LogInForm extends StatelessWidget {
                         CTAButton(formType),
                         SizedBox(height: 15),
                         LoadingIndicator(isSubmitting: state.isSubmitting),
+
+                        // go to sign up
+                        TextButton(
+                          onPressed: () {
+                            context.goNamed(
+                              AppRoutes.signUp,
+                            ); // Navigate to the sign-up page
+                          },
+                          child: Text(
+                            "Don't have an account? Sign up",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
