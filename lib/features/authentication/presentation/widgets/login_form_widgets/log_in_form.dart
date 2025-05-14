@@ -23,6 +23,7 @@ class LogInForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: BlocListener<LogInBloc, LogInState>(
+        listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           final status = state.status;
 
@@ -30,15 +31,18 @@ class LogInForm extends StatelessWidget {
           if (status != null) {
             status.fold(
               (failure) => {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: switch (failure) {
-                      UserDoesNotExist() => Text('User does not exist'),
-                      WrongPassword() => Text('Incorrect password'),
-                      _ => Text(''),
-                    },
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: switch (failure) {
+                        UserDoesNotExist() => Text('User does not exist'),
+                        WrongPassword() => Text('Incorrect password'),
+                        _ => Text(''),
+                      },
+                      duration: const Duration(seconds: 3),
+                    ),
                   ),
-                ),
               },
               (user) => {
                 authBloc.add(AuthenticationSucceeded(user: user)),
