@@ -16,7 +16,7 @@ class LoadingScreen extends StatelessWidget {
             });
           } else {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.goNamed(AppRoutes.signUp);
+              context.goNamed(AppRoutes.login);
             });
           }
         });
