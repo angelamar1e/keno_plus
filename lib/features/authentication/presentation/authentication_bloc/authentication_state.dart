@@ -12,6 +12,8 @@ class AuthenticationState {
   });
 
   bool get isAuthenticated => status == AuthenticationStatus.authenticated;
+  bool get isUnauthenticated => status == AuthenticationStatus.unauthenticated;
+  bool get isCheckingAuthStatus => status == AuthenticationStatus.initial;
 
   AuthenticationState copyWith({
     AuthenticationStatus? status,
