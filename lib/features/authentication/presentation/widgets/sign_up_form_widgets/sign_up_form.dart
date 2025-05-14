@@ -127,6 +127,22 @@ class SignUpForm extends StatelessWidget {
                         CTAButton(formType),
                         SizedBox(height: 15),
                         LoadingIndicator(isSubmitting: state.isSubmitting),
+
+                        // go to log in
+                        TextButton(
+                          onPressed: () {
+                            context.goNamed(
+                              AppRoutes.login,
+                            ); // Navigate to the sign-up page
+                          },
+                          child: Text(
+                            "Already have an account? Log in",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
