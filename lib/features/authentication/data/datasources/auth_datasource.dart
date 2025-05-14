@@ -30,7 +30,7 @@ class UserDataSource {
   ) async {
     final List<Map<String, Object?>> maps = await database.query(
       'users',
-      where: 'username',
+      where: 'username = ?',
       whereArgs: [username],
     );
 
