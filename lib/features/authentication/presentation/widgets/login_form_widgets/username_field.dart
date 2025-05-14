@@ -31,9 +31,9 @@ class UserNameField extends StatelessWidget {
             );
           },
           autovalidateMode:
-              state.showErrors
+              state.showErrors == true
                   ? AutovalidateMode.always
-                  : AutovalidateMode.disabled,
+                  : AutovalidateMode.onUnfocus,
         );
       },
     );

@@ -31,9 +31,9 @@ class PasswordField extends StatelessWidget {
             );
           },
           autovalidateMode:
-              state.showErrors
+              state.showErrors == true
                   ? AutovalidateMode.always
-                  : AutovalidateMode.disabled,
+                  : AutovalidateMode.onUnfocus,
         );
       },
     );

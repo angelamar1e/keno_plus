@@ -34,7 +34,7 @@ class PasswordField extends StatelessWidget {
           autovalidateMode:
               state.showErrors
                   ? AutovalidateMode.always
-                  : AutovalidateMode.disabled,
+                  : AutovalidateMode.onUnfocus,
         );
       },
     );
