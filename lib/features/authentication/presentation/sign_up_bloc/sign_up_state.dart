@@ -15,7 +15,7 @@ final class SignUpState {
     required this.email,
     required this.isSubmitting,
     this.status,
-    required this.showError,
+    required this.showErrors,
   });
 
   final Name firstName;
@@ -29,7 +29,7 @@ final class SignUpState {
   final EmailAddress email;
   final Either<Fail, UserModel>? status;
   final bool isSubmitting;
-  final bool showError;
+  final bool showErrors;
 
   SignUpState copyWith({
     Name? firstName,
@@ -57,7 +57,7 @@ final class SignUpState {
       email: email ?? this.email,
       status: status ?? this.status,
       isSubmitting: isSubmitting,
-      showError: showError,
+      showErrors: showError,
     );
   }
 
@@ -73,7 +73,7 @@ final class SignUpState {
       phoneNumber: PhoneNumber(''),
       email: EmailAddress(''),
       isSubmitting: false,
-      showError: false,
+      showErrors: false,
     );
   }
 }

@@ -30,6 +30,8 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
   }
 
   void _onLoggingIn(LoggingIn event, Emitter<LogInState> emit) async {
+    late Either<AuthFailure, UserModel>? result;
+
     final isUsernameValid = state.username.value.isRight();
     final isPasswordValid = state.username.value.isRight();
 
@@ -40,27 +42,27 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     if (isUsernameValid && isPasswordValid) {
       emit(state.copyWith(isSubmitting: true, status: null));
 
+      // get user by username
+      result = await getUserByUsername.call(username);
+
       await Future.delayed(const Duration(seconds: 1));
     }
 
-    // get user by username
-    final result = await getUserByUsername.call(username);
+    if (result != null) {
+      result.fold(
+        (authFail) => (emit(state.copyWith(status: Left(authFail)))),
+        (user) {
+          if (user.password == password) {
+            emit(state.copyWith(status: Right(user)));
+          } else {
+            emit(
+              state.copyWith(status: Left(AuthFailure.wrongPassword(password))),
+            );
+          }
+        },
+      );
+    }
 
-    result.fold(
-      (authFail) =>
-          (emit(state.copyWith(isSubmitting: false, status: Left(authFail)))),
-      (user) {
-        if (user.password == password) {
-          emit(state.copyWith(isSubmitting: false, status: Right(user)));
-        } else {
-          emit(
-            state.copyWith(
-              isSubmitting: false,
-              status: Left(AuthFailure.wrongPassword(password)),
-            ),
-          );
-        }
-      },
-    );
+    emit(state.copyWith(isSubmitting: false, showErrors: true));
   }
 }

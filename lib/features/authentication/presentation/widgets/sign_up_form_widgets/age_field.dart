@@ -38,7 +38,7 @@ class AgeField extends StatelessWidget {
           autocorrect: false,
           readOnly: true,
           autovalidateMode:
-              state.showError
+              state.showErrors
                   ? AutovalidateMode.always
                   : AutovalidateMode.disabled,
         );

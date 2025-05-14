@@ -33,7 +33,7 @@ class PhoneNumberField extends StatelessWidget {
                 (success) => null,
               ),
           autovalidateMode:
-              state.showError
+              state.showErrors
                   ? AutovalidateMode.always
                   : AutovalidateMode.disabled,
         );

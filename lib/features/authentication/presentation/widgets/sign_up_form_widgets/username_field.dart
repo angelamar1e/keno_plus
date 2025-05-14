@@ -55,7 +55,7 @@ class UserNameField extends StatelessWidget {
             return error;
           },
           autovalidateMode:
-              (state.showError
+              (state.showErrors
                   ? AutovalidateMode.always
                   : AutovalidateMode.disabled),
         );
