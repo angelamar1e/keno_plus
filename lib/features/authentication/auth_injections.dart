@@ -30,5 +30,7 @@ initAuthInjections() async {
   sl.registerSingleton<GetUserByUsername>(GetUserByUsername(sl()));
 
   // Register AuthenticationBloc
-  sl.registerSingleton<AuthenticationBloc>(AuthenticationBloc());
+  sl.registerSingleton<AuthenticationBloc>(
+    AuthenticationBloc(sl<GetUserByUsername>()),
+  );
 }
