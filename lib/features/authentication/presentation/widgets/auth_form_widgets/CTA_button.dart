@@ -21,7 +21,7 @@ class CTAButton extends StatelessWidget {
         buttonText = 'Sign Up';
         break;
       case AuthFormType.login:
-        onPressed = () => context.read<LogInBloc>();
+        onPressed = () => context.read<LogInBloc>().add(LoggingIn());
         buttonText = 'Login';
         break;
     }
