@@ -1,28 +1,80 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:keno_plus/features/authentication/presentation/screens/sign_up.dart';
+import 'package:keno_plus/core/utils/injections.dart';
+import 'package:keno_plus/core/values/app_imports.dart';
+import 'package:keno_plus/features/authentication/domain/usecases/create_user_usecase.dart';
+import 'package:keno_plus/features/authentication/domain/usecases/get_by_username_usecase.dart';
+import 'package:keno_plus/features/authentication/domain/usecases/get_users_usecase.dart';
+import 'package:keno_plus/features/authentication/presentation/login_bloc/log_in_bloc.dart';
+import 'package:keno_plus/features/authentication/presentation/pages/log_in_page.dart';
+import 'package:keno_plus/features/authentication/presentation/pages/sign_up_page.dart';
+import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/${AppRoutes.loadingScreen}',
   routes: [
+    GoRoute(
+      path: '/${AppRoutes.loadingScreen}',
+      name: AppRoutes.loadingScreen,
+      builder: (context, state) => const LoadingScreen(),
+    ),
     // Sign Up route
     GoRoute(
-      path: '/',
-      name: 'signUp',
-      builder: (context, state) => SignUpScreen(),
+      path: '/${AppRoutes.signUp}',
+      name: AppRoutes.signUp,
+      builder: (context, state) {
+        return BlocProvider(
+          create:
+              (context) => SignUpBloc(
+                createUser: sl<CreateUser>(),
+                getUsers: sl<GetUsers>(),
+              ),
+          child: SignUpPage(),
+        );
+      },
+    ),
+    // Log in route
+    GoRoute(
+      path: '/${AppRoutes.login}',
+      name: AppRoutes.login,
+      builder: (context, state) {
+        return BlocProvider(
+          create:
+              (context) =>
+                  LogInBloc(getUserByUsername: sl<GetUserByUsername>()),
+          child: LogInPage(),
+        );
+      },
     ),
 
-    // Home route with nested routes
-    GoRoute(
-      path: '/home',
-      name: 'home',
-      builder:
-          (context, state) => Scaffold(
-            appBar: AppBar(title: const Text('Home')),
-            body: Center(child: const Text('Home Screen')),
-          ),
+    ShellRoute(
+      builder: (context, state, child) {
+        int currentIndex = 0;
+
+        switch (state.matchedLocation) {
+          case '/${AppRoutes.home}':
+            currentIndex = 1;
+            break;
+          case '/${AppRoutes.profile}':
+            currentIndex = 2;
+            break;
+          default:
+        }
+
+        return Scaffold(
+          body: MainLayout(content: child),
+          bottomNavigationBar: KenoBottomNavBar(currentIndex: currentIndex),
+        );
+      },
       routes: [
-        // nested routes
+        GoRoute(
+          path: '/${AppRoutes.home}',
+          name: AppRoutes.home,
+          builder: (context, state) => const Home(),
+        ),
+        GoRoute(
+          path: '/${AppRoutes.profile}',
+          name: AppRoutes.profile,
+          builder: (context, state) => const Profile(),
+        ),
       ],
     ),
   ],
