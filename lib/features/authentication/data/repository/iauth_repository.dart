@@ -34,6 +34,6 @@ class IUserRepository extends UserRepository {
     String username,
   ) async {
     final result = await userDataSource.getUserByUsername(username);
-    return result.fold((authFail) => (Left(authFail)), (user) => (Right(user)));
+    return result;
   }
 }
