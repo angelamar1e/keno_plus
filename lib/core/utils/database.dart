@@ -1,4 +1,5 @@
 import 'package:keno_plus/core/values/app_imports.dart';
+import 'package:keno_plus/features/authentication/data/models/user_model.dart';
 import 'package:path/path.dart';
 
 class AppDatabase {
@@ -23,7 +24,7 @@ class AppDatabase {
     );
   }
 
-  static Future<void> insertUser(Database db, User user) async {
+  static Future<void> insertUser(Database db, UserModel user) async {
     await db.insert(
       'users',
       user.toMap(),

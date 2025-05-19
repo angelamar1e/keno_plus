@@ -10,8 +10,6 @@ export 'package:crypto/crypto.dart';
 export 'package:flutter_dotenv/flutter_dotenv.dart';
 export 'package:bloc/bloc.dart';
 export 'package:keno_plus/core/utils/database.dart';
-export 'package:keno_plus/core/routes/app_routes.dart';
-export 'package:keno_plus/core/routes/router.dart';
 export 'package:keno_plus/core/themes/app_theme.dart';
 export 'package:keno_plus/core/widgets/app_widgets.dart';
 export 'package:keno_plus/core/values/app_strings.dart';
@@ -25,9 +23,7 @@ export 'package:keno_plus/features/authentication/data/data_source/user_datasour
 export 'package:keno_plus/features/authentication/data/data_source/user_datasource_impl.dart';
 export 'package:get_it/get_it.dart';
 export 'package:keno_plus/features/authentication/data/repository/user_repository_impl.dart';
-export 'package:keno_plus/features/authentication/domain/models/user.dart';
 export 'package:keno_plus/features/authentication/domain/repository/user_repository.dart';
-export 'package:keno_plus/features/authentication/domain/use_cases/create_user.dart';
 export 'package:keno_plus/features/authentication/presentation/bloc/authentication_bloc.dart';
 export 'package:keno_plus/features/authentication/presentation/widgets/authentication_widgets.dart';
 export 'package:keno_plus/features/authentication/presentation/widgets/log_in_widget.dart';

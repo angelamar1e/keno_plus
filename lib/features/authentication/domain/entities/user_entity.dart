@@ -1,5 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-class User {
+class UserEntity {
   final String firstName;
   final String lastName;
   final String birthdate;
@@ -9,7 +8,7 @@ class User {
   final String username;
   final String password;
 
-  User({
+  UserEntity({
     required this.firstName,
     required this.lastName,
     required this.birthdate,
@@ -19,17 +18,4 @@ class User {
     required this.username,
     required this.password,
   });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'firstName': firstName,
-      'lastName': lastName,
-      'birthdate': birthdate,
-      'age': age,
-      'phoneNumber': phoneNumber,
-      'email': email,
-      'username': username,
-      'password': password,
-    };
-  }
 }

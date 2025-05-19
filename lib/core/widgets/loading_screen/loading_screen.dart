@@ -1,4 +1,6 @@
+import 'package:keno_plus/core/router/app_routes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
+import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -8,47 +10,51 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  bool _showProgressIndicator = false;
-
   @override
   void initState() {
     super.initState();
-    // Delay showing the progress indicator
-    Timer(const Duration(seconds: 2 /*3*/), () {
-      if (mounted) {
-        setState(() {
-          _showProgressIndicator = true;
-        });
-      }
-    });
 
-    // Navigate to home screen after a delay
-    Timer(const Duration(seconds: 3 /*5*/), () {
-      if (mounted) {
-        context.goNamed(AppRoutes.home);
-      }
-    });
+    // Trigger the CheckAuthenticationStatus event
+    context.read<AuthenticationBloc>().add(CheckAuthenticationStatus());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          KenoGradientBackground(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(child: KenoShowLogo(logo: AppImages.logo)),
-                SizedBox(height: 32.0),
-                if (_showProgressIndicator) KenoShowLoading(),
-              ],
-            ),
-          ),
-        ],
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state.isAuthenticated) {
+          // Navigate to the home page if authenticated
+          context.goNamed(AppRoutes.home);
+        } else if (state.isUnauthenticated) {
+          // Navigate to the login page if not authenticated
+          context.goNamed(AppRoutes.login);
+        }
+      },
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          // Display the loading screen while checking authentication status
+          if (state.isCheckingAuthStatus) {
+            return Scaffold(
+              body: Stack(
+                children: [
+                  KenoGradientBackground(),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      KenoShowLogo(logo: AppImages.logo),
+                      const SizedBox(height: 32.0),
+                      const CircularProgressIndicator(), // Show a loading indicator
+                    ],
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // Return an empty container if navigation is already handled
+          return const SizedBox.shrink();
+        },
       ),
     );
   }

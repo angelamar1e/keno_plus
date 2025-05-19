@@ -1,9 +1,13 @@
+import 'package:keno_plus/core/router/router.dart';
+import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
+
 import 'core/values/app_imports.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // initialize the dependency injection
   await initInjections();
-  WidgetsFlutterBinding.ensureInitialized();
 
   // Lock orientation to portrait only
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((
