@@ -10,20 +10,6 @@ class GetUserByUsername {
 
   Future<Either<AuthFailure, UserModel>> call(String username) async {
     final result = await userRepository.getUserByUsername(username);
-    return result.fold(
-      (authFail) => Left(authFail),
-      (user) => Right(
-        UserModel(
-          username: user.username,
-          password: user.password,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          birthdate: user.birthdate,
-          age: user.age,
-          phoneNumber: user.phoneNumber,
-          email: user.email,
-        ),
-      ),
-    );
+    return result;
   }
 }

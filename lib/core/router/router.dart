@@ -9,6 +9,8 @@ import 'package:keno_plus/features/authentication/presentation/login_bloc/log_in
 import 'package:keno_plus/features/authentication/presentation/pages/log_in_page.dart';
 import 'package:keno_plus/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/game_config_bloc/game_config_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/pages/gameplay_page.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/${AppRoutes.loadingScreen}',
@@ -70,7 +72,11 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/${AppRoutes.home}',
           name: AppRoutes.home,
-          builder: (context, state) => const Home(),
+          builder:
+              (context, state) => BlocProvider(
+                create: (context) => sl<GameConfigBloc>(),
+                child: const GameplayPage(),
+              ),
         ),
         GoRoute(
           path: '/${AppRoutes.profile}',
