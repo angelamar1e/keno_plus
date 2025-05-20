@@ -8,6 +8,7 @@ class CardBloc extends Bloc<CardEvent, CardState> {
   CardBloc() : super(CardState.initial()) {
     on<BetsChanged>(_onBetsChanged);
     on<AutoPickBets>(_onAutoPickBets);
+    on<DeleteAutoPicks>(_onDeleteAutoPicks);
   }
 
   void _onBetsChanged(BetsChanged event, Emitter<CardState> emit) {
@@ -40,5 +41,14 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     }
 
     emit(state.copyWith(numberOfBets: numberOfBets, bets: randomBets.toList()));
+  }
+
+  void _onDeleteAutoPicks(DeleteAutoPicks event, Emitter<CardState> emit) {
+    final currentBetsList = state.bets;
+    final emptyBetsList = List<int>.empty();
+
+    if (currentBetsList.isNotEmpty){
+      emit(state.copyWith(bets: emptyBetsList));
+    }
   }
 }
