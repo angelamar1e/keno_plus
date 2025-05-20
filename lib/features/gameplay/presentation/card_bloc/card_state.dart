@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
+
 class CardState {
   CardState({
     required this.numberOfBets,
@@ -8,7 +10,7 @@ class CardState {
   });
 
   final int numberOfBets;
-  final List<int> bets;
+  final List<int> bets; 
   final int wager;
   final List<int> winningBets;
 

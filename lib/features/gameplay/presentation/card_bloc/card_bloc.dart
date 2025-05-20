@@ -13,10 +13,11 @@ class CardBloc extends Bloc<CardEvent, CardState> {
   void _onBetsChanged(BetsChanged event, Emitter<CardState> emit) {
     final bets = state.bets;
     final selectedBet = event.bet;
+    final numberOfBets = state.numberOfBets;
 
     if (bets.contains(selectedBet)) {
       bets.remove(selectedBet);
-    } else {
+    } else if (bets.length < numberOfBets) {
       bets.add(selectedBet);
     }
 
@@ -29,11 +30,6 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     // generate random numbers
     final random = Random();
     final numberOfBets = event.numberOfBets ?? state.numberOfBets;
-
-    // Ensure the number of bets does not exceed the range
-    if (numberOfBets > range) {
-      throw Exception("Number of bets cannot exceed the maximum range.");
-    }
 
     // Generate unique random numbers
     final randomBets = <int>{};
