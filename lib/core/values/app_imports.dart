@@ -24,10 +24,7 @@ export 'package:keno_plus/features/authentication/data/data_source/user_datasour
 export 'package:get_it/get_it.dart';
 export 'package:keno_plus/features/authentication/data/repository/user_repository_impl.dart';
 export 'package:keno_plus/features/authentication/domain/repository/user_repository.dart';
-export 'package:keno_plus/features/authentication/presentation/bloc/authentication_bloc.dart';
 export 'package:keno_plus/features/authentication/presentation/widgets/authentication_widgets.dart';
-export 'package:keno_plus/features/authentication/presentation/widgets/log_in_widget.dart';
-export 'package:keno_plus/features/authentication/presentation/widgets/sign_up_widget.dart';
 export 'package:keno_plus/core/utils/game_mode.dart';
 export 'package:keno_plus/core/widgets/home/home.dart';
 export 'package:keno_plus/core/widgets/home/home_widgets.dart';

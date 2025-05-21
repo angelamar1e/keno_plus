@@ -14,4 +14,7 @@ class AppColors {
   static const Color miniKeno = Color(0xFF_981450);
   static const Color gradientStart = Color(0xFF_0910A5);
   static const Color gradientEnd = Color(0xFF_2F36F0);
+  static const Color error = Color(0xFF_F44336);
+  static const Color warning = Color(0xFF_FF9800);
+  static const Color success = Color(0xFF_4CAF50);
 }

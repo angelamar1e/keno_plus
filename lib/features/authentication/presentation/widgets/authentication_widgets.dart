@@ -1,29 +1,44 @@
 import 'package:keno_plus/core/values/app_imports.dart';
 
-class KenoFormDialog extends StatelessWidget {
+/// A styled dialog widget for authentication forms with a header and content area.
+class KenoFormDialogWidget extends StatelessWidget {
+  // Header content
+  final String headerTitleText;
+  final String headerSubText;
   final String? logo;
+
+  // Appearance customization
   final Color? headerBackgroundColor;
   final Color? headerTitleColor;
   final Color? headerSubColor;
   final Color? contentBackgroundColor;
-  final String headerTitleText;
-  final String headerSubText;
+
+  // Dialog content
   final Widget content;
 
-  const KenoFormDialog({
+  const KenoFormDialogWidget({
     super.key,
+    // Required parameters
+    required this.headerTitleText,
+    required this.headerSubText,
+    required this.content,
+    // Optional parameters
     this.logo,
     this.headerBackgroundColor,
     this.headerTitleColor,
     this.headerSubColor,
     this.contentBackgroundColor,
-    required this.headerTitleText,
-    required this.headerSubText,
-    required this.content,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final headerBgColor = headerBackgroundColor ?? theme.colorScheme.primary;
+    final contentBgColor = contentBackgroundColor ?? theme.colorScheme.surface;
+    final titleColor = headerTitleColor ?? theme.colorScheme.secondary;
+    final subColor = headerSubColor ?? theme.colorScheme.onPrimary;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ConstrainedBox(
@@ -43,9 +58,7 @@ class KenoFormDialog extends StatelessWidget {
                   topLeft: Radius.circular(24.0),
                   topRight: Radius.circular(24.0),
                 ),
-                color:
-                    headerBackgroundColor?.withAlpha(150) ??
-                    AppColors.black.withAlpha(150),
+                color: headerBgColor.withOpacity(0.59),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -63,13 +76,13 @@ class KenoFormDialog extends StatelessWidget {
                       fontFamily: AppFonts.grandstander,
                       fontWeight: FontWeight.w900,
                       fontSize: 32.0,
-                      color: headerTitleColor,
+                      color: titleColor,
                       isGlow: true,
                     ),
                     KenoText(
                       text: headerSubText,
                       fontSize: 12.0,
-                      color: headerSubColor,
+                      color: subColor,
                     ),
                   ],
                 ),
@@ -84,7 +97,7 @@ class KenoFormDialog extends StatelessWidget {
                     bottomLeft: Radius.circular(24.0),
                     bottomRight: Radius.circular(24.0),
                   ),
-                  color: contentBackgroundColor ?? AppColors.white,
+                  color: contentBgColor,
                 ),
                 child: SingleChildScrollView(
                   physics: const ClampingScrollPhysics(),
@@ -105,107 +118,170 @@ class KenoFormDialog extends StatelessWidget {
   }
 }
 
+/// A styled form field widget for authentication inputs.
 class KenoFormField extends StatelessWidget {
-  final TextEditingController fieldController;
-  final FocusNode fieldFocus;
-  final bool isFieldFocused;
+  // Input properties
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
   final bool? readOnly;
+  final bool? enabled;
+  final bool? autocorrect;
+  final AutovalidateMode? autovalidateMode;
+  final String? Function(String?)? validator;
+
+  // Label and text properties
   final String? label;
   final String? hint;
+  final Color? textColor;
+  final FontWeight? focusedLabelWeight;
+
+  // Field behavior properties
   final bool isPassword;
   final bool isBirthdate;
+  final bool isAge;
   final bool isPasswordVisible;
-  final Color? textColor;
-  final Color? color;
-  final FontWeight? focusedLabelWeight;
+
+  // Icon properties
   final IconData? icon;
   final VoidCallback? iconPressed;
+
+  // Event callbacks
   final VoidCallback? onTogglePasswordVisibility;
-  final String? Function(String?)? validator;
   final void Function(String)? onChanged;
   final void Function()? onTap;
-  final TextInputType? keyboardType;
 
   const KenoFormField({
     super.key,
-    required this.fieldController,
-    required this.fieldFocus,
+    // Label and text properties
     this.label,
     this.hint,
+    this.textColor,
+    this.focusedLabelWeight,
+
+    // Input properties
+    this.controller,
+    this.keyboardType,
+    this.readOnly,
+    this.enabled,
+    this.autocorrect,
+    this.autovalidateMode,
+    this.validator,
+
+    // Field behavior properties
     this.isPassword = false,
     this.isBirthdate = false,
-    this.readOnly,
-    required this.isFieldFocused,
+    this.isAge = false,
     this.isPasswordVisible = false,
-    this.textColor,
-    this.color,
-    this.focusedLabelWeight,
+
+    // Icon properties
     this.icon,
     this.iconPressed,
+
+    // Event callbacks
     this.onTogglePasswordVisibility,
     this.onChanged,
-    this.validator,
-    this.keyboardType,
-    this.onTap,
+    this.onTap, required ,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: fieldController,
-      focusNode: fieldFocus,
-      obscureText: isPassword ? !isPasswordVisible : false,
+    final theme = Theme.of(context);
+    final inputDecoration = theme.inputDecorationTheme;
+
+    return FormField<String>(
       validator: validator,
-      onChanged: onChanged,
-      style: TextStyle(color: textColor),
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        floatingLabelStyle: TextStyle(
-          color: isFieldFocused ? color : AppColors.black,
-          fontWeight: focusedLabelWeight ?? FontWeight.w400,
-        ),
-        prefixIcon:
-            !isBirthdate
-                ? null
-                : IconButton(
-                  icon:
-                      isBirthdate
-                          ? Icon(Icons.calendar_month_rounded)
-                          : Icon(icon),
-                  color: isFieldFocused ? color : AppColors.black,
-                  onPressed: () {},
-                ),
-        suffixIcon:
-            fieldController.text.isEmpty
-                ? null
-                : IconButton(
-                  icon:
-                      isPassword
-                          ? Icon(
-                            isPasswordVisible
-                                ? Icons.visibility_off_rounded
-                                : Icons.visibility_rounded,
-                          )
-                          : Icon(icon),
-                  color: isFieldFocused ? color : AppColors.black,
-                  onPressed:
-                      isPassword ? onTogglePasswordVisibility : iconPressed,
-                ),
-        fillColor: AppColors.white,
-      ),
-      readOnly: readOnly ?? false,
-      keyboardType: keyboardType,
-      textInputAction:
-          !isPassword ? TextInputAction.next : TextInputAction.done,
-      onTap: onTap,
+      autovalidateMode: autovalidateMode,
+      builder: (FormFieldState<String> state) {
+        final bool hasError = state.hasError;
+
+        return TextFormField(
+          controller: controller,
+          obscureText: isPassword ? !isPasswordVisible : false,
+          style: TextStyle(
+            color: textColor ?? theme.textTheme.bodyMedium?.color,
+          ),
+          decoration: InputDecoration(
+            labelText: label,
+            hintText: hint,
+            floatingLabelStyle: inputDecoration.floatingLabelStyle?.copyWith(
+              fontWeight: focusedLabelWeight ?? FontWeight.w600,
+              color: hasError ? AppColors.error : null,
+            ),
+            prefixIcon:
+                !isBirthdate
+                    ? null
+                    : IconButton(
+                      icon: Icon(Icons.calendar_month_rounded),
+                      onPressed: onTap,
+                      color:
+                          hasError
+                              ? AppColors.error
+                              : inputDecoration.prefixIconColor,
+                    ),
+            suffixIcon:
+                isPassword
+                    ? IconButton(
+                      icon: Icon(
+                        isPasswordVisible
+                            ? Icons.visibility_off_rounded
+                            : Icons.visibility_rounded,
+                        color:
+                            hasError
+                                ? AppColors.error
+                                : inputDecoration.suffixIconColor,
+                      ),
+                      onPressed: onTogglePasswordVisibility,
+                    )
+                    : (controller?.text.isEmpty ?? true)
+                    ? null
+                    : IconButton(
+                      icon: Icon(
+                        icon,
+                        color:
+                            hasError
+                                ? AppColors.error
+                                : inputDecoration.suffixIconColor,
+                      ),
+                      onPressed: iconPressed,
+                    ),
+            contentPadding: inputDecoration.contentPadding,
+            labelStyle: inputDecoration.labelStyle,
+            hintStyle: inputDecoration.hintStyle,
+            errorText: state.errorText,
+            filled: inputDecoration.filled,
+            fillColor: inputDecoration.fillColor,
+            border: inputDecoration.border,
+            focusedBorder: inputDecoration.focusedBorder,
+            enabledBorder: inputDecoration.enabledBorder,
+            errorBorder: inputDecoration.errorBorder,
+            focusedErrorBorder: inputDecoration.focusedErrorBorder,
+          ),
+          readOnly: readOnly ?? false,
+          enabled: !isAge? enabled : false,
+          autocorrect: autocorrect ?? true,
+          keyboardType: keyboardType,
+          textInputAction:
+              !isPassword ? TextInputAction.next : TextInputAction.done,
+          onTap: onTap,
+          onChanged: (value) {
+            state.didChange(value);
+            if (onChanged != null) {
+              onChanged!(value);
+            }
+          },
+        );
+      },
     );
   }
 }
 
+/// A custom text button with clean styling and underline effect on press.
 class KenoTextButton extends StatefulWidget {
+  // Content
   final String text;
   final VoidCallback onPressed;
+
+  // Styling
   final Color? textColor;
   final FontWeight? fontWeight;
   final double? decorationThickness;
@@ -213,8 +289,10 @@ class KenoTextButton extends StatefulWidget {
 
   const KenoTextButton({
     super.key,
+    // Required parameters
     required this.text,
     required this.onPressed,
+    // Optional styling parameters
     this.textColor,
     this.fontWeight,
     this.decorationThickness,
@@ -230,6 +308,9 @@ class _KenoTextButtonState extends State<KenoTextButton> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final defaultTextColor = widget.textColor ?? theme.colorScheme.secondary;
+
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
       onTapUp: (_) => setState(() => _isPressed = false),
@@ -248,45 +329,58 @@ class _KenoTextButtonState extends State<KenoTextButton> {
         ),
         child: KenoText(
           text: widget.text,
-          color: widget.textColor,
-          fontWeight: widget.fontWeight,
+          color: defaultTextColor,
+          fontWeight: widget.fontWeight ?? FontWeight.w600,
           textDecoration: _isPressed ? TextDecoration.underline : null,
           decorationThickness: widget.decorationThickness,
-          decorationColor: widget.textColor,
+          decorationColor: defaultTextColor,
         ),
       ),
     );
   }
 }
 
+/// A text button with descriptive label for common authentication actions.
 class KenoDesciptiveTextButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  // Text content
   final String descriptiveText;
   final String buttonText;
+
+  // Styling
   final Color? descriptiveTextColor;
   final Color? buttonTextColor;
 
+  // Event callback
+  final VoidCallback onPressed;
+
   const KenoDesciptiveTextButton({
     super.key,
-    required this.onPressed,
+    // Required parameters
     required this.descriptiveText,
     required this.buttonText,
+    required this.onPressed,
+    // Optional styling parameters
     this.descriptiveTextColor,
     this.buttonTextColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final defaultDescriptiveColor =
+        descriptiveTextColor ?? theme.textTheme.bodyMedium?.color;
+    final defaultButtonColor = buttonTextColor ?? theme.colorScheme.secondary;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        KenoText(text: descriptiveText, color: descriptiveTextColor),
+        KenoText(text: descriptiveText, color: defaultDescriptiveColor),
         const SizedBox(width: 6),
         KenoTextButton(
           text: buttonText,
-          onPressed: onPressed,
-          textColor: buttonTextColor,
+          textColor: defaultButtonColor,
           fontWeight: FontWeight.w900,
+          onPressed: onPressed,
         ),
       ],
     );

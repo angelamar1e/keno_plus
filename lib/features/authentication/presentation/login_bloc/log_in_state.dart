@@ -7,6 +7,7 @@ class LogInState {
     required this.isSubmitting,
     required this.showErrors,
     required this.status,
+    this.isPasswordVisible = false,
   });
 
   final Username username;
@@ -14,6 +15,7 @@ class LogInState {
   final bool isSubmitting;
   final bool showErrors;
   final Either<AuthFailure, UserModel>? status;
+  final bool isPasswordVisible;
 
   LogInState copyWith({
     Username? username,
@@ -21,6 +23,7 @@ class LogInState {
     bool? isSubmitting,
     bool? showErrors,
     Either<AuthFailure, UserModel>? status,
+    bool? isPasswordVisible,
   }) {
     return LogInState(
       username: username ?? this.username,
@@ -28,6 +31,7 @@ class LogInState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       showErrors: showErrors ?? this.showErrors,
       status: status ?? this.status,
+      isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible,
     );
   }
 
@@ -38,6 +42,7 @@ class LogInState {
       isSubmitting: false,
       showErrors: false,
       status: null,
+      //isPasswordVisible: false,
     );
   }
 }

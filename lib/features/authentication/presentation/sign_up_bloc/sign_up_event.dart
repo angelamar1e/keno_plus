@@ -53,3 +53,8 @@ class EmailChanged extends SignUpEvent {
 }
 
 class CreatingUser extends SignUpEvent {}
+
+class TogglePasswordVisibilityEvent extends SignUpEvent {}
+
+class ResetPasswordVisibilityEvent extends SignUpEvent {}
+
