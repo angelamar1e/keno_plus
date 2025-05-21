@@ -4,17 +4,15 @@ import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dar
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
 
 class AutoPickNumberSlider extends StatelessWidget {
-  final int min; // Minimum value of the range
-  final int max; // Maximum value of the range
-  final int range;
+  final int max; // max allowable number of bets
+  final int largestNumber; // 
   final CardBloc cardBlocInstance;
 
   const AutoPickNumberSlider({
     super.key,
-    required this.min,
     required this.max,
     required this.cardBlocInstance,
-    required this.range,
+    required this.largestNumber,
   });
 
   @override
@@ -37,13 +35,13 @@ class AutoPickNumberSlider extends StatelessWidget {
               ),
               Slider(
                 value: numberOfBets.toDouble(),
-                min: 0,
+                min: 1.0,
                 max: max.toDouble(),
                 divisions: max, // Number of divisions
                 label: numberOfBets.toString(),
                 onChanged: (value) {
                   context.read<CardBloc>().add(
-                    AutoPickBets(numberOfBets: value.toInt(), range: range),
+                    AutoPickBets(numberOfBets: value.toInt(), largestNumber: largestNumber),
                   );
                 },
               ),

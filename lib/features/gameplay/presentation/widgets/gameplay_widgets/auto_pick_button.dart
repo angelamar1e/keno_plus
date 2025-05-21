@@ -7,11 +7,11 @@ class AutoPickButton extends StatelessWidget {
   const AutoPickButton({
     super.key,
     required this.cardBlocInstance,
-    required this.range,
+    required this.largestNumber,
   });
 
   final CardBloc cardBlocInstance;
-  final int range;
+  final int largestNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class AutoPickButton extends StatelessWidget {
         builder: (context, state) {
           return GestureDetector(
             onTap: () {
-              context.read<CardBloc>().add(AutoPickBets(range: range));
+              context.read<CardBloc>().add(AutoPickBets(largestNumber: largestNumber));
             },
             child: Container(
               width: 40,
