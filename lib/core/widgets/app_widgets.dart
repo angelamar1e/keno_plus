@@ -95,6 +95,18 @@ class _KenoButtonState extends State<KenoButton>
 
   @override
   Widget build(BuildContext context) {
+    // Get theme colors for defaults
+    final theme = Theme.of(context);
+    final defaultBackgroundColor =
+        widget.backgroundColor ?? theme.colorScheme.secondary;
+    final defaultTextColor = widget.textColor ?? theme.colorScheme.onSecondary;
+    final defaultIconColor = widget.iconColor ?? defaultTextColor;
+    final defaultForegroundColor =
+        widget.foregroundColor ?? theme.colorScheme.primary;
+    final defaultBorderColor =
+        widget.borderColor ?? theme.colorScheme.onPrimary;
+    final defaultGlowColor = widget.glowColor ?? defaultTextColor;
+
     return Listener(
       onPointerDown: (_) => _controller.forward(),
       onPointerUp: (_) => _controller.reverse(),
@@ -112,11 +124,9 @@ class _KenoButtonState extends State<KenoButton>
                         borderRadius: BorderRadius.circular(24.0),
                         boxShadow: [
                           BoxShadow(
-                            color:
-                                widget.glowColor ??
-                                AppColors.white.withAlpha(
-                                  _shadowAlphaAnimation.value.toInt(),
-                                ),
+                            color: defaultGlowColor.withAlpha(
+                              _shadowAlphaAnimation.value.toInt(),
+                            ),
                             blurRadius: 8.0,
                             spreadRadius: 1.0,
                             offset: Offset.zero,
@@ -130,10 +140,10 @@ class _KenoButtonState extends State<KenoButton>
                   onPressed: widget.onPressed,
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(
-                      widget.backgroundColor ?? AppColors.secondary,
+                      defaultBackgroundColor,
                     ),
                     foregroundColor: WidgetStateProperty.all(
-                      widget.foregroundColor ?? AppColors.primary,
+                      defaultForegroundColor,
                     ),
                     padding: WidgetStateProperty.all(
                       widget.padding ??
@@ -148,7 +158,7 @@ class _KenoButtonState extends State<KenoButton>
                         side:
                             widget.hasBorder
                                 ? BorderSide(
-                                  color: widget.borderColor ?? AppColors.white,
+                                  color: defaultBorderColor,
                                   width: widget.borderWidth ?? 2.0,
                                 )
                                 : BorderSide.none,
@@ -164,15 +174,18 @@ class _KenoButtonState extends State<KenoButton>
                         Icon(
                           widget.icon,
                           size: widget.iconSize ?? 26.0,
-                          color: widget.iconColor,
+                          color: defaultIconColor,
                         ),
                         SizedBox(width: 8.0),
                       ],
                       KenoText(
                         text: widget.text,
-                        fontFamily: widget.fontFamily ?? AppFonts.inter,
+                        fontFamily:
+                            widget.fontFamily ??
+                            theme.textTheme.labelLarge?.fontFamily ??
+                            AppFonts.inter,
                         fontSize: widget.fontSize ?? 16.0,
-                        color: widget.textColor,
+                        color: defaultTextColor,
                         fontWeight: widget.fontWeight ?? FontWeight.w600,
                       ),
                     ],
@@ -194,12 +207,16 @@ class KenoBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get theme colors
+    final theme = Theme.of(context);
+
     return BottomAppBar(
-      color: AppColors.primary,
+      color: theme.colorScheme.primary,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildNavItem(
+            context: context,
             pageIndex: 1,
             icon: Icons.home_rounded,
             label: AppStrings.home,
@@ -207,6 +224,7 @@ class KenoBottomNavBar extends StatelessWidget {
           ),
           const SizedBox(width: 24.0),
           _buildNavItem(
+            context: context,
             pageIndex: 2,
             icon: Icons.person_rounded,
             label: AppStrings.profile,
@@ -218,33 +236,28 @@ class KenoBottomNavBar extends StatelessWidget {
   }
 
   Widget _buildNavItem({
+    required BuildContext context,
     required int pageIndex,
     required IconData icon,
     required String label,
     required VoidCallback onTap,
   }) {
+    // Get theme colors
+    final theme = Theme.of(context);
+    final isSelected = currentIndex == pageIndex;
+    final color =
+        isSelected ? theme.colorScheme.secondary : theme.colorScheme.onPrimary;
+
     return FittedBox(
       child: Column(
         children: [
           IconButton(
             icon: Icon(icon),
             iconSize: 32.0,
-            color:
-                currentIndex == pageIndex
-                    ? AppColors.secondary
-                    : AppColors.white,
-            onPressed: () {
-              onTap();
-            },
+            color: color,
+            onPressed: onTap,
           ),
-          KenoText(
-            text: label,
-            fontSize: 16.0,
-            color:
-                currentIndex == pageIndex
-                    ? AppColors.secondary
-                    : AppColors.white,
-          ),
+          KenoText(text: label, fontSize: 16.0, color: color),
         ],
       ),
     );
@@ -312,12 +325,21 @@ class KenoText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get theme text style and colors
+    final theme = Theme.of(context);
+    final defaultColor =
+        color ??
+        theme.textTheme.bodyMedium?.color ??
+        theme.colorScheme.onBackground;
+    final defaultFontFamily =
+        fontFamily ?? theme.textTheme.bodyMedium?.fontFamily ?? AppFonts.inter;
+
     return Text(
       text,
       style: TextStyle(
-        fontFamily: fontFamily ?? 'Inter',
+        fontFamily: defaultFontFamily,
         fontSize: fontSize ?? 14.0,
-        color: color,
+        color: defaultColor,
         fontVariations: [
           FontVariation('wght', _getFontWeightValue(fontWeight)),
         ],
@@ -326,20 +348,20 @@ class KenoText extends StatelessWidget {
             isGlow == true
                 ? [
                   Shadow(
-                    color: (glowColor ?? color ?? Colors.white.withAlpha(200)),
+                    color: (glowColor ?? defaultColor).withAlpha(200),
                     blurRadius: (glowIntensity ?? 20) * 0.5,
-                    offset: Offset(0, 0),
+                    offset: const Offset(0, 0),
                   ),
                   Shadow(
-                    color: (glowColor ?? color ?? Colors.white).withAlpha(100),
+                    color: (glowColor ?? defaultColor).withAlpha(100),
                     blurRadius: glowIntensity ?? 20,
-                    offset: Offset(0, 0),
+                    offset: const Offset(0, 0),
                   ),
                 ]
                 : null,
         decoration: textDecoration ?? TextDecoration.none,
         decorationThickness: decorationThickness ?? 2.0,
-        decorationColor: decorationColor ?? color,
+        decorationColor: decorationColor ?? defaultColor,
       ),
       textAlign: textAlign ?? TextAlign.center,
     );
@@ -382,10 +404,10 @@ class KenoMainBackground extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                AppColors.black.withAlpha(50),
-                AppColors.gradientStart.withAlpha(100),
-                AppColors.gradientEnd.withAlpha(150),
+                colors: [
+                AppColors.black.withOpacity(0.2),
+                AppColors.gradientStart.withOpacity(0.4),
+                AppColors.gradientEnd.withOpacity(0.6),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
