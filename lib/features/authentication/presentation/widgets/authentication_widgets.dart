@@ -180,7 +180,8 @@ class KenoFormField extends StatelessWidget {
     // Event callbacks
     this.onTogglePasswordVisibility,
     this.onChanged,
-    this.onTap, required ,
+    this.onTap,
+    required,
   });
 
   @override
@@ -206,6 +207,11 @@ class KenoFormField extends StatelessWidget {
             floatingLabelStyle: inputDecoration.floatingLabelStyle?.copyWith(
               fontWeight: focusedLabelWeight ?? FontWeight.w600,
               color: hasError ? AppColors.error : null,
+            ),
+            errorMaxLines: 3,
+            errorStyle: TextStyle(
+              overflow:
+                  TextOverflow.ellipsis,
             ),
             prefixIcon:
                 !isBirthdate
@@ -257,7 +263,7 @@ class KenoFormField extends StatelessWidget {
             focusedErrorBorder: inputDecoration.focusedErrorBorder,
           ),
           readOnly: readOnly ?? false,
-          enabled: !isAge? enabled : false,
+          enabled: !isAge ? enabled : false,
           autocorrect: autocorrect ?? true,
           keyboardType: keyboardType,
           textInputAction:
