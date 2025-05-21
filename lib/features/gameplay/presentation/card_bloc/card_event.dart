@@ -5,27 +5,23 @@ class CardEvent {}
 
 class BetsChanged extends CardEvent {
   final int bet;
-  BetsChanged({required this.bet});
+  final int maxBets;
+  BetsChanged({required this.bet, required this.maxBets});
 }
 
 class AutoPickBets extends CardEvent {
   final int? numberOfBets;
-  final int range;
+  final int largestNumber;
 
-  AutoPickBets({required this.range, this.numberOfBets});
+  AutoPickBets({required this.largestNumber, this.numberOfBets});
 }
-
-class WagerHalved extends CardEvent {}
-
-class WagerDoubled extends CardEvent {}
-
-class IncreaseWager extends CardEvent {}
-
-class DecreaseWager extends CardEvent {}
 
 class DeleteAutoPicks extends CardEvent {}
 
 class PlayPressed extends CardEvent {
+  final int numbersCount;
+
+  PlayPressed({required this.numbersCount});
   // draw winning bets
   // save game history
   // emit resultsReady true
