@@ -8,9 +8,9 @@ class ModeSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: BlocBuilder<GameConfigBloc, GameConfigState>(
-        builder: (context, state) {},
-      ),
+      // child: BlocBuilder<GameConfigBloc, GameConfigState>(
+      //   builder: (context, state) {},
+      // ),
     );
   }
 }

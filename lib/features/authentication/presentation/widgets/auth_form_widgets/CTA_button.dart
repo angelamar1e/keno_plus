@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/core/utils/auth_form_type.dart';
+import 'package:keno_plus/core/values/app_imports.dart';
+import 'package:keno_plus/core/widgets/app_widgets.dart';
 import 'package:keno_plus/features/authentication/presentation/login_bloc/log_in_bloc.dart';
 import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
@@ -18,16 +20,18 @@ class CTAButton extends StatelessWidget {
     switch (formType) {
       case AuthFormType.signUp:
         onPressed = () => context.read<SignUpBloc>().add(CreatingUser());
-        buttonText = 'Sign Up';
+        buttonText = AppStrings.register;
         break;
       case AuthFormType.login:
         onPressed = () => context.read<LogInBloc>().add(LoggingIn());
-        buttonText = 'Login';
+        buttonText = AppStrings.login;
         break;
     }
-    return ElevatedButton(
+    return KenoButton(
+      text: buttonText,
+      hasBorder: true,
+      borderColor: AppColors.black,
       onPressed: onPressed,
-      child: Text(buttonText, style: TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 }

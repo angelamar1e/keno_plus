@@ -1,7 +1,6 @@
 // ignore_for_file: unused_import
 
-import 'dart:io';
-
+import 'package:keno_plus/core/router/app_routes.dart';
 import 'package:keno_plus/core/utils/auth_form_type.dart';
 import 'package:keno_plus/core/utils/injections.dart';
 import 'package:keno_plus/core/validation/auth_failure.dart';
@@ -13,101 +12,101 @@ import 'package:keno_plus/features/authentication/presentation/widgets/login_for
 import 'package:keno_plus/features/authentication/presentation/widgets/login_form_widgets/username_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/auth_form_widgets/loading_indicator.dart';
 
+/// Login form widget that handles user authentication.
+///
+/// This widget creates a complete login form with username and password fields,
+/// submit button, loading indicator, and navigation to sign up.
 class LogInForm extends StatelessWidget {
-  LogInForm({super.key});
+  // Dependencies
+  final AuthenticationBloc authBloc;
+  final AuthFormType formType;
 
-  final authBloc = sl<AuthenticationBloc>();
-  final AuthFormType formType = AuthFormType.login;
+  /// Creates a login form with the necessary dependencies.
+  LogInForm({super.key})
+    : authBloc = sl<AuthenticationBloc>(),
+      formType = AuthFormType.login;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: BlocListener<LogInBloc, LogInState>(
-        listenWhen: (previous, current) => previous.status != current.status,
-        listener: (context, state) {
-          final status = state.status;
-
-          // show error via a snackbar or navigate to home
-          if (status != null) {
-            status.fold(
-              (failure) => {
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(
-                    SnackBar(
-                      content: switch (failure) {
-                        UserDoesNotExist() => Text('User does not exist'),
-                        WrongPassword() => Text('Incorrect password'),
-                        _ => Text(''),
-                      },
-                      duration: const Duration(seconds: 3),
-                    ),
+    return BlocListener<LogInBloc, LogInState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        final status = state.status;
+    
+        // Handle authentication status
+        if (status != null) {
+          status.fold(
+            // Handle failure cases
+            (failure) => {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: switch (failure) {
+                      UserDoesNotExist() => const Text('User does not exist'),
+                      WrongPassword() => const Text('Incorrect password'),
+                      _ => const Text('Authentication failed'),
+                    },
+                    duration: const Duration(seconds: 3),
                   ),
-              },
-              (user) => {
-                authBloc.add(AuthenticationSucceeded(user: user)),
-
-                // navigate to home if sign up is successful
-                context.goNamed(AppRoutes.home),
-              },
-            );
-          }
-        },
-        child: BlocBuilder<LogInBloc, LogInState>(
-          builder: (context, state) {
-            return SingleChildScrollView(
-              reverse: true,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            },
+            // Handle success case
+            (user) => {
+              authBloc.add(AuthenticationSucceeded(user: user)),
+              // Navigate to home if login is successful
+              context.goNamed(AppRoutes.home),
+            },
+          );
+        }
+      },
+      child: BlocBuilder<LogInBloc, LogInState>(
+        builder: (context, state) {
+          return KenoMainLayout(
+            content: Stack(
+              fit: StackFit.expand,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
                   child: Form(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 30,
+                    child: KenoFormDialogWidget(
+                      // Header content
+                      logo: AppImages.logo,
+                      headerTitleText: AppStrings.welcomeTitle,
+                      headerSubText: AppStrings.welcomeDesc,
+                      // Form fields and buttons
+                      content: Column(
+                        children: [
+                          // Form fields
+                          const UserNameField(),
+                          const VerticalSpacer(),
+                          const PasswordField(),
+                          const VerticalSpacer(),
+    
+                          // Action buttons
+                          CTAButton(formType),
+                          const VerticalSpacer(),
+                          LoadingIndicator(isSubmitting: state.isSubmitting),
+                          const VerticalSpacer(),
+    
+                          // Secondary actions
+                          KenoDesciptiveTextButton(
+                            onPressed:
+                                () => context.goNamed(AppRoutes.signUp),
+                            descriptiveText: AppStrings.dontHaveAcc,
+                            buttonText: AppStrings.signUp,
                           ),
-                          child: UserNameField(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 30,
-                          ),
-                          child: PasswordField(),
-                        ),
-                        SizedBox(height: 30),
-                        CTAButton(formType),
-                        SizedBox(height: 15),
-                        LoadingIndicator(isSubmitting: state.isSubmitting),
-
-                        // go to sign up
-                        TextButton(
-                          onPressed: () {
-                            context.goNamed(
-                              AppRoutes.signUp,
-                            ); // Navigate to the sign-up page
-                          },
-                          child: Text(
-                            "Don't have an account? Sign up",
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

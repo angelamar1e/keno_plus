@@ -1,5 +1,5 @@
+import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/data/models/user_model.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class AppDatabase {

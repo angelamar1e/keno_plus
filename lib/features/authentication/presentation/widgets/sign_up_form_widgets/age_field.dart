@@ -2,29 +2,48 @@ import 'package:keno_plus/core/validation/value_failure.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
+/// Age input field with validation for minimum age requirement.
+///
+/// This widget renders a read-only form field that:
+/// - Displays the calculated age from the birthdate
+/// - Validates the user is at least 18 years old
+/// - Shows appropriate validation error messages
 class AgeField extends StatelessWidget {
+  /// Creates an age field widget
   AgeField({super.key});
 
-  final String fieldName = 'Age';
+  /// The display name for this field
+  final String fieldText = 'Age';
+
+  /// Text controller to display calculated age
   final ageController = TextEditingController();
+
+  /// Focus node for the field
+  final FocusNode ageFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpBloc, SignUpState>(
       builder: (context, state) {
+        // Update displayed text from state
         state.age.value.fold(
           (fail) => {ageController.text = fail.failedValue ?? ''},
           (age) => {ageController.text = age.toString()},
         );
 
-        return TextFormField(
+        return KenoFormField(
+          // Field appearance
           controller: ageController,
-          decoration: InputDecoration(
-            labelText: fieldName,
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-            ),
-          ),
+          label: fieldText,
+          keyboardType: TextInputType.none,
+
+          // Field behavior
+          isAge: true,
+          autocorrect: false,
+          readOnly: true,
+          enabled: false,
+
+          // Validation
           validator:
               (_) => state.age.value.fold(
                 (fail) => switch (fail) {
@@ -35,8 +54,6 @@ class AgeField extends StatelessWidget {
                 },
                 (success) => null,
               ),
-          autocorrect: false,
-          readOnly: true,
           autovalidateMode:
               state.showErrors
                   ? AutovalidateMode.always

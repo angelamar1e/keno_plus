@@ -30,6 +30,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     on<PasswordChanged>(_onPasswordChanged);
     on<EmailChanged>(_onEmailChanged);
     on<PhoneNumberChanged>(_onPhoneNumberChanged);
+    on<TogglePasswordVisibilityEvent>(_onTogglePasswordVisibility);
+    on<ResetPasswordVisibilityEvent>(_onResetPasswordVisibility);
   }
 
   void _onFirstNameChanged(FirstNameChanged event, Emitter<SignUpState> emit) {
@@ -127,5 +129,19 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     }
 
     emit(state.copyWith(isSubmitting: false, status: result, showError: true));
+  }
+
+  void _onTogglePasswordVisibility(
+    TogglePasswordVisibilityEvent event,
+    Emitter<SignUpState> emit,
+  ) {
+    emit(state.copyWith(isPasswordVisible: !state.isPasswordVisible));
+  }
+
+  void _onResetPasswordVisibility(
+    ResetPasswordVisibilityEvent event,
+    Emitter<SignUpState> emit,
+  ) {
+    emit(state.copyWith(isPasswordVisible: false));
   }
 }
