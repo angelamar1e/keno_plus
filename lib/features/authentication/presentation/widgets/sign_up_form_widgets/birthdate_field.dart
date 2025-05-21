@@ -1,4 +1,3 @@
-import 'package:keno_plus/core/themes/app_theme.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/presentation/sign_up_bloc/sign_up_bloc.dart';
 
