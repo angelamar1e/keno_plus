@@ -39,7 +39,7 @@ class PasswordField extends StatelessWidget {
                   Empty() => '$fieldText is required',
                   TooShort() => '$fieldText should be at least 8 characters',
                   Invalid() =>
-                    '$fieldText must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+                    '$fieldText must contain at least one uppercase letter, one lowercase letter, and one number (minimum 8 characters)',
                   _ => null,
                 },
                 (success) => null,
