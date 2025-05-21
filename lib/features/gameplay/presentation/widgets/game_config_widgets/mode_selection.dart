@@ -1,6 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/game_config_bloc/game_config_bloc.dart';
 
 class ModeSelection extends StatelessWidget {
   const ModeSelection({super.key});

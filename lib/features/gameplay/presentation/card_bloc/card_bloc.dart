@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:math';
+import 'package:keno_plus/core/utils/auto_generate_numbers.dart';
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
 
 part 'card_event.dart';
@@ -8,41 +8,72 @@ class CardBloc extends Bloc<CardEvent, CardState> {
   CardBloc() : super(CardState.initial()) {
     on<BetsChanged>(_onBetsChanged);
     on<AutoPickBets>(_onAutoPickBets);
+    on<DeleteAutoPicks>(_onDeleteAutoPicks);
+    on<PlayPressed>(_onPlayPressed);
   }
 
   void _onBetsChanged(BetsChanged event, Emitter<CardState> emit) {
     final bets = state.bets;
     final selectedBet = event.bet;
+    final numberOfBets = state.numberOfBets;
+    final maxBets = event.maxBets;
 
     if (bets.contains(selectedBet)) {
       bets.remove(selectedBet);
-    } else {
+    } else if (bets.length < maxBets) {
       bets.add(selectedBet);
     }
 
-    emit(state.copyWith(bets: bets));
+    emit(state.copyWith(bets: bets, winningBets: List.empty(), matchedBets: List.empty()));
   }
 
   void _onAutoPickBets(AutoPickBets event, Emitter<CardState> emit) {
-    final range = event.range;
-
-    // generate random numbers
-    final random = Random();
+    final largestNumber = event.largestNumber;
     final numberOfBets = event.numberOfBets ?? state.numberOfBets;
 
-    // Ensure the number of bets does not exceed the range
-    if (numberOfBets > range) {
-      throw Exception("Number of bets cannot exceed the maximum range.");
-    }
-
     // Generate unique random numbers
-    final randomBets = <int>{};
-    while (randomBets.length < numberOfBets) {
-      randomBets.add(
-        random.nextInt(range) + 1,
-      ); // Random number between 1 and range
-    }
+    final randomBets = autoGenerateNumbersList(
+      max: largestNumber,
+      size: numberOfBets,
+    );
 
-    emit(state.copyWith(numberOfBets: numberOfBets, bets: randomBets.toList()));
+    emit(
+      state.copyWith(
+        numberOfBets: numberOfBets,
+        bets: randomBets.toList(),
+        winningBets: List.empty(),
+        matchedBets: List.empty(),
+      ),
+    );
+  }
+
+  void _onDeleteAutoPicks(DeleteAutoPicks event, Emitter<CardState> emit) {
+    final currentBetsList = state.bets;
+    final emptyBetsList = List<int>.empty();
+
+    if (currentBetsList.isNotEmpty) {
+      emit(state.copyWith(bets: emptyBetsList));
+    }
+  }
+
+  void _onPlayPressed(PlayPressed event, Emitter<CardState> emit) {
+    final largestNumber = event.numbersCount;
+    final numberOfBets = state.numberOfBets;
+
+    final randomWinningBets = autoGenerateNumbersList(
+      max: largestNumber,
+      size: numberOfBets,
+    );
+
+    final matchedBets = state.bets.fold<List<int>>([], (value, element) {
+      if (randomWinningBets.contains(element)) {
+        return [...value, element];
+      }
+      return value;
+    });
+
+    emit(
+      state.copyWith(winningBets: randomWinningBets, matchedBets: matchedBets),
+    );
   }
 }
