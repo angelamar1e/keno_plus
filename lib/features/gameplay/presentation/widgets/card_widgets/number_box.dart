@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 class NumberBox extends StatelessWidget {
   final int number;
   final bool isSelected;
+  final bool isMatch;
+  final bool isWinningBet;
   final VoidCallback onTap;
 
   const NumberBox({
     super.key,
     required this.number,
     required this.isSelected,
+    required this.isMatch,
+    required this.isWinningBet,
     required this.onTap,
   });
 
@@ -21,7 +25,12 @@ class NumberBox extends StatelessWidget {
         height: 40,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : Colors.grey[300],
+          color:
+              isMatch
+                  ? Colors.green
+                  : isWinningBet
+                  ? Colors.red
+                  : (isSelected ? Colors.blue : Colors.grey[300]),
           border: Border.all(color: Colors.black),
           borderRadius: BorderRadius.circular(4),
         ),
