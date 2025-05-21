@@ -1,8 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_event.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_state.dart';
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
 
 class PayoutBloc extends Bloc<PayoutEvent, PayoutState> {
   // Mini Keno payout table (1-10 spots)
@@ -43,110 +41,117 @@ class PayoutBloc extends Bloc<PayoutEvent, PayoutState> {
   // Classic Keno payout table (1-15 spots)
   static const Map<int, Map<int, double>> _classicPayoutTable = {
     1: {1: 3.5},
-    2: {1: 0, 2: 12.0},
-    3: {1: 0, 2: 2.0, 3: 30.0},
-    4: {1: 0, 2: 1.0, 3: 4.0, 4: 100.0},
-    5: {1: 0, 2: 0, 3: 2.0, 4: 15.0, 5: 300.0},
-    6: {1: 0, 2: 0, 3: 1.0, 4: 5.0, 5: 50.0, 6: 1000.0},
-    7: {1: 0, 2: 0, 3: 0, 4: 2.0, 5: 15.0, 6: 100.0, 7: 2000.0},
-    8: {1: 0, 2: 0, 3: 0, 4: 1.0, 5: 5.0, 6: 50.0, 7: 300.0, 8: 5000.0},
+    2: {1: 1, 2: 10.0},
+    3: {1: 0, 2: 2.0, 3: 50.0},
+    4: {1: 0, 2: 1.5, 3: 10.0, 4: 80.0},
+    5: {1: 0, 2: 1.0, 3: 3.0, 4: 30.0, 5: 150.0},
+    6: {1: 0, 2: 0, 3: 2.0, 4: 15.0, 5: 60.0, 6: 500.0},
+    7: {0: 1, 1: 0, 2: 0, 3: 2, 4: 4.0, 5: 20.0, 6: 80.0, 7: 1000.0},
+    8: {0: 1, 1: 0, 2: 0, 3: 0, 4: 5.0, 5: 15.0, 6: 50.0, 7: 200.0, 8: 2000.0},
     9: {
+      0: 2,
       1: 0,
       2: 0,
       3: 0,
-      4: 0,
-      5: 2.0,
-      6: 15.0,
-      7: 100.0,
+      4: 2.0,
+      5: 10.0,
+      6: 25.0,
+      7: 125.0,
       8: 1000.0,
-      9: 10000.0,
+      9: 5000.0,
     },
     10: {
+      0: 2.0,
       1: 0,
       2: 0,
       3: 0,
       4: 0,
-      5: 1.0,
-      6: 5.0,
-      7: 50.0,
+      5: 5.0,
+      6: 30.0,
+      7: 100.0,
       8: 300.0,
       9: 2000.0,
       10: 100000.0,
     },
     11: {
+      0: 5.0,
       1: 0,
       2: 0,
       3: 0,
       4: 0,
-      5: 1.0,
-      6: 5.0,
+      5: 3.0,
+      6: 10.0,
       7: 50.0,
-      8: 300.0,
-      9: 2000.0,
-      10: 10000.0,
-      11: 100000.0,
+      8: 200.0,
+      9: 1200.0,
+      10: 8500.0,
+      11: 45000.0,
     },
     12: {
+      0: 5.0,
       1: 0,
       2: 0,
       3: 0,
       4: 0,
       5: 1.0,
-      6: 5.0,
-      7: 50.0,
-      8: 300.0,
-      9: 2000.0,
-      10: 10000.0,
-      11: 50000.0,
-      12: 100000.0,
+      6: 7.0,
+      7: 30.0,
+      8: 150.0,
+      9: 800.0,
+      10: 5000.0,
+      11: 12000.0,
+      12: 55000.0,
     },
     13: {
+      0: 7.0,
       1: 0,
       2: 0,
       3: 0,
       4: 0,
-      5: 1.0,
+      5: 0.0,
       6: 5.0,
-      7: 50.0,
-      8: 300.0,
-      9: 2000.0,
-      10: 10000.0,
-      11: 50000.0,
-      12: 100000.0,
-      13: 1000000.0,
+      7: 15.0,
+      8: 100.0,
+      9: 400.0,
+      10: 2500.0,
+      11: 10000.0,
+      12: 35000.0,
+      13: 170000.0,
     },
     14: {
+      0: 10.0,
       1: 0,
       2: 0,
       3: 0,
       4: 0,
-      5: 1.0,
-      6: 5.0,
-      7: 50.0,
-      8: 300.0,
-      9: 2000.0,
-      10: 10000.0,
-      11: 50000.0,
-      12: 100000.0,
-      13: 500000.0,
-      14: 1000000.0,
+      5: 0.0,
+      6: 2.50,
+      7: 7.50,
+      8: 50.0,
+      9: 250.0,
+      10: 1250.0,
+      11: 7500.0,
+      12: 20000.0,
+      13: 95000.0,
+      14: 380000.0,
     },
     15: {
+      0: 15.0,
       1: 0,
       2: 0,
       3: 0,
       4: 0,
-      5: 1.0,
-      6: 5.0,
-      7: 50.0,
-      8: 300.0,
-      9: 2000.0,
-      10: 10000.0,
-      11: 50000.0,
-      12: 100000.0,
-      13: 500000.0,
-      14: 1000000.0,
-      15: 10000000.0,
+      5: 0.0,
+      6: 1.50,
+      7: 5.0,
+      8: 15.0,
+      9: 120.0,
+      10: 1000.0,
+      11: 4500.0,
+      12: 12000.0,
+      13: 45000.0,
+      14: 200000.0,
+      15: 500000.0,
     },
   };
 
@@ -187,7 +192,7 @@ class PayoutBloc extends Bloc<PayoutEvent, PayoutState> {
   }
 
   void _onCalculatePayouts(CalculatePayouts event, Emitter<PayoutState> emit) {
-    final updatedPayouts = <String, CardPayoutInfo>{};
+    final Map<String, CardPayoutInfo> updatedPayouts = {};
     var totalAmountWon = 0.0;
 
     for (var i = 0; i < event.cardBlocInstances.length; i++) {
@@ -204,17 +209,22 @@ class PayoutBloc extends Bloc<PayoutEvent, PayoutState> {
         isClassicMode: event.isClassicMode,
       );
 
-      updatedPayouts['Card $i'] = CardPayoutInfo(
+      updatedPayouts['Card ${i + 1}'] = CardPayoutInfo(
         spots: spots,
         catches: catches,
         amountWon: amountWon,
+        winningNumbers: cardState.winningBets,
       );
 
       totalAmountWon += amountWon;
     }
 
     emit(
-      PayoutState(cardPayouts: updatedPayouts, totalAmountWon: totalAmountWon),
+      PayoutState(
+        cardPayouts: updatedPayouts,
+        totalAmountWon: totalAmountWon,
+        isCalculating: false,
+      ),
     );
   }
 
