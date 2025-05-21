@@ -1,3 +1,4 @@
+import 'package:keno_plus/core/router/app_routes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
 
@@ -36,12 +37,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
             return Scaffold(
               body: Stack(
                 children: [
-                  GradientBackground(),
+                  KenoGradientBackground(),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ShowLogo(logo: AppImages.logo),
+                      KenoShowLogo(logo: AppImages.logo),
                       const SizedBox(height: 32.0),
                       const CircularProgressIndicator(), // Show a loading indicator
                     ],

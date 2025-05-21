@@ -16,6 +16,7 @@ final class SignUpState {
     required this.isSubmitting,
     this.status,
     required this.showErrors,
+    this.isPasswordVisible = false,
   });
 
   final Name firstName;
@@ -30,6 +31,7 @@ final class SignUpState {
   final Either<Fail, UserModel>? status;
   final bool isSubmitting;
   final bool showErrors;
+  final bool isPasswordVisible;
 
   SignUpState copyWith({
     Name? firstName,
@@ -44,6 +46,7 @@ final class SignUpState {
     Either<Fail, UserModel>? status,
     bool isSubmitting = false,
     bool showError = false,
+    bool? isPasswordVisible,
   }) {
     return SignUpState(
       firstName: firstName ?? this.firstName,
@@ -58,6 +61,7 @@ final class SignUpState {
       status: status ?? this.status,
       isSubmitting: isSubmitting,
       showErrors: showError,
+      isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible,
     );
   }
 
@@ -74,6 +78,7 @@ final class SignUpState {
       email: EmailAddress(''),
       isSubmitting: false,
       showErrors: false,
+      //isPasswordVisible: false,
     );
   }
 }

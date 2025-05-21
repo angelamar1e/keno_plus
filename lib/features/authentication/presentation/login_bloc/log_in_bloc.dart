@@ -16,6 +16,8 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     on<UsernameChanged>(_onUsernameChanged);
     on<PasswordChanged>(_onPasswordChanged);
     on<LoggingIn>(_onLoggingIn);
+    on<TogglePasswordVisibilityEvent>(_onTogglePasswordVisibility);
+    on<ResetPasswordVisibilityEvent>(_onResetPasswordVisibility);
   }
 
   void _onUsernameChanged(
@@ -64,5 +66,19 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     }
 
     emit(state.copyWith(isSubmitting: false, showErrors: true));
+  }
+
+  void _onTogglePasswordVisibility(
+    TogglePasswordVisibilityEvent event,
+    Emitter<LogInState> emit,
+  ) {
+    emit(state.copyWith(isPasswordVisible: !state.isPasswordVisible));
+  }
+
+  void _onResetPasswordVisibility(
+    ResetPasswordVisibilityEvent event,
+    Emitter<LogInState> emit,
+  ) {
+    emit(state.copyWith(isPasswordVisible: false));
   }
 }

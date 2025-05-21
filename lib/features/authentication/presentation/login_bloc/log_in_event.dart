@@ -17,3 +17,7 @@ class PasswordChanged extends LogInEvent {
 }
 
 class LoggingIn extends LogInEvent {}
+
+class TogglePasswordVisibilityEvent extends LogInEvent {}
+
+class ResetPasswordVisibilityEvent extends LogInEvent {}

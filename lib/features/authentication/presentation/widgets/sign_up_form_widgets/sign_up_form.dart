@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import
 
+import 'package:keno_plus/core/router/app_routes.dart';
 import 'package:keno_plus/core/utils/auth_form_type.dart';
 import 'package:keno_plus/core/utils/injections.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
@@ -15,142 +16,127 @@ import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_f
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/phone_number_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/username_field.dart';
 
+/// Sign up form widget that handles user registration.
+///
+/// This widget creates a complete sign up form with all required user fields,
+/// submit button, loading indicator, and navigation to login.
 class SignUpForm extends StatelessWidget {
-  SignUpForm({super.key});
-  final authBloc = sl<AuthenticationBloc>();
-  final AuthFormType formType = AuthFormType.signUp;
+  // Dependencies
+  final AuthenticationBloc authBloc;
+  final AuthFormType formType;
+
+  /// Creates a sign up form with the necessary dependencies.
+  SignUpForm({super.key})
+    : authBloc = sl<AuthenticationBloc>(),
+      formType = AuthFormType.signUp;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: BlocListener<SignUpBloc, SignUpState>(
-        listener: (context, state) {
-          final status = state.status;
+    return BlocListener<SignUpBloc, SignUpState>(
+      listener: (context, state) {
+        final status = state.status;
 
-          if (status != null) {
-            status.fold(
-              (failure) => {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(failure.failure.toString())),
-                ),
-              },
-              (newUser) => {
-                authBloc.add(AuthenticationSucceeded(user: newUser)),
+        // Handle registration status
+        if (status != null) {
+          status.fold(
+            // Handle failure cases
+            (failure) => {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(failure.failure.toString())),
+              ),
+            },
+            // Handle success case
+            (newUser) => {
+              authBloc.add(AuthenticationSucceeded(user: newUser)),
+              // Navigate to home if sign up is successful
+              context.goNamed(AppRoutes.home),
+            },
+          );
+        }
+      },
+      child: BlocBuilder<SignUpBloc, SignUpState>(
+        builder: (context, state) {
+          return KenoMainLayout(
+            content: Stack(
+              fit: StackFit.expand,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: Form(
+                      child: KenoFormDialogWidget(
+                        // Header content
+                        logo: AppImages.logo,
+                        headerTitleText: AppStrings.welcomeTitle,
+                        headerSubText: AppStrings.welcomeDesc,
 
-                // navigate to home if sign up is successful
-                context.goNamed(AppRoutes.home),
-              },
-            );
-          }
-        },
-        child: BlocBuilder<SignUpBloc, SignUpState>(
-          builder: (context, state) {
-            return SingleChildScrollView(
-              reverse: true,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Form(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 30,
-                          ),
-                          child: NameField(
-                            labelText: 'First Name',
-                            onChanged:
-                                (value) => context.read<SignUpBloc>().add(
-                                  FirstNameChanged(value),
-                                ),
-                            valueSelector: (_) => state.firstName.value,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: NameField(
-                            labelText: 'Last Name',
-                            onChanged:
-                                (value) => context.read<SignUpBloc>().add(
-                                  LastNameChanged(value),
-                                ),
-                            valueSelector: (_) => state.lastName.value,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 30,
-                          ),
-                          child: BirthdateField(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 30,
-                          ),
-                          child: AgeField(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 30,
-                          ),
-                          child: PhoneNumberField(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 30,
-                          ),
-                          child: EmailAddressField(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 30,
-                          ),
-                          child: UserNameField(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 30,
-                          ),
-                          child: PasswordField(),
-                        ),
-                        SizedBox(height: 30),
-                        CTAButton(formType),
-                        SizedBox(height: 15),
-                        LoadingIndicator(isSubmitting: state.isSubmitting),
-
-                        // go to log in
-                        TextButton(
-                          onPressed: () {
-                            context.goNamed(
-                              AppRoutes.login,
-                            ); // Navigate to the sign-up page
-                          },
-                          child: Text(
-                            "Already have an account? Log in",
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 16,
+                        // Form content
+                        content: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // Personal information fields
+                            NameField(
+                              labelText: AppStrings.firstNameLabel,
+                              hintText: AppStrings.firstNameHint,
+                              onChanged:
+                                  (value) => context.read<SignUpBloc>().add(
+                                    FirstNameChanged(value),
+                                  ),
+                              valueSelector: (_) => state.firstName.value,
                             ),
-                          ),
+                            const VerticalSpacer(),
+                            NameField(
+                              labelText: AppStrings.lastNameLabel,
+                              hintText: AppStrings.lastNameHint,
+                              onChanged:
+                                  (value) => context.read<SignUpBloc>().add(
+                                    LastNameChanged(value),
+                                  ),
+                              valueSelector: (_) => state.lastName.value,
+                            ),
+                            const VerticalSpacer(),
+
+                            // Demographic information
+                            BirthdateField(),
+                            const VerticalSpacer(),
+                            AgeField(),
+                            const VerticalSpacer(),
+
+                            // Contact information
+                            const PhoneNumberField(),
+                            const VerticalSpacer(),
+                            const EmailAddressField(),
+                            const VerticalSpacer(),
+
+                            // Account information
+                            const UserNameField(),
+                            const VerticalSpacer(),
+                            const PasswordField(),
+                            const VerticalSpacer(),
+
+                            // Action buttons
+                            CTAButton(formType),
+                            LoadingIndicator(isSubmitting: state.isSubmitting),
+                            const VerticalSpacer(),
+
+                            // Secondary actions
+                            KenoDesciptiveTextButton(
+                              onPressed: () => context.goNamed(AppRoutes.login),
+                              descriptiveText: AppStrings.alreadyHaveAcc,
+                              buttonText: AppStrings.login,
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
