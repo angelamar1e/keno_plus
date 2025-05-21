@@ -8,89 +8,143 @@ import 'package:keno_plus/features/gameplay/presentation/game_config_bloc/game_c
 import 'package:keno_plus/features/gameplay/presentation/widgets/card_widgets/card_widget.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/auto_pick_button.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/auto_pick_slider.dart';
+import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/play_button.dart';
+import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/wager_controls.dart';
 
-class GameplayPage extends StatelessWidget {
+class GameplayPage extends StatefulWidget {
   const GameplayPage({super.key});
 
   @override
+  State<GameplayPage> createState() => _GameplayPageState();
+}
+
+class _GameplayPageState extends State<GameplayPage> {
+  late final PageController pageController;
+  final Map<int, CardBloc> cardBlocInstances = {};
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final Map<int, CardBloc> cardBlocInstances = {};
+    return BlocListener<GameConfigBloc, GameConfigState>(
+      listener: (context, state) {
+        pageController.animateToPage(
+          state.currentCard,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      },
+      child: Center(
+        child: BlocBuilder<GameConfigBloc, GameConfigState>(
+          builder: (context, state) {
+            // Ensure the currentCardBloc is retrieved from the map
+            if (!cardBlocInstances.containsKey(state.currentCard)) {
+              cardBlocInstances[state.currentCard] = CardBloc();
+            }
 
-    return Center(
-      child: BlocBuilder<GameConfigBloc, GameConfigState>(
-        builder: (context, state) {
-          // Ensure the currentCardBloc is retrieved from the map
-          if (!cardBlocInstances.containsKey(state.currentCard)) {
-            cardBlocInstances[state.currentCard] = CardBloc();
-          }
-          final currentCardBloc = cardBlocInstances[state.currentCard]!;
-          final numberOfCards = state.numberOfCards;
-          final range = state.gameMode.columns * state.gameMode.rows;
+            final currentCardBloc = cardBlocInstances[state.currentCard]!;
+            final numberOfCards =
+                state.numberOfCards; // number of purchased cards
+            final gameMode = state.gameMode;
+            final numbersCount =
+                gameMode
+                    .numbersCount; // largest number in a card, count of numbers in a card
 
-          return Column(
-            children: [
-              Expanded(
-                child: PageView.builder(
-                  itemCount: state.numberOfCards,
-                  onPageChanged: (index) {
-                    // Dispatch an event to update the current card
-                    context.read<GameConfigBloc>().add(
-                      UpdateCurrentCard(index),
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    if (!cardBlocInstances.containsKey(index)) {
-                      cardBlocInstances[index] = CardBloc();
-                    }
+            return Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: pageController,
+                    itemCount: state.numberOfCards,
+                    onPageChanged: (index) {
+                      // Dispatch an event to update the current card
+                      context.read<GameConfigBloc>().add(
+                        UpdateCurrentCard(index),
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      if (!cardBlocInstances.containsKey(index)) {
+                        cardBlocInstances[index] = CardBloc();
+                      }
 
-                    return BlocProvider.value(
-                      value: cardBlocInstances[index]!,
-                      child: CardWidget(gameMode: state.gameMode),
-                    );
-                  },
+                      return BlocProvider.value(
+                        value: cardBlocInstances[index]!,
+                        child: CardWidget(
+                          columns: gameMode.columns,
+                          numbersCount: numbersCount,
+                          maxBets: gameMode.maxBets,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed:
-                        state.currentCard > 0
-                            ? () {
-                              // Navigate to the previous card
-                              context.read<GameConfigBloc>().add(
-                                UpdateCurrentCard(state.currentCard - 1),
-                              );
-                            }
-                            : null,
-                    child: const Icon(Icons.arrow_back),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed:
-                        state.currentCard < numberOfCards - 1
-                            ? () {
-                              // Navigate to the next card
-                              context.read<GameConfigBloc>().add(
-                                UpdateCurrentCard(state.currentCard + 1),
-                              );
-                            }
-                            : null,
-                    child: const Icon(Icons.arrow_forward),
-                  ),
-                ],
-              ),
-              AutoPickButton(cardBlocInstance: currentCardBloc, range: range),
-              AutoPickNumberSlider(
-                range: range,
-                min: 0,
-                max: state.gameMode.maxBets,
-                cardBlocInstance: currentCardBloc,
-              ),
-            ],
-          );
-        },
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed:
+                          state.currentCard > 0
+                              ? () {
+                                // Navigate to the previous card
+                                context.read<GameConfigBloc>().add(
+                                  UpdateCurrentCard(state.currentCard - 1),
+                                );
+                              }
+                              : null,
+                      child: const Icon(Icons.arrow_back),
+                    ),
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed:
+                          state.currentCard < numberOfCards - 1
+                              ? () {
+                                // Navigate to the next card
+                                context.read<GameConfigBloc>().add(
+                                  UpdateCurrentCard(state.currentCard + 1),
+                                );
+                              }
+                              : null,
+                      child: const Icon(Icons.arrow_forward),
+                    ),
+                  ],
+                ),
+
+                // Wager controls
+                const WagerControls(),
+                const SizedBox(height: 16),
+
+                // button to auto-pick bets, according to number set in the slider
+                AutoPickButton(
+                  cardBlocInstance: currentCardBloc,
+                  largestNumber: numbersCount,
+                ),
+
+                // automatically auto-picks bets on slider change
+                AutoPickNumberSlider(
+                  cardBlocInstance: currentCardBloc,
+                  largestNumber: numbersCount,
+                  max: gameMode.maxBets,
+                ),
+
+                PlayButton(
+                  cardBlocInstances: cardBlocInstances.values.toList(),
+                  numbersCount: numbersCount,
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
