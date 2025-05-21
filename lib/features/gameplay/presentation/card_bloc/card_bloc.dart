@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/core/utils/auto_generate_numbers.dart';
-import 'package:keno_plus/core/utils/keno_payout_table.dart';
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
 
 part 'card_event.dart';
@@ -25,13 +24,7 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       bets.add(selectedBet);
     }
 
-    emit(
-      state.copyWith(
-        bets: bets,
-        winningBets: List.empty(),
-        matchedBets: List.empty(),
-      ),
-    );
+    emit(state.copyWith(bets: bets, winningBets: List.empty(), matchedBets: List.empty()));
   }
 
   void _onAutoPickBets(AutoPickBets event, Emitter<CardState> emit) {
@@ -66,15 +59,12 @@ class CardBloc extends Bloc<CardEvent, CardState> {
   void _onPlayPressed(PlayPressed event, Emitter<CardState> emit) {
     final largestNumber = event.numbersCount;
     final numberOfBets = state.numberOfBets;
-    final isClassicMode = event.isClassicMode;
 
-    // Generate winning numbers
     final randomWinningBets = autoGenerateNumbersList(
       max: largestNumber,
       size: numberOfBets,
     );
 
-    // Find matching numbers
     final matchedBets = state.bets.fold<List<int>>([], (value, element) {
       if (randomWinningBets.contains(element)) {
         return [...value, element];
@@ -82,20 +72,8 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       return value;
     });
 
-    // Calculate payout
-    final payout = KenoPayoutTable.calculatePayout(
-      numberOfSpots: state.bets.length,
-      numberOfCatches: matchedBets.length,
-      wager: state.wager.toDouble(),
-      isClassicMode: isClassicMode,
-    );
-
     emit(
-      state.copyWith(
-        winningBets: randomWinningBets,
-        matchedBets: matchedBets,
-        amountWon: payout,
-      ),
+      state.copyWith(winningBets: randomWinningBets, matchedBets: matchedBets),
     );
   }
 }
