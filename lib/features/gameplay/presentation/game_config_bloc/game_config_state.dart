@@ -14,7 +14,7 @@ class GameConfigState {
 
   factory GameConfigState.initial() {
     return GameConfigState(
-      numberOfCards: 1,
+      numberOfCards: 2,
       gameMode: GameMode.classic,
       currentCard: 0, // Default to the first card
     );
