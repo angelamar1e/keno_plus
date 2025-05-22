@@ -9,9 +9,10 @@ class KenoGameModeLayout extends StatefulWidget {
 
 class _KenoGameModeLayoutState extends State<KenoGameModeLayout> {
   int _currentPage = 0;
-
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -30,14 +31,14 @@ class _KenoGameModeLayoutState extends State<KenoGameModeLayout> {
           children: [
             KenoTopBar(
               text: AppStrings.gameMode,
-              textColor: AppColors.secondary,
+              textColor: colorScheme.secondary,
             ),
             Spacer(),
             KenoGameBar(
               gameMode: AppGameModes.modes[_currentPage],
               currentPage: _currentPage,
-              color: AppColors.secondary,
-              shadowColor: AppColors.black,
+              color: colorScheme.secondary,
+              shadowColor: colorScheme.shadow,
             ),
           ],
         ),
@@ -101,20 +102,22 @@ class KenoGameBar extends StatelessWidget {
     required this.color,
     required this.shadowColor,
   }) : _currentPage = currentPage;
-
+  
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
             color: shadowColor.withAlpha(100),
             blurRadius: 32.0,
             spreadRadius: 8.0,
-            offset: Offset(0, -16),
+            offset: const Offset(0, -16),
           ),
         ],
       ),
@@ -124,26 +127,29 @@ class KenoGameBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             KenoPageIndicator(currentPage: _currentPage),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             KenoText(
               text: gameMode.title,
               fontWeight: FontWeight.w900,
               fontSize: 36.0,
-              color: AppColors.black,
+              color: colorScheme.onSecondary,
             ),
-            SizedBox(height: 8.0),
-            KenoText(text: gameMode.description, color: AppColors.black),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 8.0),
+            KenoText(
+              text: gameMode.description, 
+              color: colorScheme.onSecondary
+            ),
+            const SizedBox(height: 16.0),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 18.0),
+              margin: const EdgeInsets.symmetric(horizontal: 18.0),
               child: KenoButton(
                 text: gameMode.buttonText,
                 icon: Icons.play_arrow_rounded,
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.white,
-                iconColor: AppColors.secondary,
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onPrimary,
+                iconColor: colorScheme.secondary,
                 isGlow: true,
-                glowColor: AppColors.primary,
+                glowColor: colorScheme.primary,
                 onPressed: () {},
               ),
             ),
@@ -159,23 +165,25 @@ class KenoPageIndicator extends StatelessWidget {
 
   const KenoPageIndicator({super.key, required int currentPage})
     : _currentPage = currentPage;
-
+    
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
         AppGameModes.modes.length,
         (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 4),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
           width: 10,
           height: 10,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color:
                 _currentPage == index
-                    ? AppColors.primary
-                    : AppColors.white.withAlpha(150),
+                    ? colorScheme.primary
+                    : colorScheme.onSecondary.withAlpha(150),
           ),
         ),
       ),
@@ -188,14 +196,19 @@ class KenoTopBar extends StatelessWidget {
   final Color textColor;
 
   const KenoTopBar({super.key, required this.text, required this.textColor});
-
+  
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Container(
-      padding: EdgeInsets.only(bottom: 128.0),
+      padding: const EdgeInsets.only(bottom: 128.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.primary, AppColors.transparent],
+          colors: [
+            colorScheme.primary, 
+            colorScheme.background.withOpacity(0)
+          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -227,14 +240,19 @@ class KenoGameBg extends StatelessWidget {
   final String imagePath;
 
   const KenoGameBg({super.key, required this.imagePath});
-
+  
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Image.asset(
       imagePath,
       fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,
+      color: colorScheme.brightness == Brightness.dark ? 
+          null : colorScheme.surface.withOpacity(0.1),
+      colorBlendMode: BlendMode.darken,
     );
   }
 }
@@ -262,10 +280,18 @@ class KenoStartLayout extends StatelessWidget {
 
 class KenoElementBg extends StatelessWidget {
   const KenoElementBg({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
-    return Image.asset(AppImages.elementBg, fit: BoxFit.contain);
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    return Image.asset(
+      AppImages.elementBg, 
+      fit: BoxFit.contain,
+      color: colorScheme.brightness == Brightness.dark ?
+          null : colorScheme.surface.withOpacity(0.1),
+      colorBlendMode: BlendMode.darken,
+    );
   }
 }
 
@@ -276,6 +302,8 @@ class KenoStart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18.0),
       child: Column(
@@ -287,12 +315,13 @@ class KenoStart extends StatelessWidget {
             textAlign: TextAlign.center,
             fontWeight: FontWeight.w900,
             fontSize: 36.0,
-            color: AppColors.secondary,
+            color: colorScheme.secondary,
             isGlow: true,
           ),
           const SizedBox(height: 8.0),
           KenoText(
             text: AppStrings.homeSubText,
+            color: colorScheme.onBackground,
             fontFamily: AppFonts.inter,
             textAlign: TextAlign.center,
             fontSize: 14.0,
@@ -301,7 +330,11 @@ class KenoStart extends StatelessWidget {
           KenoButton(
             text: AppStrings.play,
             icon: Icons.play_arrow_rounded,
+            textColor: colorScheme.primary,
+            iconColor: colorScheme.onPrimary,
+            backgroundColor: colorScheme.secondary,
             isGlow: true,
+            glowColor: colorScheme.secondary,
             margin: 18.0,
             onPressed: onPlayPressed, // CHANGE LAYOUT TO GAME MODE
           ),
@@ -310,10 +343,11 @@ class KenoStart extends StatelessWidget {
             text: AppStrings.learnKenoPlus,
             icon: Icons.question_mark_rounded,
             iconSize: 20.0,
-            foregroundColor: AppColors.secondary,
-            backgroundColor: AppColors.transparent,
+            textColor: colorScheme.secondary,
+            foregroundColor: colorScheme.secondary,
+            backgroundColor: Colors.transparent,
             hasBorder: true,
-            borderColor: AppColors.secondary,
+            borderColor: colorScheme.secondary,
             margin: 18.0,
             onPressed: () {}, // CHANGE LAYOUT TO TUTORIAL
           ),

@@ -18,7 +18,6 @@ class AppTheme {
       // Text styles for different typography elements
       textTheme: _createDarkTextTheme(),
 
-      // Color scheme for consistent UI coloring
       colorScheme: ColorScheme.dark(
         // Base properties
         brightness: Brightness.dark,
@@ -31,7 +30,7 @@ class AppTheme {
 
         // Secondary colors - accent colors
         secondary: AppColors.secondary,
-        onSecondary: AppColors.black,
+        onSecondary: AppColors.white,
         secondaryContainer: AppColors.secondary.withOpacity(0.7),
         onSecondaryContainer: AppColors.white,
 
@@ -44,16 +43,15 @@ class AppTheme {
         // Background colors - used for screen backgrounds
         background: AppColors.primary,
         onBackground: AppColors.white,
-
         // Error colors - used for error states and validation
         error: AppColors.error,
-        onError: AppColors.black,
+        onError: AppColors.white,
         errorContainer: AppColors.error.withOpacity(0.7),
         onErrorContainer: AppColors.white,
 
         // Tertiary colors - additional accents if needed
         tertiary: AppColors.secondary,
-        onTertiary: AppColors.black,
+        onTertiary: AppColors.white,
         tertiaryContainer: AppColors.secondary.withOpacity(0.7),
         onTertiaryContainer: AppColors.white,
 
@@ -76,63 +74,46 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       // Base theme properties
-      scaffoldBackgroundColor: AppColors.primary,
+      scaffoldBackgroundColor: Colors.grey[100], // Light background
       fontFamily: AppFonts.inter,
 
       // Text styles for different typography elements
-      textTheme: _createDarkTextTheme(),
+      textTheme: _createLightTextTheme(),
 
-      // Color scheme for consistent UI coloring
-      colorScheme: ColorScheme.dark(
+      // Fixed color scheme following Material standards
+      colorScheme: ColorScheme.light(
         // Base properties
-        brightness: Brightness.dark,
+        brightness: Brightness.light,
 
         // Primary colors - main brand colors
         primary: AppColors.primary,
         onPrimary: AppColors.white,
-        primaryContainer: AppColors.primary.withOpacity(0.7),
-        onPrimaryContainer: AppColors.white,
+        primaryContainer: AppColors.primary.withOpacity(0.2),
+        onPrimaryContainer: AppColors.primary,
 
         // Secondary colors - accent colors
         secondary: AppColors.secondary,
-        onSecondary: AppColors.black,
-        secondaryContainer: AppColors.secondary.withOpacity(0.7),
-        onSecondaryContainer: AppColors.white,
+        onSecondary: AppColors.white,
+        secondaryContainer: AppColors.secondary.withOpacity(0.2),
+        onSecondaryContainer: AppColors.secondary,
 
-        // Surface colors - used for cards, sheets, and menus
-        surface: AppColors.white,
-        onSurface: AppColors.black,
-        surfaceVariant: AppColors.white.withOpacity(0.8),
-        onSurfaceVariant: AppColors.black,
+        // Surface colors - light in light theme
+        surface: Colors.white,
+        onSurface: Colors.black,
+        surfaceVariant: Colors.grey[100],
+        onSurfaceVariant: Colors.black87,
 
         // Background colors - used for screen backgrounds
-        background: AppColors.primary,
-        onBackground: AppColors.white,
+        background: Colors.white,
+        onBackground: Colors.black,
 
         // Error colors - used for error states and validation
         error: AppColors.error,
-        onError: AppColors.black,
-        errorContainer: AppColors.error.withOpacity(0.7),
-        onErrorContainer: AppColors.white,
-
-        // Tertiary colors - additional accents if needed
-        tertiary: AppColors.secondary,
-        onTertiary: AppColors.black,
-        tertiaryContainer: AppColors.secondary.withOpacity(0.7),
-        onTertiaryContainer: AppColors.white,
-
-        // Other UI colors - used for miscellaneous UI elements
-        outline: AppColors.secondary.withOpacity(0.5),
-        outlineVariant: AppColors.secondary.withOpacity(0.3),
-        shadow: Colors.black,
-        scrim: Colors.black.withOpacity(0.3),
-        inverseSurface: AppColors.black,
-        onInverseSurface: AppColors.white,
-        inversePrimary: AppColors.secondary,
+        onError: AppColors.white,
       ),
 
       // Input decoration for form fields
-      inputDecorationTheme: _createDarkInputDecorationTheme(),
+      inputDecorationTheme: _createLightInputDecorationTheme(),
     );
   }
 
@@ -170,29 +151,29 @@ class AppTheme {
   static TextTheme _createLightTextTheme() {
     return const TextTheme(
       // Body text styles
-      bodyLarge: TextStyle(color: AppColors.black),
-      bodyMedium: TextStyle(color: AppColors.black),
-      bodySmall: TextStyle(color: AppColors.black),
+      bodyLarge: TextStyle(color: AppColors.white),
+      bodyMedium: TextStyle(color: AppColors.white),
+      bodySmall: TextStyle(color: AppColors.white),
 
       // Title text styles
-      titleLarge: TextStyle(color: AppColors.black),
-      titleMedium: TextStyle(color: AppColors.black),
-      titleSmall: TextStyle(color: AppColors.black),
+      titleLarge: TextStyle(color: AppColors.white),
+      titleMedium: TextStyle(color: AppColors.white),
+      titleSmall: TextStyle(color: AppColors.white),
 
       // Label text styles (buttons, etc)
-      labelLarge: TextStyle(color: AppColors.black),
-      labelMedium: TextStyle(color: AppColors.black),
-      labelSmall: TextStyle(color: AppColors.black),
+      labelLarge: TextStyle(color: AppColors.white),
+      labelMedium: TextStyle(color: AppColors.white),
+      labelSmall: TextStyle(color: AppColors.white),
 
       // Display text styles (large headers)
-      displayLarge: TextStyle(color: AppColors.black),
-      displayMedium: TextStyle(color: AppColors.black),
-      displaySmall: TextStyle(color: AppColors.black),
+      displayLarge: TextStyle(color: AppColors.white),
+      displayMedium: TextStyle(color: AppColors.white),
+      displaySmall: TextStyle(color: AppColors.white),
 
       // Headline text styles
-      headlineLarge: TextStyle(color: AppColors.black),
-      headlineMedium: TextStyle(color: AppColors.black),
-      headlineSmall: TextStyle(color: AppColors.black),
+      headlineLarge: TextStyle(color: AppColors.white),
+      headlineMedium: TextStyle(color: AppColors.white),
+      headlineSmall: TextStyle(color: AppColors.white),
     );
   }
 
@@ -206,8 +187,8 @@ class AppTheme {
       ),
 
       // Text styling
-      labelStyle: const TextStyle(color: AppColors.white),
-      hintStyle: TextStyle(color: AppColors.white.withOpacity(0.39)),
+      labelStyle: const TextStyle(color: AppColors.black),
+      hintStyle: TextStyle(color: AppColors.black.withOpacity(0.39)),
       floatingLabelStyle: const TextStyle(
         color: AppColors.secondary,
         fontWeight: FontWeight.w600,
@@ -226,7 +207,7 @@ class AppTheme {
       // Border styling
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(24.0),
-        borderSide: const BorderSide(color: AppColors.white),
+        borderSide: const BorderSide(color: AppColors.black),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(24.0),
@@ -277,7 +258,7 @@ class AppTheme {
       // Border styling
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(24.0),
-        borderSide: const BorderSide(color: AppColors.black),
+        borderSide: const BorderSide(color: AppColors.white),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(24.0),

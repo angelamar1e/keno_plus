@@ -59,7 +59,7 @@ class SignUpForm extends StatelessWidget {
               logo: AppImages.logo,
               headerTitleText: AppStrings.getReady,
               headerSubText: AppStrings.signUpToAccess,
-                    
+
               // Form content
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,40 +85,35 @@ class SignUpForm extends StatelessWidget {
                     valueSelector: (_) => state.lastName.value,
                   ),
                   const VerticalSpacer(),
-                    
+
                   // Demographic information
                   Row(
                     children: [
-                      Flexible(
-                        flex: 2,
-                        child: BirthdateField(),
-                      ),
+                      Flexible(flex: 2, child: BirthdateField()),
                       const SizedBox(width: 16),
-                      Flexible(
-                        flex: 1,
-                        child: AgeField(),
-                      ),
+                      Flexible(flex: 1, child: AgeField()),
                     ],
                   ),
                   const VerticalSpacer(),
-                    
+
                   // Contact information
                   const PhoneNumberField(),
                   const VerticalSpacer(),
                   const EmailAddressField(),
                   const VerticalSpacer(),
-                    
+
                   // Account information
                   const UserNameField(),
                   const VerticalSpacer(),
                   const PasswordField(),
                   const VerticalSpacer(),
-                    
+
                   // Action buttons
                   CTAButton(formType),
+                  const VerticalSpacer(),
                   LoadingIndicator(isSubmitting: state.isSubmitting),
                   const VerticalSpacer(),
-                    
+
                   // Secondary actions
                   KenoDesciptiveTextButton(
                     onPressed: () => context.goNamed(AppRoutes.login),

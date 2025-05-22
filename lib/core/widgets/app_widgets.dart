@@ -7,13 +7,14 @@ import 'package:keno_plus/core/values/app_imports.dart';
 
 /// Main layout for app screens with background and content.
 class KenoMainLayout extends StatelessWidget {
+  final Widget? background;
   final Widget content;
 
-  const KenoMainLayout({super.key, required this.content});
+  const KenoMainLayout({super.key, this.background, required this.content});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [const KenoMainBackground(), content]);
+    return Stack(children: [background ?? KenoMainBackground(), content]);
   }
 }
 
@@ -29,16 +30,16 @@ class KenoButton extends StatefulWidget {
   // Content
   final String text;
   final IconData? icon;
-  
+
   // Event handling
   final VoidCallback? onPressed;
-  
+
   // Text styling
   final String? fontFamily;
   final double? fontSize;
   final FontWeight? fontWeight;
   final Color? textColor;
-  
+
   // Button appearance
   final Color? backgroundColor;
   final Color? foregroundColor;
@@ -46,7 +47,7 @@ class KenoButton extends StatefulWidget {
   final double? iconSize;
   final Color? iconColor;
   final double? margin;
-  
+
   // Effects
   final bool isGlow;
   final Color? glowColor;
@@ -59,13 +60,13 @@ class KenoButton extends StatefulWidget {
     // Required parameters
     required this.text,
     this.onPressed,
-    
+
     // Text styling
     this.fontFamily,
     this.fontSize,
     this.fontWeight,
     this.textColor,
-    
+
     // Button appearance
     this.backgroundColor,
     this.foregroundColor,
@@ -74,7 +75,7 @@ class KenoButton extends StatefulWidget {
     this.iconSize,
     this.iconColor,
     this.margin,
-    
+
     // Effects
     this.isGlow = false,
     this.glowColor,
@@ -127,13 +128,12 @@ class _KenoButtonState extends State<KenoButton>
     final theme = Theme.of(context);
     final defaultBackgroundColor =
         widget.backgroundColor ?? theme.colorScheme.secondary;
-    final defaultTextColor = widget.textColor ?? theme.colorScheme.onSecondary;
-    final defaultIconColor = widget.iconColor ?? defaultTextColor;
+    final defaultTextColor = widget.textColor ?? theme.colorScheme.primary;
+    final defaultIconColor = widget.iconColor ?? theme.colorScheme.secondary;
     final defaultForegroundColor =
         widget.foregroundColor ?? theme.colorScheme.primary;
-    final defaultBorderColor =
-        widget.borderColor ?? theme.colorScheme.onPrimary;
-    final defaultGlowColor = widget.glowColor ?? defaultTextColor;
+    final defaultBorderColor = widget.borderColor ?? theme.colorScheme.primary;
+    final defaultGlowColor = widget.glowColor ?? theme.colorScheme.onPrimary;
 
     return Listener(
       onPointerDown: (_) => _controller.forward(),
@@ -308,7 +308,7 @@ class KenoBottomNavBar extends StatelessWidget {
 class KenoText extends StatelessWidget {
   // Content
   final String text;
-  
+
   // Text styling
   final double? fontSize;
   final TextAlign? textAlign;
@@ -319,7 +319,7 @@ class KenoText extends StatelessWidget {
   final bool italic;
   final Color? color;
   final String? fontFamily;
-  
+
   // Effects
   final bool isGlow;
   final Color? glowColor;
@@ -329,7 +329,7 @@ class KenoText extends StatelessWidget {
     super.key,
     // Required parameters
     required this.text,
-    
+
     // Text styling
     this.fontSize,
     this.textAlign,
@@ -340,7 +340,7 @@ class KenoText extends StatelessWidget {
     this.italic = false,
     this.color,
     this.fontFamily,
-    
+
     // Effects
     this.isGlow = false,
     this.glowColor,
@@ -451,6 +451,39 @@ class KenoMainBackground extends StatelessWidget {
           height: double.infinity,
           width: double.infinity,
           child: Image.asset(AppImages.menuBg, fit: BoxFit.cover),
+        ),
+        Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppColors.black.withOpacity(0.2),
+                AppColors.gradientStart.withOpacity(0.4),
+                AppColors.gradientEnd.withOpacity(0.6),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Main app background with image and gradient overlay.
+class KenoGameBackground extends StatelessWidget {
+  const KenoGameBackground({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: Image.asset(AppImages.gameBg, fit: BoxFit.cover),
         ),
         Container(
           height: double.infinity,
