@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/game_history_bloc/game_history_event.dart';
-import 'package:keno_plus/features/gameplay/presentation/game_history_bloc/game_history_state.dart';
-import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_state.dart';
+import 'package:keno_plus/features/game_history/game_history_bloc/game_history_event.dart';
+import 'package:keno_plus/features/game_history/game_history_bloc/game_history_state.dart';
 
 class GameHistoryBloc extends Bloc<GameHistoryEvent, GameHistoryState> {
   GameHistoryBloc() : super(GameHistoryState.initial()) {
@@ -23,15 +22,9 @@ class GameHistoryBloc extends Bloc<GameHistoryEvent, GameHistoryState> {
       //   gameMode: event.gameMode,
       // );
 
-      emit(state.copyWith(
-        isSaving: false,
-        isSaved: true,
-      ));
+      emit(state.copyWith(isSaving: false, isSaved: true));
     } catch (e) {
-      emit(state.copyWith(
-        isSaving: false,
-        error: e.toString(),
-      ));
+      emit(state.copyWith(isSaving: false, error: e.toString()));
     }
   }
-} 
+}
