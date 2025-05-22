@@ -15,8 +15,8 @@ class CardBloc extends Bloc<CardEvent, CardState> {
   void _onBetsChanged(BetsChanged event, Emitter<CardState> emit) {
     final bets = state.bets;
     final selectedBet = event.bet;
-    final numberOfBets = state.numberOfBets;
     final maxBets = event.maxBets;
+    final emptyList = List<int>.empty();
 
     if (bets.contains(selectedBet)) {
       bets.remove(selectedBet);
@@ -24,12 +24,20 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       bets.add(selectedBet);
     }
 
-    emit(state.copyWith(bets: bets, winningBets: List.empty(), matchedBets: List.empty()));
+    emit(
+      state.copyWith(
+        bets: bets,
+        // reset result lists
+        winningBets: emptyList,
+        matchedBets: emptyList,
+      ),
+    );
   }
 
   void _onAutoPickBets(AutoPickBets event, Emitter<CardState> emit) {
     final largestNumber = event.largestNumber;
     final numberOfBets = event.numberOfBets ?? state.numberOfBets;
+    final emptyList = List<int>.empty();
 
     // Generate unique random numbers
     final randomBets = autoGenerateNumbersList(
@@ -41,18 +49,19 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       state.copyWith(
         numberOfBets: numberOfBets,
         bets: randomBets.toList(),
-        winningBets: List.empty(),
-        matchedBets: List.empty(),
+        // reset result lists
+        winningBets: emptyList,
+        matchedBets: emptyList,
       ),
     );
   }
 
   void _onDeleteAutoPicks(DeleteAutoPicks event, Emitter<CardState> emit) {
     final currentBetsList = state.bets;
-    final emptyBetsList = List<int>.empty();
+    final emptyList = List<int>.empty();
 
     if (currentBetsList.isNotEmpty) {
-      emit(state.copyWith(bets: emptyBetsList));
+      emit(state.copyWith(bets: emptyList));
     }
   }
 

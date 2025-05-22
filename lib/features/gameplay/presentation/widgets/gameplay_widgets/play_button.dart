@@ -4,12 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/features/gameplay/gameplay_injections.dart';
 
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/game_history_bloc/game_history_bloc.dart';
+import 'package:keno_plus/features/game_history/game_history_bloc/game_history_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_event.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_state.dart';
 import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_state.dart';
+import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/result_dialog.dart';
 
 class PlayButton extends StatelessWidget {
   const PlayButton({
@@ -23,71 +24,6 @@ class PlayButton extends StatelessWidget {
 
   bool _hasEmptyBets(List<CardBloc> cardBlocs) {
     return cardBlocs.any((bloc) => bloc.state.bets.isEmpty);
-  }
-
-  void _showPayoutsDialog(BuildContext context, PayoutState state) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Game Results'),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...state.cardPayouts!.entries.map(
-                    (entry) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            entry.key,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text('Spots: ${entry.value.spots}'),
-                          Text('Catches: ${entry.value.catches}'),
-                          Text(
-                            'Amount Won: \$${entry.value.amountWon.toStringAsFixed(2)}',
-                            style: TextStyle(
-                              color:
-                                  entry.value.amountWon > 0
-                                      ? Colors.green
-                                      : Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Divider(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Total Won: \$${state.totalAmountWon.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          state.totalAmountWon > 0 ? Colors.green : Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Close'),
-              ),
-            ],
-          ),
-    );
   }
 
   @override
@@ -105,7 +41,7 @@ class PlayButton extends StatelessWidget {
               return BlocListener<PayoutBloc, PayoutState>(
                 listener: (context, state) {
                   if (state.hasPayouts && !state.isCalculating) {
-                    _showPayoutsDialog(context, state);
+                    resultDialog(context, state);
                   }
                 },
                 child: Builder(
