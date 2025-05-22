@@ -1,6 +1,11 @@
+import 'dart:ui';
 import 'package:keno_plus/core/router/app_routes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 
+/// A collection of common widgets used throughout the Keno Plus app.
+/// These widgets provide consistent styling and behavior.
+
+/// Main layout for app screens with background and content.
 class KenoMainLayout extends StatelessWidget {
   final Widget content;
 
@@ -12,48 +17,70 @@ class KenoMainLayout extends StatelessWidget {
   }
 }
 
+/// Primary button with animation, theming and customization options.
+///
+/// Features include:
+/// - Press animation with scale effect
+/// - Glow effect option
+/// - Border customization
+/// - Icon support
+/// - Theme-aware defaults
 class KenoButton extends StatefulWidget {
-  final VoidCallback? onPressed;
+  // Content
   final String text;
+  final IconData? icon;
+  
+  // Event handling
+  final VoidCallback? onPressed;
+  
+  // Text styling
   final String? fontFamily;
   final double? fontSize;
   final FontWeight? fontWeight;
-  final bool? italic;
   final Color? textColor;
+  
+  // Button appearance
   final Color? backgroundColor;
   final Color? foregroundColor;
   final EdgeInsets? padding;
-  final IconData? icon;
   final double? iconSize;
   final Color? iconColor;
+  final double? margin;
+  
+  // Effects
   final bool isGlow;
   final Color? glowColor;
   final bool hasBorder;
   final Color? borderColor;
   final double? borderWidth;
-  final double? margin;
 
   const KenoButton({
     super.key,
-    this.onPressed,
+    // Required parameters
     required this.text,
+    this.onPressed,
+    
+    // Text styling
     this.fontFamily,
     this.fontSize,
     this.fontWeight,
-    this.italic,
     this.textColor,
+    
+    // Button appearance
     this.backgroundColor,
     this.foregroundColor,
     this.padding,
     this.icon,
     this.iconSize,
     this.iconColor,
+    this.margin,
+    
+    // Effects
     this.isGlow = false,
     this.glowColor,
     this.hasBorder = false,
     this.borderColor,
     this.borderWidth,
-    this.margin,
   });
 
   @override
@@ -62,6 +89,7 @@ class KenoButton extends StatefulWidget {
 
 class _KenoButtonState extends State<KenoButton>
     with SingleTickerProviderStateMixin {
+  // Animation controllers and animations
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _shadowAlphaAnimation;
@@ -200,6 +228,12 @@ class _KenoButtonState extends State<KenoButton>
   }
 }
 
+/// Bottom navigation bar with themed styling and navigation.
+///
+/// Provides:
+/// - Themed appearance based on app colors
+/// - Active/inactive state styling
+/// - Navigation using Go Router
 class KenoBottomNavBar extends StatelessWidget {
   final int currentIndex;
 
@@ -264,34 +298,51 @@ class KenoBottomNavBar extends StatelessWidget {
   }
 }
 
+/// Styled text widget with glow, font variations and theme integration.
+///
+/// Features:
+/// - Theme-aware styling
+/// - Custom font weights using font variations
+/// - Optional glow effect
+/// - Text decoration options
 class KenoText extends StatelessWidget {
+  // Content
   final String text;
+  
+  // Text styling
   final double? fontSize;
   final TextAlign? textAlign;
   final FontWeight? fontWeight;
   final TextDecoration? textDecoration;
   final double? decorationThickness;
   final Color? decorationColor;
-  final bool? italic;
+  final bool italic;
   final Color? color;
   final String? fontFamily;
-  final bool? isGlow;
+  
+  // Effects
+  final bool isGlow;
   final Color? glowColor;
   final double? glowIntensity;
 
   const KenoText({
     super.key,
+    // Required parameters
     required this.text,
+    
+    // Text styling
     this.fontSize,
     this.textAlign,
     this.fontWeight,
     this.textDecoration,
     this.decorationThickness,
     this.decorationColor,
-    this.italic,
+    this.italic = false,
     this.color,
     this.fontFamily,
-    this.isGlow,
+    
+    // Effects
+    this.isGlow = false,
     this.glowColor,
     this.glowIntensity,
   });
@@ -343,9 +394,9 @@ class KenoText extends StatelessWidget {
         fontVariations: [
           FontVariation('wght', _getFontWeightValue(fontWeight)),
         ],
-        fontStyle: italic == true ? FontStyle.italic : FontStyle.normal,
+        fontStyle: italic ? FontStyle.italic : FontStyle.normal,
         shadows:
-            isGlow == true
+            isGlow
                 ? [
                   Shadow(
                     color: (glowColor ?? defaultColor).withAlpha(200),
@@ -368,6 +419,7 @@ class KenoText extends StatelessWidget {
   }
 }
 
+/// Gradient background widget for consistent app styling.
 class KenoGradientBackground extends StatelessWidget {
   const KenoGradientBackground({super.key});
 
@@ -387,6 +439,7 @@ class KenoGradientBackground extends StatelessWidget {
   }
 }
 
+/// Main app background with image and gradient overlay.
 class KenoMainBackground extends StatelessWidget {
   const KenoMainBackground({super.key});
 
@@ -404,7 +457,7 @@ class KenoMainBackground extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [
+              colors: [
                 AppColors.black.withOpacity(0.2),
                 AppColors.gradientStart.withOpacity(0.4),
                 AppColors.gradientEnd.withOpacity(0.6),
@@ -419,6 +472,7 @@ class KenoMainBackground extends StatelessWidget {
   }
 }
 
+/// Standard vertical spacing widget for consistent spacing in forms.
 class VerticalSpacer extends StatelessWidget {
   const VerticalSpacer({super.key});
 

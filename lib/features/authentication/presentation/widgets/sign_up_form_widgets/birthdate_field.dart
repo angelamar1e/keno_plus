@@ -25,7 +25,7 @@ class BirthdateField extends StatelessWidget {
 
   /// The display name for this field
   final String fieldText = 'Birthday';
-  final String hintText = 'Choose you birthdate';
+  final String hintText = 'Choose birthdate';
 
   /// Text controller to display selected date
   final birthdayController = TextEditingController();
@@ -50,19 +50,17 @@ class BirthdateField extends StatelessWidget {
                 isBirthdate: true,
                 autocorrect: false,
                 readOnly: true,
+                enableInteractiveSelection: false,
 
-                // Event callbacks
-                onTap:
-                    () => _showDatePicker(context).then(
-                      (pickedDate) => {
-                        if (context.mounted)
-                          {
-                            context.read<SignUpBloc>().add(
-                              BirthdateChanged(pickedDate),
-                            ),
-                          },
-                      },
-                    ),
+                // Move date picker functionality to icon press handler
+                iconPressed:
+                    () => _showDatePicker(context).then((pickedDate) {
+                      if (context.mounted) {
+                        context.read<SignUpBloc>().add(
+                          BirthdateChanged(pickedDate),
+                        );
+                      }
+                    }),
               ),
             ),
           ],

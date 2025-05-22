@@ -29,7 +29,7 @@ class LogInForm extends StatelessWidget {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         final status = state.status;
-    
+
         // Handle authentication status
         if (status != null) {
           status.fold(
@@ -59,48 +59,35 @@ class LogInForm extends StatelessWidget {
       },
       child: BlocBuilder<LogInBloc, LogInState>(
         builder: (context, state) {
-          return KenoMainLayout(
-            content: Stack(
-              fit: StackFit.expand,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
+          return Form(
+            child: KenoFormDialogWidget(
+              // Header content
+              logo: AppImages.logo,
+              headerTitleText: AppStrings.welcomeTitle,
+              headerSubText: AppStrings.welcomeDesc,
+              // Form fields and buttons
+              content: Column(
+                children: [
+                  // Form fields
+                  const UserNameField(),
+                  const VerticalSpacer(),
+                  const PasswordField(),
+                  const VerticalSpacer(),
+
+                  // Action buttons
+                  CTAButton(formType),
+                  const VerticalSpacer(),
+                  LoadingIndicator(isSubmitting: state.isSubmitting),
+                  const VerticalSpacer(),
+
+                  // Secondary actions
+                  KenoDesciptiveTextButton(
+                    onPressed: () => context.goNamed(AppRoutes.signUp),
+                    descriptiveText: AppStrings.dontHaveAcc,
+                    buttonText: AppStrings.signUp,
                   ),
-                  child: Form(
-                    child: KenoFormDialogWidget(
-                      // Header content
-                      logo: AppImages.logo,
-                      headerTitleText: AppStrings.welcomeTitle,
-                      headerSubText: AppStrings.welcomeDesc,
-                      // Form fields and buttons
-                      content: Column(
-                        children: [
-                          // Form fields
-                          const UserNameField(),
-                          const VerticalSpacer(),
-                          const PasswordField(),
-                          const VerticalSpacer(),
-    
-                          // Action buttons
-                          CTAButton(formType),
-                          const VerticalSpacer(),
-                          LoadingIndicator(isSubmitting: state.isSubmitting),
-                          const VerticalSpacer(),
-    
-                          // Secondary actions
-                          KenoDesciptiveTextButton(
-                            onPressed:
-                                () => context.goNamed(AppRoutes.signUp),
-                            descriptiveText: AppStrings.dontHaveAcc,
-                            buttonText: AppStrings.signUp,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

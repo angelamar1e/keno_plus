@@ -8,9 +8,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => WidgetsBinding.instance.focusManager.primaryFocus?.unfocus(),
-      child: Scaffold(
-        body: SignUpForm(),
-      ),
+      child: Scaffold(body: Center(child: SignUpForm())),
     );
   }
 }

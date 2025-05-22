@@ -12,7 +12,7 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       // Base theme properties
-      scaffoldBackgroundColor: AppColors.primary,
+      scaffoldBackgroundColor: AppColors.transparent,
       fontFamily: AppFonts.inter,
 
       // Text styles for different typography elements
@@ -31,7 +31,7 @@ class AppTheme {
 
         // Secondary colors - accent colors
         secondary: AppColors.secondary,
-        onSecondary: AppColors.white,
+        onSecondary: AppColors.black,
         secondaryContainer: AppColors.secondary.withOpacity(0.7),
         onSecondaryContainer: AppColors.white,
 
@@ -47,13 +47,13 @@ class AppTheme {
 
         // Error colors - used for error states and validation
         error: AppColors.error,
-        onError: AppColors.white,
+        onError: AppColors.black,
         errorContainer: AppColors.error.withOpacity(0.7),
         onErrorContainer: AppColors.white,
 
         // Tertiary colors - additional accents if needed
         tertiary: AppColors.secondary,
-        onTertiary: AppColors.white,
+        onTertiary: AppColors.black,
         tertiaryContainer: AppColors.secondary.withOpacity(0.7),
         onTertiaryContainer: AppColors.white,
 
@@ -76,63 +76,63 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       // Base theme properties
-      scaffoldBackgroundColor: AppColors.white,
+      scaffoldBackgroundColor: AppColors.primary,
       fontFamily: AppFonts.inter,
 
       // Text styles for different typography elements
-      textTheme: _createLightTextTheme(),
+      textTheme: _createDarkTextTheme(),
 
       // Color scheme for consistent UI coloring
-      colorScheme: ColorScheme.light(
+      colorScheme: ColorScheme.dark(
         // Base properties
-        brightness: Brightness.light,
+        brightness: Brightness.dark,
 
         // Primary colors - main brand colors
         primary: AppColors.primary,
         onPrimary: AppColors.white,
-        primaryContainer: AppColors.primary.withOpacity(0.1),
-        onPrimaryContainer: AppColors.primary,
+        primaryContainer: AppColors.primary.withOpacity(0.7),
+        onPrimaryContainer: AppColors.white,
 
         // Secondary colors - accent colors
         secondary: AppColors.secondary,
-        onSecondary: AppColors.white,
-        secondaryContainer: AppColors.secondary.withOpacity(0.1),
-        onSecondaryContainer: AppColors.secondary,
+        onSecondary: AppColors.black,
+        secondaryContainer: AppColors.secondary.withOpacity(0.7),
+        onSecondaryContainer: AppColors.white,
 
         // Surface colors - used for cards, sheets, and menus
         surface: AppColors.white,
         onSurface: AppColors.black,
-        surfaceVariant: AppColors.white.withOpacity(0.7),
+        surfaceVariant: AppColors.white.withOpacity(0.8),
         onSurfaceVariant: AppColors.black,
 
         // Background colors - used for screen backgrounds
-        background: AppColors.white,
-        onBackground: AppColors.black,
+        background: AppColors.primary,
+        onBackground: AppColors.white,
 
         // Error colors - used for error states and validation
         error: AppColors.error,
-        onError: AppColors.white,
-        errorContainer: AppColors.error.withOpacity(0.1),
-        onErrorContainer: AppColors.error,
+        onError: AppColors.black,
+        errorContainer: AppColors.error.withOpacity(0.7),
+        onErrorContainer: AppColors.white,
 
         // Tertiary colors - additional accents if needed
         tertiary: AppColors.secondary,
-        onTertiary: AppColors.white,
-        tertiaryContainer: AppColors.secondary.withOpacity(0.1),
-        onTertiaryContainer: AppColors.secondary,
+        onTertiary: AppColors.black,
+        tertiaryContainer: AppColors.secondary.withOpacity(0.7),
+        onTertiaryContainer: AppColors.white,
 
         // Other UI colors - used for miscellaneous UI elements
-        outline: AppColors.black.withOpacity(0.2),
-        outlineVariant: AppColors.black.withOpacity(0.1),
-        shadow: Colors.black.withOpacity(0.1),
-        scrim: Colors.black.withOpacity(0.2),
-        inverseSurface: AppColors.primary,
+        outline: AppColors.secondary.withOpacity(0.5),
+        outlineVariant: AppColors.secondary.withOpacity(0.3),
+        shadow: Colors.black,
+        scrim: Colors.black.withOpacity(0.3),
+        inverseSurface: AppColors.black,
         onInverseSurface: AppColors.white,
         inversePrimary: AppColors.secondary,
       ),
 
       // Input decoration for form fields
-      inputDecorationTheme: _createLightInputDecorationTheme(),
+      inputDecorationTheme: _createDarkInputDecorationTheme(),
     );
   }
 
