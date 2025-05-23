@@ -1,10 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keno_plus/core/utils/game_modes.dart';
+import 'package:keno_plus/features/game_history/game_history_bloc/game_history_event.dart';
 import 'package:keno_plus/features/gameplay/gameplay_injections.dart';
 
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
 import 'package:keno_plus/features/game_history/game_history_bloc/game_history_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/game_config_bloc/game_config_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_event.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_state.dart';
@@ -16,11 +19,11 @@ class PlayButton extends StatelessWidget {
   const PlayButton({
     super.key,
     required this.cardBlocInstances,
-    required this.numbersCount,
+    required this.gameMode,
   });
 
   final List<CardBloc> cardBlocInstances;
-  final int numbersCount;
+  final GameMode gameMode;
 
   bool _hasEmptyBets(List<CardBloc> cardBlocs) {
     return cardBlocs.any((bloc) => bloc.state.bets.isEmpty);
@@ -32,7 +35,10 @@ class PlayButton extends StatelessWidget {
       providers: [
         BlocProvider<PayoutBloc>(create: (context) => sl<PayoutBloc>()),
         BlocProvider<WagerBloc>(create: (context) => sl<WagerBloc>()),
-        BlocProvider<GameHistoryBloc>(create: (context) => GameHistoryBloc()),
+        BlocProvider<GameConfigBloc>(create: (context) => sl<GameConfigBloc>()),
+        BlocProvider<GameHistoryBloc>(
+          create: (context) => sl<GameHistoryBloc>(),
+        ),
       ],
       child: BlocBuilder<WagerBloc, WagerState>(
         builder: (context, wagerState) {
@@ -41,7 +47,17 @@ class PlayButton extends StatelessWidget {
               return BlocListener<PayoutBloc, PayoutState>(
                 listener: (context, state) {
                   if (state.hasPayouts && !state.isCalculating) {
-                    resultDialog(context, state);
+                    showResultDialog(context, state);
+
+                    // save game history for all cards
+                    context.read<GameHistoryBloc>().add(
+                      SaveGameHistory(
+                        cardPayouts: state.cardPayouts!,
+                        timestamp: DateTime.timestamp(),
+                        gameMode: gameMode.name,
+                        wager: wagerState.wager,
+                      ),
+                    );
                   }
                 },
                 child: Builder(
@@ -61,7 +77,9 @@ class PlayButton extends StatelessWidget {
                                 // Trigger play on all cards
                                 for (final bloc in cardBlocInstances) {
                                   bloc.add(
-                                    PlayPressed(numbersCount: numbersCount),
+                                    PlayPressed(
+                                      numbersCount: gameMode.numbersCount,
+                                    ),
                                   );
                                 }
 
@@ -70,18 +88,11 @@ class PlayButton extends StatelessWidget {
                                   CalculatePayouts(
                                     cardBlocInstances: cardBlocInstances,
                                     wager: wagerState.wager,
-                                    isClassicMode:
-                                        true, // TODO: get from game config
+                                    isClassicMode: gameMode == GameMode.classic,
                                   ),
                                 );
                               },
-                      child: Text(
-                        payoutState.isCalculating
-                            ? 'Calculating...'
-                            : hasEmptyBets
-                            ? 'Select Numbers'
-                            : 'Play',
-                      ),
+                      child: Text('Play'),
                     );
                   },
                 ),

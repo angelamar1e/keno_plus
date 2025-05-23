@@ -1,6 +1,4 @@
-// build using game config bloc
-// resultsReady listener from card bloc, trigger results bloc (singleton) and handle output modal (build using results bloc)
-
+import 'package:keno_plus/core/utils/game_modes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/game_config_bloc/game_config_bloc.dart';
@@ -53,7 +51,7 @@ class _GameplayPageState extends State<GameplayPage> {
           final currentCardBloc = cardBlocInstances[state.currentCard]!;
           final numberOfCards =
               state.numberOfCards; // number of purchased cards
-          final gameMode = state.gameMode;
+          final GameMode gameMode = state.gameMode;
           final numbersCount =
               gameMode
                   .numbersCount; // largest number in a card, count of numbers in a card
@@ -146,7 +144,7 @@ class _GameplayPageState extends State<GameplayPage> {
 
                     PlayButton(
                       cardBlocInstances: cardBlocInstances.values.toList(),
-                      numbersCount: numbersCount,
+                      gameMode: gameMode,
                     ),
                   ],
                 ),

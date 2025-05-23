@@ -8,11 +8,7 @@ class CreateUser {
   CreateUser(this.userRepository);
 
   Future<Either<Fail, UserModel>> call(UserModel user) async {
-    try {
-      await userRepository.createUser(user);
-      return Right(user);
-    } catch (e) {
-      return Left(Fail(e.toString()));
-    }
+    final result = await userRepository.createUser(user);
+    return result;
   }
 }

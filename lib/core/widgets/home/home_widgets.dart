@@ -86,7 +86,7 @@ class _KenoGameCarouselState extends State<KenoGameCarousel> {
 }
 
 class KenoGameBar extends StatelessWidget {
-  final GameMode gameMode;
+  final GameModeStrings gameMode;
   final int _currentPage;
   final Color color;
   final Color shadowColor;
@@ -129,7 +129,7 @@ class KenoGameBar extends StatelessWidget {
               color: AppColors.black,
             ),
             SizedBox(height: 8.0),
-            KenoText(text: gameMode.description, color: AppColors.black),
+            KenoText(text: gameMode.title, color: AppColors.black),
             SizedBox(height: 16.0),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 18.0),
@@ -162,7 +162,7 @@ class KenoPageIndicator extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        AppGameModes.modes.length,
+        2,
         (index) => Container(
           margin: EdgeInsets.symmetric(horizontal: 4),
           width: 10,
