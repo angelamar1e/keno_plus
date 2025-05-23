@@ -41,4 +41,6 @@ class AppStrings {
   static const String lastNameHint = 'Enter your last name';
   static const String firstNameLabel = 'First Name';
   static const String firstNameHint = 'Enter your first name';
+  static const String getReady = 'Get Ready to Dive in!';
+  static const String signUpToAccess = 'Sign up to access exclusive game modes, and earn rewards!';
 }

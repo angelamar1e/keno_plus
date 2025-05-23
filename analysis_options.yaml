@@ -5,3 +5,4 @@ analyzer:
     public_member_api_docs: ignore 
     sort_constructors_first: ignore
     file_names: ignore
+    unused_element: ignore

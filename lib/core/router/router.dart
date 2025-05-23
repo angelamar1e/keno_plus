@@ -18,33 +18,40 @@ final GoRouter router = GoRouter(
       name: AppRoutes.loadingScreen,
       builder: (context, state) => const LoadingScreen(),
     ),
-    // Sign Up route
-    GoRoute(
-      path: '/${AppRoutes.signUp}',
-      name: AppRoutes.signUp,
-      builder: (context, state) {
-        return BlocProvider(
-          create:
-              (context) => SignUpBloc(
-                createUser: sl<CreateUser>(),
-                getUsers: sl<GetUsers>(),
-              ),
-          child: SignUpPage(),
-        );
+
+    ShellRoute(
+      builder: (context, state, child) {
+        return KenoMainLayout( content: child);
       },
-    ),
-    // Log in route
-    GoRoute(
-      path: '/${AppRoutes.login}',
-      name: AppRoutes.login,
-      builder: (context, state) {
-        return BlocProvider(
-          create:
-              (context) =>
-                  LogInBloc(getUserByUsername: sl<GetUserByUsername>()),
-          child: LogInPage(),
-        );
-      },
+      routes: [
+        GoRoute(
+          path: '/${AppRoutes.login}',
+          name: AppRoutes.login,
+          builder: (context, state) {
+            return BlocProvider(
+              create:
+                  (context) =>
+                      LogInBloc(getUserByUsername: sl<GetUserByUsername>()),
+              child: LogInPage(),
+            );
+          },
+        ),
+
+        GoRoute(
+          path: '/${AppRoutes.signUp}',
+          name: AppRoutes.signUp,
+          builder: (context, state) {
+            return BlocProvider(
+              create:
+                  (context) => SignUpBloc(
+                    createUser: sl<CreateUser>(),
+                    getUsers: sl<GetUsers>(),
+                  ),
+              child: SignUpPage(),
+            );
+          },
+        ),
+      ],
     ),
 
     ShellRoute(
@@ -62,7 +69,9 @@ final GoRouter router = GoRouter(
         }
 
         return Scaffold(
-          body: KenoMainLayout(content: child),
+          body: KenoMainLayout(
+            content: child,
+          ),
           bottomNavigationBar: KenoBottomNavBar(currentIndex: currentIndex),
         );
       },
