@@ -31,35 +31,36 @@ class CardWidget extends StatelessWidget {
           final matches = state.matchedBets;
           final winningBets = state.winningBets;
 
-          // Wrap GridView in a Container with proper constraints
-          return Center(
-            child: Container(
-              padding: const EdgeInsets.all(16.0),
-              child: GridView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: columns,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: 1.0, // Make boxes square
+          // Use LayoutBuilder to ensure proper sizing
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return Container(
+                padding: const EdgeInsets.all(12.0), // Reduced padding
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: columns,
+                    mainAxisSpacing: 6, // Reduced spacing
+                    crossAxisSpacing: 6,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemCount: numbersCount,
+                  itemBuilder: (context, index) {
+                    final number = index + 1;
+                    return NumberBox(
+                      number: number,
+                      isWinningBet: winningBets.contains(number),
+                      isMatch: matches.contains(number),
+                      isSelected: bets.contains(number),
+                      onTap: () {
+                        bloc.add(BetsChanged(bet: number, maxBets: maxBets));
+                      },
+                    );
+                  },
                 ),
-                itemCount: numbersCount,
-                itemBuilder: (context, index) {
-                  final number = index + 1;
-                  return NumberBox(
-                    number: number,
-                    isWinningBet: winningBets.contains(number),
-                    isMatch: matches.contains(number),
-                    isSelected: bets.contains(number),
-                    onTap: () {
-                      bloc.add(BetsChanged(bet: number, maxBets: maxBets));
-                    },
-                  );
-                },
-              ),
-            ),
+              );
+            },
           );
         },
       ),
