@@ -29,7 +29,7 @@ void showResultDialog(BuildContext context, PayoutState state) {
                         Text('Spots: ${entry.value.spots}'),
                         Text('Catches: ${entry.value.catches}'),
                         Text(
-                          'Amount Won: \$${entry.value.amountWon.toStringAsFixed(2)}',
+                          'Amount Won: ₱${entry.value.amountWon.toStringAsFixed(2)}',
                           style: TextStyle(
                             color:
                                 entry.value.amountWon > 0
@@ -45,7 +45,7 @@ void showResultDialog(BuildContext context, PayoutState state) {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Total Won: \$${state.totalAmountWon.toStringAsFixed(2)}',
+                  'Total Won: ₱${state.totalAmountWon.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

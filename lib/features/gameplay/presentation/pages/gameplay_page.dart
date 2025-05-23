@@ -48,13 +48,13 @@ class _GameplayPageState extends State<GameplayPage> {
             cardBlocInstances[state.currentCard] = CardBloc();
           }
 
-            final currentCardBloc = cardBlocInstances[state.currentCard]!;
-            final numberOfCards =
-                state.numberOfCards; // number of purchased cards
-            final GameMode gameMode = state.gameMode;
-            final numbersCount =
-                gameMode
-                    .numbersCount; // largest number in a card, count of numbers in a card
+          final currentCardBloc = cardBlocInstances[state.currentCard]!;
+          final numberOfCards =
+              state.numberOfCards; // number of purchased cards
+          final GameMode gameMode = state.gameMode;
+          final numbersCount =
+              gameMode
+                  .numbersCount; // largest number in a card, count of numbers in a card
 
           return KenoMainLayout(
             background: KenoGameBackground(),
@@ -142,14 +142,16 @@ class _GameplayPageState extends State<GameplayPage> {
                       max: gameMode.maxBets,
                     ),
 
-                PlayButton(
-                  cardBlocInstances: cardBlocInstances.values.toList(),
-                  gameMode: gameMode,
+                    PlayButton(
+                      cardBlocInstances: cardBlocInstances.values.toList(),
+                      gameMode: gameMode,
+                    ),
+                  ],
                 ),
               ],
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
