@@ -155,11 +155,13 @@ class _GameplayPageState extends State<GameplayPage> {
                           max: gameMode.maxBets,
                         ),
 
-                    PlayButton(
-                      cardBlocInstances: cardBlocInstances.values.toList(),
-                      gameMode: gameMode,
+                        PlayButton(
+                          cardBlocInstances: cardBlocInstances.values.toList(),
+                          gameMode: gameMode,
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
