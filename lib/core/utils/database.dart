@@ -1,5 +1,4 @@
 import 'package:keno_plus/core/values/app_imports.dart';
-import 'package:keno_plus/features/authentication/data/models/user_model.dart';
 import 'package:path/path.dart';
 
 class AppDatabase {
@@ -15,20 +14,24 @@ class AppDatabase {
   static Future<Database> initialize() async {
     return openDatabase(
       join(await getDatabasesPath(), 'keno_plus.db'),
-      onCreate: (db, version) {
-        return db.execute(
+      onCreate: (db, version) async {
+        // Create users table
+        await db.execute(
           'CREATE TABLE users(username TEXT PRIMARY KEY NOT NULL, firstName TEXT, lastName TEXT, birthdate TEXT, age INTEGER, phoneNumber TEXT, email TEXT, password TEXT)',
         );
+
+        // Create game_history table
+        await db.execute('''
+          CREATE TABLE game_history(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp TEXT NOT NULL,
+            game_mode TEXT NOT NULL,
+            wager REAL NOT NULL,
+            card_payouts TEXT NOT NULL
+          )
+        ''');
       },
       version: 1,
-    );
-  }
-
-  static Future<void> insertUser(Database db, UserModel user) async {
-    await db.insert(
-      'users',
-      user.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 }

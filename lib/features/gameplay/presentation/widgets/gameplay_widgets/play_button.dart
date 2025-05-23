@@ -1,93 +1,32 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keno_plus/core/utils/game_modes.dart';
+import 'package:keno_plus/features/game_history/game_history_bloc/game_history_event.dart';
 import 'package:keno_plus/features/gameplay/gameplay_injections.dart';
 
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/game_history_bloc/game_history_bloc.dart';
+import 'package:keno_plus/features/game_history/game_history_bloc/game_history_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/game_config_bloc/game_config_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_event.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_state.dart';
 import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_state.dart';
+import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/result_dialog.dart';
 
 class PlayButton extends StatelessWidget {
   const PlayButton({
     super.key,
     required this.cardBlocInstances,
-    required this.numbersCount,
+    required this.gameMode,
   });
 
   final List<CardBloc> cardBlocInstances;
-  final int numbersCount;
+  final GameMode gameMode;
 
   bool _hasEmptyBets(List<CardBloc> cardBlocs) {
     return cardBlocs.any((bloc) => bloc.state.bets.isEmpty);
-  }
-
-  void _showPayoutsDialog(BuildContext context, PayoutState state) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Game Results'),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...state.cardPayouts!.entries.map(
-                    (entry) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            entry.key,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text('Spots: ${entry.value.spots}'),
-                          Text('Catches: ${entry.value.catches}'),
-                          Text(
-                            'Amount Won: \$${entry.value.amountWon.toStringAsFixed(2)}',
-                            style: TextStyle(
-                              color:
-                                  entry.value.amountWon > 0
-                                      ? Colors.green
-                                      : Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Divider(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Total Won: \$${state.totalAmountWon.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          state.totalAmountWon > 0 ? Colors.green : Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Close'),
-              ),
-            ],
-          ),
-    );
   }
 
   @override
@@ -96,7 +35,10 @@ class PlayButton extends StatelessWidget {
       providers: [
         BlocProvider<PayoutBloc>(create: (context) => sl<PayoutBloc>()),
         BlocProvider<WagerBloc>(create: (context) => sl<WagerBloc>()),
-        BlocProvider<GameHistoryBloc>(create: (context) => GameHistoryBloc()),
+        BlocProvider<GameConfigBloc>(create: (context) => sl<GameConfigBloc>()),
+        BlocProvider<GameHistoryBloc>(
+          create: (context) => sl<GameHistoryBloc>(),
+        ),
       ],
       child: BlocBuilder<WagerBloc, WagerState>(
         builder: (context, wagerState) {
@@ -105,7 +47,17 @@ class PlayButton extends StatelessWidget {
               return BlocListener<PayoutBloc, PayoutState>(
                 listener: (context, state) {
                   if (state.hasPayouts && !state.isCalculating) {
-                    _showPayoutsDialog(context, state);
+                    showResultDialog(context, state);
+
+                    // save game history for all cards
+                    context.read<GameHistoryBloc>().add(
+                      SaveGameHistory(
+                        cardPayouts: state.cardPayouts!,
+                        timestamp: DateTime.timestamp(),
+                        gameMode: gameMode.name,
+                        wager: wagerState.wager,
+                      ),
+                    );
                   }
                 },
                 child: Builder(
@@ -125,7 +77,9 @@ class PlayButton extends StatelessWidget {
                                 // Trigger play on all cards
                                 for (final bloc in cardBlocInstances) {
                                   bloc.add(
-                                    PlayPressed(numbersCount: numbersCount),
+                                    PlayPressed(
+                                      numbersCount: gameMode.numbersCount,
+                                    ),
                                   );
                                 }
 
@@ -134,18 +88,11 @@ class PlayButton extends StatelessWidget {
                                   CalculatePayouts(
                                     cardBlocInstances: cardBlocInstances,
                                     wager: wagerState.wager,
-                                    isClassicMode:
-                                        true, // TODO: get from game config
+                                    isClassicMode: gameMode == GameMode.classic,
                                   ),
                                 );
                               },
-                      child: Text(
-                        payoutState.isCalculating
-                            ? 'Calculating...'
-                            : hasEmptyBets
-                            ? 'Select Numbers'
-                            : 'Play',
-                      ),
+                      child: Text('Play'),
                     );
                   },
                 ),

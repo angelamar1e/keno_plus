@@ -8,13 +8,13 @@ class GetUsers {
   Future<List<String>> call() async {
     final result = await userRepository.getUsers();
     return result.fold(
-      (l) {
+      (fail) {
         // Handle failure case
-        throw Exception('Failed to get users: ${l.toString()}');
+        throw Exception('Failed to get users: ${fail.toString()}');
       },
-      (r) {
+      (usernameList) {
         // Handle success case
-        return r;
+        return usernameList;
       },
     );
   }

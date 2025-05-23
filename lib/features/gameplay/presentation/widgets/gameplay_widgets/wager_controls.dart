@@ -20,7 +20,7 @@ class WagerControls extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               KenoText(
-                text: 'Wager: \$${state.wager.toStringAsFixed(2)}',
+                text: 'Wager: ₱${state.wager.toStringAsFixed(2)}',
                 fontSize: 16.0,
                 color: AppColors.white,
               ),
