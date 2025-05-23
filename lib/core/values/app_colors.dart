@@ -7,9 +7,10 @@ class AppColors {
   static const Color primary = Color(0xFF_060351);
   static const Color secondary = Color(0xFF_F8AB00);
   static const Color tertiary = Color(0xFF_683FEA);
-  static const Color selected = Color(0xFF_4337C1);
   static const Color cardPrimary = Color(0xFF_846CCF);
-  static const Color cardSecondary = Color(0xFF_524DE0);
+  static const Color cardSelected = Color(0xFF_BB78FF);
+  static const Color cardWin = Color(0xFF_4ADFF0);
+  static const Color cardLose = Color(0xFF_FF7779);
   static const Color classicKeno = Color(0xFF_981450);
   static const Color miniKeno = Color(0xFF_981450);
   static const Color gradientStart = Color(0xFF_0910A5);

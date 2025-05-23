@@ -4,4 +4,5 @@ class AppImages {
   static const String classicKenoBg = 'assets/images/classic_keno_bg.png';
   static const String miniKenoBg = 'assets/images/mini_keno_bg.png';
   static const String elementBg = 'assets/images/kenoplus_element_bg.png';
+  static const String gameBg = 'assets/images/game_bg.png';
 }

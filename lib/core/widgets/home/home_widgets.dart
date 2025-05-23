@@ -28,10 +28,7 @@ class _KenoGameModeLayoutState extends State<KenoGameModeLayout> {
         // Main layout
         Column(
           children: [
-            KenoTopBar(
-              text: AppStrings.gameMode,
-              textColor: AppColors.secondary,
-            ),
+            KenoTopBar(text: AppStrings.gameMode, color: AppColors.secondary),
             Spacer(),
             KenoGameBar(
               gameMode: AppGameModes.modes[_currentPage],
@@ -185,38 +182,29 @@ class KenoPageIndicator extends StatelessWidget {
 
 class KenoTopBar extends StatelessWidget {
   final String text;
-  final Color textColor;
+  final Color? color;
+  final double? fontSize;
 
-  const KenoTopBar({super.key, required this.text, required this.textColor});
+  const KenoTopBar({super.key, required this.text, this.color, this.fontSize});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 128.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primary, AppColors.transparent],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              KenoText(
-                text: text,
-                fontFamily: AppFonts.grandstander,
-                textAlign: TextAlign.start,
-                fontWeight: FontWeight.w900,
-                fontSize: 36.0,
-                color: textColor,
-                isGlow: true,
-              ),
-            ],
-          ),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            KenoText(
+              text: text,
+              fontFamily: AppFonts.grandstander,
+              textAlign: TextAlign.start,
+              fontWeight: FontWeight.w900,
+              fontSize: fontSize ?? 36.0,
+              color: color ?? AppColors.secondary,
+              isGlow: true,
+            ),
+          ],
         ),
       ),
     );
@@ -293,6 +281,7 @@ class KenoStart extends StatelessWidget {
           const SizedBox(height: 8.0),
           KenoText(
             text: AppStrings.homeSubText,
+            color: AppColors.white,
             fontFamily: AppFonts.inter,
             textAlign: TextAlign.center,
             fontSize: 14.0,
@@ -301,6 +290,8 @@ class KenoStart extends StatelessWidget {
           KenoButton(
             text: AppStrings.play,
             icon: Icons.play_arrow_rounded,
+            textColor: AppColors.primary,
+            iconColor: AppColors.white,
             isGlow: true,
             margin: 18.0,
             onPressed: onPlayPressed, // CHANGE LAYOUT TO GAME MODE
@@ -310,6 +301,7 @@ class KenoStart extends StatelessWidget {
             text: AppStrings.learnKenoPlus,
             icon: Icons.question_mark_rounded,
             iconSize: 20.0,
+            textColor: AppColors.secondary,
             foregroundColor: AppColors.secondary,
             backgroundColor: AppColors.transparent,
             hasBorder: true,

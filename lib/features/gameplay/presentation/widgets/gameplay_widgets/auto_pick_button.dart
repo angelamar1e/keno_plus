@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
 
@@ -21,18 +22,24 @@ class AutoPickButton extends StatelessWidget {
         builder: (context, state) {
           return GestureDetector(
             onTap: () {
-              context.read<CardBloc>().add(AutoPickBets(largestNumber: largestNumber));
+              context.read<CardBloc>().add(
+                AutoPickBets(largestNumber: largestNumber),
+              );
             },
             child: Container(
               width: 40,
               height: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: AppColors.secondary,
                 border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: const Icon(Icons.auto_awesome_sharp, size: 30),
+              child: const Icon(
+                Icons.auto_awesome_sharp,
+                size: 30,
+                color: AppColors.primary,
+              ),
             ),
           );
         },

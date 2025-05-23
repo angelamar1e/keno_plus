@@ -14,7 +14,7 @@ class EmailAddressField extends StatelessWidget {
 
   /// The display name for this field.
   final String fieldText = 'Email Address';
-  final String hintText = 'Enter you email';
+  final String hintText = 'Enter your email';
 
   @override
   Widget build(BuildContext context) {

@@ -35,6 +35,7 @@ flutter:
     - assets/images/classic_keno_bg.png
     - assets/images/mini_keno_bg.png
     - assets/images/kenoplus_element_bg.png
+    - assets/images/game_bg.png
 
   fonts:
     - family: Grandstander

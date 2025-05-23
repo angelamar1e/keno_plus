@@ -39,78 +39,70 @@ class KenoFormDialogWidget extends StatelessWidget {
     final titleColor = headerTitleColor ?? theme.colorScheme.secondary;
     final subColor = headerSubColor ?? theme.colorScheme.onPrimary;
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.85,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _header(headerBgColor, titleColor, subColor),
+              _content(contentBgColor),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Container _content(Color contentBgColor) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(24.0),
+          bottomRight: Radius.circular(24.0),
+        ),
+        color: contentBgColor,
+      ),
+      // Content padding and child remain the same
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 32.0),
+        child: content,
+      ),
+    );
+  }
+
+  Container _header(Color headerBgColor, Color titleColor, Color subColor) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24.0),
+          topRight: Radius.circular(24.0),
+        ),
+        color: headerBgColor.withOpacity(0.59),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 32.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Fixed header
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(24.0),
-                  topRight: Radius.circular(24.0),
-                ),
-                color: headerBgColor.withOpacity(0.59),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 32.0,
-                ),
-                child: Column(
-                  children: [
-                    if (logo != null) ...[
-                      KenoShowLogo(logo: logo!, height: 32.0),
-                      const SizedBox(height: 16.0),
-                    ],
-                    KenoText(
-                      text: headerTitleText,
-                      fontFamily: AppFonts.grandstander,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 32.0,
-                      color: titleColor,
-                      isGlow: true,
-                    ),
-                    KenoText(
-                      text: headerSubText,
-                      fontSize: 12.0,
-                      color: subColor,
-                    ),
-                  ],
-                ),
-              ),
+            if (logo != null) ...[
+              KenoShowLogo(logo: logo!, height: 32.0),
+              const SizedBox(height: 16.0),
+            ],
+            KenoText(
+              text: headerTitleText,
+              fontFamily: AppFonts.grandstander,
+              fontWeight: FontWeight.w900,
+              fontSize: 32.0,
+              color: titleColor,
+              isGlow: true,
             ),
-            // Scrollable content area
-            Flexible(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(24.0),
-                    bottomRight: Radius.circular(24.0),
-                  ),
-                  color: contentBgColor,
-                ),
-                child: SingleChildScrollView(
-                  physics: const ClampingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 32.0,
-                    ),
-                    child: content,
-                  ),
-                ),
-              ),
-            ),
+            KenoText(text: headerSubText, fontSize: 12.0, color: subColor),
           ],
         ),
       ),
@@ -148,7 +140,9 @@ class KenoFormField extends StatelessWidget {
   // Event callbacks
   final VoidCallback? onTogglePasswordVisibility;
   final void Function(String)? onChanged;
-  final void Function()? onTap;
+
+  // Add this new property
+  final bool? enableInteractiveSelection;
 
   const KenoFormField({
     super.key,
@@ -166,6 +160,7 @@ class KenoFormField extends StatelessWidget {
     this.autocorrect,
     this.autovalidateMode,
     this.validator,
+    this.enableInteractiveSelection,
 
     // Field behavior properties
     this.isPassword = false,
@@ -180,7 +175,6 @@ class KenoFormField extends StatelessWidget {
     // Event callbacks
     this.onTogglePasswordVisibility,
     this.onChanged,
-    this.onTap,
     required,
   });
 
@@ -198,6 +192,7 @@ class KenoFormField extends StatelessWidget {
         return TextFormField(
           controller: controller,
           obscureText: isPassword ? !isPasswordVisible : false,
+          enableInteractiveSelection: enableInteractiveSelection ?? true,
           style: TextStyle(
             color: textColor ?? theme.textTheme.bodyMedium?.color,
           ),
@@ -209,16 +204,13 @@ class KenoFormField extends StatelessWidget {
               color: hasError ? AppColors.error : null,
             ),
             errorMaxLines: 3,
-            errorStyle: TextStyle(
-              overflow:
-                  TextOverflow.ellipsis,
-            ),
+            errorStyle: TextStyle(overflow: TextOverflow.ellipsis),
             prefixIcon:
                 !isBirthdate
                     ? null
                     : IconButton(
                       icon: Icon(Icons.calendar_month_rounded),
-                      onPressed: onTap,
+                      onPressed: iconPressed,
                       color:
                           hasError
                               ? AppColors.error
@@ -268,7 +260,6 @@ class KenoFormField extends StatelessWidget {
           keyboardType: keyboardType,
           textInputAction:
               !isPassword ? TextInputAction.next : TextInputAction.done,
-          onTap: onTap,
           onChanged: (value) {
             state.didChange(value);
             if (onChanged != null) {

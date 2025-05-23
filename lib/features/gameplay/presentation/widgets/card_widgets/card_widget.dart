@@ -18,49 +18,51 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        BlocListener<CardBloc, CardState>(
-          listener: (context, state) {
-            if (state.matchedBets.isNotEmpty) {
-              // generate payout info
-            }
-          },
-          child: Center(
-            child: BlocBuilder<CardBloc, CardState>(
-              builder: (context, state) {
-                final bloc = context.read<CardBloc>();
-                final bets = state.bets;
-                final matches = state.matchedBets;
-                final winningBets = state.winningBets;
+    return BlocListener<CardBloc, CardState>(
+      listener: (context, state) {
+        if (state.matchedBets.isNotEmpty) {
+          // generate payout info
+        }
+      },
+      child: BlocBuilder<CardBloc, CardState>(
+        builder: (context, state) {
+          final bloc = context.read<CardBloc>();
+          final bets = state.bets;
+          final matches = state.matchedBets;
+          final winningBets = state.winningBets;
 
-                // Generate the grid of NumberBox widgets
-                return GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: columns,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                  ),
-                  itemCount: numbersCount,
-                  itemBuilder: (context, index) {
-                    final number = index + 1; // Numbers start at 1
-                    return NumberBox(
-                      number: number,
-                      isWinningBet: winningBets.contains(number),
-                      isMatch: matches.contains(number),
-                      isSelected: bets.contains(number),
-                      onTap: () {
-                        bloc.add(BetsChanged(bet: number, maxBets: maxBets));
-                      },
-                    );
-                  },
-                );
-              },
+          // Wrap GridView in a Container with proper constraints
+          return Center(
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: GridView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 1.0, // Make boxes square
+                ),
+                itemCount: numbersCount,
+                itemBuilder: (context, index) {
+                  final number = index + 1;
+                  return NumberBox(
+                    number: number,
+                    isWinningBet: winningBets.contains(number),
+                    isMatch: matches.contains(number),
+                    isSelected: bets.contains(number),
+                    onTap: () {
+                      bloc.add(BetsChanged(bet: number, maxBets: maxBets));
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ),
-      ],
+          );
+        },
+      ),
     );
   }
 }

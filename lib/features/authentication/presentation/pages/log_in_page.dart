@@ -8,7 +8,7 @@ class LogInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => WidgetsBinding.instance.focusManager.primaryFocus?.unfocus(),
-      child: Scaffold(body: LogInForm()),
+      child: Scaffold(body: Center(child: LogInForm())),
     );
   }
 }

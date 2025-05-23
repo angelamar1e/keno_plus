@@ -53,84 +53,75 @@ class SignUpForm extends StatelessWidget {
       },
       child: BlocBuilder<SignUpBloc, SignUpState>(
         builder: (context, state) {
-          return KenoMainLayout(
-            content: Stack(
-              fit: StackFit.expand,
-              children: [
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: Form(
-                      child: KenoFormDialogWidget(
-                        // Header content
-                        logo: AppImages.logo,
-                        headerTitleText: AppStrings.welcomeTitle,
-                        headerSubText: AppStrings.welcomeDesc,
+          return Form(
+            child: KenoFormDialogWidget(
+              // Header content
+              logo: AppImages.logo,
+              headerTitleText: AppStrings.getReady,
+              headerSubText: AppStrings.signUpToAccess,
 
-                        // Form content
-                        content: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            // Personal information fields
-                            NameField(
-                              labelText: AppStrings.firstNameLabel,
-                              hintText: AppStrings.firstNameHint,
-                              onChanged:
-                                  (value) => context.read<SignUpBloc>().add(
-                                    FirstNameChanged(value),
-                                  ),
-                              valueSelector: (_) => state.firstName.value,
-                            ),
-                            const VerticalSpacer(),
-                            NameField(
-                              labelText: AppStrings.lastNameLabel,
-                              hintText: AppStrings.lastNameHint,
-                              onChanged:
-                                  (value) => context.read<SignUpBloc>().add(
-                                    LastNameChanged(value),
-                                  ),
-                              valueSelector: (_) => state.lastName.value,
-                            ),
-                            const VerticalSpacer(),
-
-                            // Demographic information
-                            BirthdateField(),
-                            const VerticalSpacer(),
-                            AgeField(),
-                            const VerticalSpacer(),
-
-                            // Contact information
-                            const PhoneNumberField(),
-                            const VerticalSpacer(),
-                            const EmailAddressField(),
-                            const VerticalSpacer(),
-
-                            // Account information
-                            const UserNameField(),
-                            const VerticalSpacer(),
-                            const PasswordField(),
-                            const VerticalSpacer(),
-
-                            // Action buttons
-                            CTAButton(formType),
-                            LoadingIndicator(isSubmitting: state.isSubmitting),
-                            const VerticalSpacer(),
-
-                            // Secondary actions
-                            KenoDesciptiveTextButton(
-                              onPressed: () => context.goNamed(AppRoutes.login),
-                              descriptiveText: AppStrings.alreadyHaveAcc,
-                              buttonText: AppStrings.login,
-                            ),
-                          ],
+              // Form content
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Personal information fields
+                  NameField(
+                    labelText: AppStrings.firstNameLabel,
+                    hintText: AppStrings.firstNameHint,
+                    onChanged:
+                        (value) => context.read<SignUpBloc>().add(
+                          FirstNameChanged(value),
                         ),
-                      ),
-                    ),
+                    valueSelector: (_) => state.firstName.value,
                   ),
-                ),
-              ],
+                  const VerticalSpacer(),
+                  NameField(
+                    labelText: AppStrings.lastNameLabel,
+                    hintText: AppStrings.lastNameHint,
+                    onChanged:
+                        (value) => context.read<SignUpBloc>().add(
+                          LastNameChanged(value),
+                        ),
+                    valueSelector: (_) => state.lastName.value,
+                  ),
+                  const VerticalSpacer(),
+
+                  // Demographic information
+                  Row(
+                    children: [
+                      Flexible(flex: 2, child: BirthdateField()),
+                      const SizedBox(width: 16),
+                      Flexible(flex: 1, child: AgeField()),
+                    ],
+                  ),
+                  const VerticalSpacer(),
+
+                  // Contact information
+                  const PhoneNumberField(),
+                  const VerticalSpacer(),
+                  const EmailAddressField(),
+                  const VerticalSpacer(),
+
+                  // Account information
+                  const UserNameField(),
+                  const VerticalSpacer(),
+                  const PasswordField(),
+                  const VerticalSpacer(),
+
+                  // Action buttons
+                  CTAButton(formType),
+                  const VerticalSpacer(),
+                  LoadingIndicator(isSubmitting: state.isSubmitting),
+                  const VerticalSpacer(),
+
+                  // Secondary actions
+                  KenoDesciptiveTextButton(
+                    onPressed: () => context.goNamed(AppRoutes.login),
+                    descriptiveText: AppStrings.alreadyHaveAcc,
+                    buttonText: AppStrings.login,
+                  ),
+                ],
+              ),
             ),
           );
         },
