@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_state.dart';
 
-void resultDialog(BuildContext context, PayoutState state) {
+void showResultDialog(BuildContext context, PayoutState state) {
   showDialog(
     context: context,
     builder:
