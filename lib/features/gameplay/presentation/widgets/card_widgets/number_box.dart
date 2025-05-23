@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keno_plus/core/values/app_imports.dart';
 
 class NumberBox extends StatelessWidget {
   final int number;
@@ -21,26 +22,31 @@ class NumberBox extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 40,
-        height: 40,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color:
               isMatch
-                  ? Colors.green
+                  ? AppColors.cardWin
                   : isWinningBet
-                  ? Colors.red
-                  : (isSelected ? Colors.blue : Colors.grey[300]),
-          border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.circular(4),
+                  ? AppColors.cardLose
+                  : (isSelected
+                      ? AppColors.cardSelected
+                      : AppColors.cardPrimary),
+          border: Border.all(color: AppColors.white, width: 1),
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.white.withOpacity(0.5),
+              blurRadius: 2.0,
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
-        child: Text(
-          number.toString(),
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.white : Colors.black,
-          ),
+        child: KenoText(
+          text: number.toString(),
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+          color: isSelected ? AppColors.primary : AppColors.white,
         ),
       ),
     );

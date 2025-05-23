@@ -28,7 +28,7 @@ class KenoMainLayout extends StatelessWidget {
 /// - Theme-aware defaults
 class KenoButton extends StatefulWidget {
   // Content
-  final String text;
+  final String? text;
   final IconData? icon;
 
   // Event handling
@@ -47,6 +47,7 @@ class KenoButton extends StatefulWidget {
   final double? iconSize;
   final Color? iconColor;
   final double? margin;
+  final String? tooltip;
 
   // Effects
   final bool isGlow;
@@ -58,7 +59,7 @@ class KenoButton extends StatefulWidget {
   const KenoButton({
     super.key,
     // Required parameters
-    required this.text,
+    this.text,
     this.onPressed,
 
     // Text styling
@@ -75,6 +76,7 @@ class KenoButton extends StatefulWidget {
     this.iconSize,
     this.iconColor,
     this.margin,
+    this.tooltip,
 
     // Effects
     this.isGlow = false,
@@ -207,7 +209,7 @@ class _KenoButtonState extends State<KenoButton>
                         SizedBox(width: 8.0),
                       ],
                       KenoText(
-                        text: widget.text,
+                        text: widget.text ?? '',
                         fontFamily:
                             widget.fontFamily ??
                             theme.textTheme.labelLarge?.fontFamily ??
