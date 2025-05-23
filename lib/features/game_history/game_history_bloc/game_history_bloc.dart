@@ -8,7 +8,7 @@ class GameHistoryBloc extends Bloc<GameHistoryEvent, GameHistoryState> {
     on<SaveGameHistory>(_onSaveGameHistory);
   }
 
-  final SaveGameHistoryUseCase saveGameHistory; // replace with usecases
+  final SaveGameHistoryUseCase saveGameHistory;
 
   Future<void> _onSaveGameHistory(
     SaveGameHistory event,

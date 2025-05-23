@@ -13,7 +13,5 @@ initGameHistoryInjections() async {
   sl.registerSingleton<GameHistoryDatasource>(GameHistoryDatasource(database));
   sl.registerSingleton<GameHistoryRepository>(IGameHistoryRepository(sl()));
   sl.registerSingleton<SaveGameHistoryUseCase>(SaveGameHistoryUseCase(sl()));
-  sl.registerSingleton<GameHistoryBloc>(
-    GameHistoryBloc(sl<SaveGameHistoryUseCase>()),
-  );
+  sl.registerSingleton<GameHistoryBloc>(GameHistoryBloc(sl()));
 }
