@@ -1,11 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keno_plus/features/game_history/domain/usecases/save_game_history_usecase.dart';
 import 'package:keno_plus/features/game_history/game_history_bloc/game_history_event.dart';
 import 'package:keno_plus/features/game_history/game_history_bloc/game_history_state.dart';
 
 class GameHistoryBloc extends Bloc<GameHistoryEvent, GameHistoryState> {
-  GameHistoryBloc() : super(GameHistoryState.initial()) {
+  GameHistoryBloc(this.saveGameHistory) : super(GameHistoryState.initial()) {
     on<SaveGameHistory>(_onSaveGameHistory);
   }
+
+  final SaveGameHistoryUseCase saveGameHistory; // replace with usecases
 
   Future<void> _onSaveGameHistory(
     SaveGameHistory event,
@@ -14,13 +17,12 @@ class GameHistoryBloc extends Bloc<GameHistoryEvent, GameHistoryState> {
     try {
       emit(state.copyWith(isSaving: true, error: null));
 
-      // TODO: Implement database saving logic here
-      // Example:
-      // await gameHistoryRepository.saveGameHistory(
-      //   cardPayouts: event.cardPayouts,
-      //   timestamp: event.timestamp,
-      //   gameMode: event.gameMode,
-      // );
+      await saveGameHistory.call(
+        timestamp: event.timestamp,
+        gameMode: event.gameMode,
+        wager: event.wager,
+        cardPayouts: event.cardPayouts,
+      );
 
       emit(state.copyWith(isSaving: false, isSaved: true));
     } catch (e) {
