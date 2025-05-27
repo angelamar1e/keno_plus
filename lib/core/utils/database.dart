@@ -32,10 +32,10 @@ class AppDatabase {
           )
         ''');
 
-        // Create game_history table
+        // Create tickets table
         await db.execute('''
           CREATE TABLE tickets(
-            ticket_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             game_history_id INTEGER,
             winning_numbers TEXT NOT NULL,
             spots TEXT NOT NULL,
