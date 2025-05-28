@@ -23,8 +23,8 @@ class TicketModel extends TicketEntity {
 
   factory TicketModel.fromMap(Map<String, dynamic> map) {
     return TicketModel(
-      id: map['id'] as String,
-      gameHistoryId: map['game_history_id'] as String,
+      id: map['id'] as int,
+      gameHistoryId: map['game_history_id'] as int,
       winningNumbers: map['winning_numbers'] as String,
       spots: map['spots'] as String,
       catches: map['catches'] as String,
