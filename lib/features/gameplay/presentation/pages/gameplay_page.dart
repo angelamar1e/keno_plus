@@ -6,6 +6,7 @@ import 'package:keno_plus/features/gameplay/presentation/widgets/card_widgets/ca
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/auto_pick_button.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/auto_pick_slider.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/play_button.dart';
+import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/result_dialog.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/wager_controls.dart';
 
 class GameplayPage extends StatefulWidget {
