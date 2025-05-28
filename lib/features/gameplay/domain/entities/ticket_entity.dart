@@ -1,6 +1,6 @@
 class TicketEntity {
-  final String id;
-  final String gameHistoryId;
+  final int? id;
+  final int? gameHistoryId;
   final String winningNumbers;
   final String spots;
   final String catches;
