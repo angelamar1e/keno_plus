@@ -7,7 +7,7 @@ class TicketDataSource {
 
   TicketDataSource(this.database);
 
-  Future<Either<Fail, void>> createTicket(TicketModel ticket) async {
+  Future<Either<Fail<String>, void>> insertTicket(TicketModel ticket) async {
     try {
       await database.insert(
         'tickets',
@@ -20,7 +20,7 @@ class TicketDataSource {
     }
   }
 
-  Future<Either<Fail, List<TicketModel>>> getTicketsByGameHistoryId(
+  Future<Either<Fail<String>, List<TicketModel>>> getTicketsByGameHistoryId(
     int gameHistoryId,
   ) async {
     try {
