@@ -49,13 +49,11 @@ class _GameplayPageState extends State<GameplayPage> {
             cardBlocInstances[state.currentCard] = CardBloc();
           }
 
-          final currentCardBloc = cardBlocInstances[state.currentCard]!;
+          final currentCardBloc =
+              cardBlocInstances[state.currentCard] ?? CardBloc();
           final numberOfCards =
               state.numberOfCards; // number of purchased cards
-          final GameMode gameMode = state.gameMode;
-          final numbersCount =
-              gameMode
-                  .numbersCount; // largest number in a card, count of numbers in a card
+          final gameMode = state.gameMode;
 
           return KenoMainLayout(
             background: KenoGameBackground(),
@@ -80,14 +78,12 @@ class _GameplayPageState extends State<GameplayPage> {
                           }
 
                           return BlocProvider.value(
-                            value: cardBlocInstances[index]!,
+                            value: cardBlocInstances[index] ?? CardBloc(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: CardWidget(
-                                columns: gameMode.columns,
-                                numbersCount: numbersCount,
-                                maxBets: gameMode.maxBets,
-                              ),
+                                gameMode,
+                              ), // build card based on game mode
                             ),
                           );
                         },
@@ -131,16 +127,12 @@ class _GameplayPageState extends State<GameplayPage> {
                     const SizedBox(height: 16),
 
                     // button to auto-pick bets, according to number set in the slider
-                    AutoPickButton(
-                      cardBlocInstance: currentCardBloc,
-                      largestNumber: numbersCount,
-                    ),
+                    AutoPickButton(cardBlocInstance: currentCardBloc, gameMode),
 
                     // automatically auto-picks bets on slider change
                     AutoPickNumberSlider(
                       cardBlocInstance: currentCardBloc,
-                      largestNumber: numbersCount,
-                      max: gameMode.maxBets,
+                      gameMode,
                     ),
 
                     PlayButton(

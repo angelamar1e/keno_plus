@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keno_plus/core/utils/game_modes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
 
 class AutoPickButton extends StatelessWidget {
-  const AutoPickButton({
+  const AutoPickButton(
+    this.gameMode, {
     super.key,
     required this.cardBlocInstance,
-    required this.largestNumber,
   });
 
   final CardBloc cardBlocInstance;
-  final int largestNumber;
+  final GameMode gameMode;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class AutoPickButton extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               context.read<CardBloc>().add(
-                AutoPickBets(largestNumber: largestNumber),
+                AutoPickBets(largestNumber: gameMode.numbersCount),
               );
             },
             child: Container(
