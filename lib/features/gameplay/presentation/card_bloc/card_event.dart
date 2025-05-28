@@ -20,9 +20,10 @@ class DeleteAutoPicks extends CardEvent {}
 
 class PlayPressed extends CardEvent {
   final int numbersCount;
+  final int? gameHistoryId;
+  final GameMode gameMode;
+  final double wager;
 
-  PlayPressed({required this.numbersCount});
+  PlayPressed(this.gameHistoryId, this.numbersCount, this.gameMode, this.wager);
   // draw winning bets
-  // save game history
-  // emit resultsReady true
 }

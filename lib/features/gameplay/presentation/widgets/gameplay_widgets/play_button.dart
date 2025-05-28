@@ -2,17 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/core/utils/game_modes.dart';
-import 'package:keno_plus/features/game_history/game_history_bloc/game_history_event.dart';
+import 'package:keno_plus/features/authentication/presentation/authentication_bloc/authentication_bloc.dart';
+import 'package:keno_plus/features/game_history/data/models/game_history_model.dart';
+import 'package:keno_plus/features/game_history/presentation/game_history_bloc/game_history_event.dart';
 import 'package:keno_plus/features/gameplay/gameplay_injections.dart';
 
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
-import 'package:keno_plus/features/game_history/game_history_bloc/game_history_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/game_config_bloc/game_config_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_event.dart';
-import 'package:keno_plus/features/gameplay/presentation/payout_bloc/payout_state.dart';
+import 'package:keno_plus/features/game_history/presentation/game_history_bloc/game_history_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_state.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/result_dialog.dart';
 
 class PlayButton extends StatelessWidget {
@@ -26,78 +23,78 @@ class PlayButton extends StatelessWidget {
   final GameMode gameMode;
 
   bool _hasEmptyBets(List<CardBloc> cardBlocs) {
-    return cardBlocs.any((bloc) => bloc.state.bets.isEmpty);
+    return cardBlocs.any((bloc) => bloc.state.spots.isEmpty);
+  }
+
+  bool _isCalculating(List<CardBloc> cardBlocs) {
+    return cardBlocs.any((bloc) => bloc.state.isCalculating);
   }
 
   @override
   Widget build(BuildContext context) {
+    final hasEmptyBets = cardBlocInstances.any(
+      (bloc) => bloc.state.spots.isEmpty,
+    );
+    final isCalculating = cardBlocInstances.any(
+      (bloc) => bloc.state.isCalculating,
+    );
+
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PayoutBloc>(create: (context) => sl<PayoutBloc>()),
         BlocProvider<WagerBloc>(create: (context) => sl<WagerBloc>()),
-        BlocProvider<GameConfigBloc>(create: (context) => sl<GameConfigBloc>()),
         BlocProvider<GameHistoryBloc>(
           create: (context) => sl<GameHistoryBloc>(),
         ),
+        BlocProvider<AuthenticationBloc>(
+          create: (context) => sl<AuthenticationBloc>(),
+        ),
       ],
-      child: BlocBuilder<WagerBloc, WagerState>(
-        builder: (context, wagerState) {
-          return BlocBuilder<PayoutBloc, PayoutState>(
-            builder: (context, payoutState) {
-              return BlocListener<PayoutBloc, PayoutState>(
-                listener: (context, state) {
-                  if (state.hasPayouts && !state.isCalculating) {
-                    showResultDialog(context, state);
+      child: Builder(
+        builder: (context) {
+          final wager = context.select((WagerBloc bloc) => bloc.state.wager);
+          final user = context.select(
+            (AuthenticationBloc bloc) => bloc.state.user,
+          );
+          final newGameHistoryId = context.select(
+            (GameHistoryBloc bloc) => bloc.state.newGameHistoryId,
+          );
 
-                    // save game history for all cards
-                    context.read<GameHistoryBloc>().add(
-                      SaveGameHistory(
-                        cardPayouts: state.cardPayouts!,
-                        timestamp: DateTime.timestamp(),
-                        gameMode: gameMode.name,
-                        wager: wagerState.wager,
-                      ),
-                    );
-                  }
-                },
-                child: Builder(
-                  builder: (context) {
-                    final hasEmptyBets = _hasEmptyBets(cardBlocInstances);
-                    final isDisabled =
-                        payoutState.isCalculating || hasEmptyBets;
+          // Disable the button if any card is calculating or has empty bets
+          final isDisabled = isCalculating || hasEmptyBets;
+          final newGameHistory = GameHistoryModel(
+            id: null,
+            username: user?.username ?? '',
+            timestamp: DateTime.now().toIso8601String(),
+            gameMode: gameMode.name,
+            wager: wager,
+          );
 
-                    return ElevatedButton(
-                      onPressed:
-                          isDisabled
-                              ? null
-                              : () {
-                                // Reset payouts before starting new game
-                                context.read<PayoutBloc>().add(ResetPayouts());
+          return ElevatedButton(
+            onPressed:
+                isDisabled
+                    ? null
+                    : () {
+                      // save game settings history
+                      context.read<GameHistoryBloc>().add(
+                        SaveGameHistory(gameHistory: newGameHistory),
+                      );
 
-                                // Trigger play on all cards
-                                for (final bloc in cardBlocInstances) {
-                                  bloc.add(
-                                    PlayPressed(
-                                      numbersCount: gameMode.numbersCount,
-                                    ),
-                                  );
-                                }
+                      // Trigger play on all cards, draws winning numbers, and calculates payouts
+                      for (final bloc in cardBlocInstances) {
+                        bloc.add(
+                          PlayPressed(
+                            newGameHistoryId,
+                            gameMode.numbersCount,
+                            gameMode,
+                            wager,
+                          ),
+                        );
+                      }
 
-                                // calculate payouts for all cards
-                                context.read<PayoutBloc>().add(
-                                  CalculatePayouts(
-                                    cardBlocInstances: cardBlocInstances,
-                                    wager: wagerState.wager,
-                                    isClassicMode: gameMode == GameMode.classic,
-                                  ),
-                                );
-                              },
-                      child: Text('Play'),
-                    );
-                  },
-                ),
-              );
-            },
+                      // Show the result dialog after all cards have been played
+                      showResultDialog(context, cardBlocInstances);
+                    },
+            child: Text('Play'),
           );
         },
       ),
