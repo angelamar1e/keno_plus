@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/core/utils/auto_generate_numbers.dart';
+import 'package:keno_plus/core/utils/calculate_payout.dart';
+import 'package:keno_plus/core/utils/game_modes.dart';
+import 'package:keno_plus/features/game_history/game_history_injections.dart';
+import 'package:keno_plus/features/gameplay/data/models/ticket_model.dart';
+import 'package:keno_plus/features/gameplay/domain/usecases/save_ticket_usecase.dart';
 import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
 
 part 'card_event.dart';
@@ -11,6 +18,8 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     on<DeleteAutoPicks>(_onDeleteAutoPicks);
     on<PlayPressed>(_onPlayPressed);
   }
+
+  final SaveTicketUsecase saveTicketUsecase = sl<SaveTicketUsecase>();
 
   void _onBetsChanged(BetsChanged event, Emitter<CardState> emit) {
     final bets = state.bets;
@@ -27,6 +36,7 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     emit(
       state.copyWith(
         bets: bets,
+        numberOfBets: bets.length,
         // reset result lists
         winningBets: emptyList,
         matchedBets: emptyList,
@@ -65,7 +75,11 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     }
   }
 
-  void _onPlayPressed(PlayPressed event, Emitter<CardState> emit) {
+  Future<void> _onPlayPressed(
+    PlayPressed event,
+    Emitter<CardState> emit,
+  ) async {
+    final bets = state.bets;
     final largestNumber = event.numbersCount;
     final numberOfBets = state.numberOfBets;
 
@@ -81,8 +95,31 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       return value;
     });
 
+    final payout = calculatePayout(
+      numberOfSpots: bets.length,
+      numberOfCatches: matchedBets.length,
+      wager: event.wager,
+      isClassicMode: event.gameMode == GameMode.classic,
+    );
+
+    await saveTicketUsecase.call(
+      TicketModel(
+        id: null,
+        gameHistoryId: event.gameHistoryId,
+        winningNumbers: jsonEncode(randomWinningBets),
+        spots: jsonEncode(state.bets),
+        catches: jsonEncode(matchedBets),
+        payout: payout,
+      ),
+    );
+
     emit(
-      state.copyWith(winningBets: randomWinningBets, matchedBets: matchedBets),
+      state.copyWith(
+        winningBets: randomWinningBets,
+        matchedBets: matchedBets,
+        payout: payout,
+        isCalculating: false,
+      ),
     );
   }
 }

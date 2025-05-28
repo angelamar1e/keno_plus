@@ -8,6 +8,8 @@ class CardState {
     required this.wager,
     required this.winningBets,
     required this.matchedBets,
+    required this.payout,
+    required this.isCalculating,
   });
 
   final int largestNumber;
@@ -16,6 +18,8 @@ class CardState {
   final int wager;
   final List<int> winningBets;
   final List<int> matchedBets;
+  final double? payout;
+  final bool isCalculating;
 
   factory CardState.initial() {
     return CardState(
@@ -25,6 +29,8 @@ class CardState {
       numberOfBets: 1,
       matchedBets: [],
       largestNumber: 80,
+      payout: null,
+      isCalculating: false,
     );
   }
 
@@ -35,6 +41,8 @@ class CardState {
     int? wager,
     List<int>? winningBets,
     List<int>? matchedBets,
+    double? payout,
+    bool? isCalculating,
   }) {
     return CardState(
       largestNumber: largestNumber ?? this.largestNumber,
@@ -43,6 +51,8 @@ class CardState {
       wager: wager ?? this.wager,
       winningBets: winningBets ?? this.winningBets,
       matchedBets: matchedBets ?? this.matchedBets,
+      payout: payout ?? this.payout,
+      isCalculating: isCalculating ?? this.isCalculating,
     );
   }
 }
