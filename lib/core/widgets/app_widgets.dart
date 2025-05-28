@@ -507,6 +507,35 @@ class KenoGameBackground extends StatelessWidget {
   }
 }
 
+/// Icon button with consistent styling and theming.
+class KenoIconButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final IconData? icon;
+  final String? tooltip;
+  final Color? color;
+  final double? iconSize;
+  const KenoIconButton({
+    super.key,
+    this.onPressed,
+    this.icon,
+    this.tooltip,
+    this.color,
+    this.iconSize,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(icon),
+      iconSize: iconSize ?? 36.0,
+      tooltip: tooltip,
+      color: color,
+    );
+  }
+}
+
+
 /// Standard vertical spacing widget for consistent spacing in forms.
 class VerticalSpacer extends StatelessWidget {
   const VerticalSpacer({super.key});

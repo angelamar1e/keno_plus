@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/core/utils/game_modes.dart';
+import 'package:keno_plus/core/widgets/app_widgets.dart';
 import 'package:keno_plus/features/game_history/game_history_bloc/game_history_event.dart';
 import 'package:keno_plus/features/gameplay/gameplay_injections.dart';
 
@@ -66,7 +67,7 @@ class PlayButton extends StatelessWidget {
                     final isDisabled =
                         payoutState.isCalculating || hasEmptyBets;
 
-                    return ElevatedButton(
+                    return KenoButton(
                       onPressed:
                           isDisabled
                               ? null
@@ -92,7 +93,7 @@ class PlayButton extends StatelessWidget {
                                   ),
                                 );
                               },
-                      child: Text('Play'),
+                      text: 'Play',
                     );
                   },
                 ),

@@ -28,40 +28,36 @@ class WagerControls extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Decrease wager button
-                  IconButton(
-                    onPressed: () {
-                      context.read<WagerBloc>().add(DecreaseWager());
-                    },
-                    icon: const Icon(Icons.remove),
-                    tooltip: 'Decrease wager',
-                    color: AppColors.white,
-                  ),
                   // Halve wager button
-                  IconButton(
-                    onPressed: () {
-                      context.read<WagerBloc>().add(WagerHalved());
-                    },
-                    icon: const Icon(Icons.exposure_neg_1),
+                  KenoIconButton(
+                    icon: Icons.keyboard_double_arrow_down_rounded,
+                    onPressed:
+                        () => context.read<WagerBloc>().add(WagerHalved()),
                     tooltip: 'Halve wager',
                     color: AppColors.white,
                   ),
-                  // Double wager button
-                  IconButton(
-                    onPressed: () {
-                      context.read<WagerBloc>().add(WagerDoubled());
-                    },
-                    icon: const Icon(Icons.exposure_plus_1),
-                    tooltip: 'Double wager',
+                  // Decrease wager button
+                  KenoIconButton(
+                    onPressed:
+                        () => context.read<WagerBloc>().add(DecreaseWager()),
+                    icon: Icons.keyboard_arrow_down_rounded,
+                    tooltip: 'Decrease wager',
                     color: AppColors.white,
                   ),
                   // Increase wager button
-                  IconButton(
-                    onPressed: () {
-                      context.read<WagerBloc>().add(IncreaseWager());
-                    },
-                    icon: const Icon(Icons.add),
+                  KenoIconButton(
+                    onPressed:
+                        () => context.read<WagerBloc>().add(IncreaseWager()),
+                    icon: Icons.keyboard_arrow_up_rounded,
                     tooltip: 'Increase wager',
+                    color: AppColors.white,
+                  ),
+                  // Double wager button
+                  KenoIconButton(
+                    onPressed:
+                        () => context.read<WagerBloc>().add(WagerDoubled()),
+                    icon: Icons.keyboard_double_arrow_up_rounded,
+                    tooltip: 'Double wager',
                     color: AppColors.white,
                   ),
                 ],
@@ -73,3 +69,4 @@ class WagerControls extends StatelessWidget {
     );
   }
 }
+
