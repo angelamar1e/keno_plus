@@ -3,7 +3,7 @@ import 'package:keno_plus/features/game_history/data/datasources/game_history_da
 import 'package:keno_plus/features/game_history/data/repositories/igame_history_repository.dart';
 import 'package:keno_plus/features/game_history/domain/repositories/game_history_repository.dart';
 import 'package:keno_plus/features/game_history/domain/usecases/save_game_history_usecase.dart';
-import 'package:keno_plus/features/game_history/game_history_bloc/game_history_bloc.dart';
+import 'package:keno_plus/features/game_history/presentation/game_history_bloc/game_history_bloc.dart';
 
 final sl = GetIt.instance;
 
