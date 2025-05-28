@@ -1,5 +1,5 @@
 enum GameMode {
-  classic(maxBets: 15, rows: 8, columns: 10),
+  classic(maxBets: 15, rows: 10, columns: 8),
   mini(maxBets: 7, rows: 7, columns: 7);
 
   final int maxBets;
