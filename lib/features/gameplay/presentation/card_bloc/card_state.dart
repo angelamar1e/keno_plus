@@ -3,31 +3,31 @@
 class CardState {
   CardState({
     required this.largestNumber,
-    required this.numberOfBets,
-    required this.bets,
+    required this.numberOfSpots,
+    required this.spots,
     required this.wager,
-    required this.winningBets,
-    required this.matchedBets,
+    required this.winningSpots,
+    required this.catches,
     required this.payout,
     required this.isCalculating,
   });
 
   final int largestNumber;
-  final int numberOfBets;
-  final List<int> bets;
+  final int numberOfSpots;
+  final List<int> spots;
   final int wager;
-  final List<int> winningBets;
-  final List<int> matchedBets;
+  final List<int> winningSpots;
+  final List<int> catches;
   final double? payout;
   final bool isCalculating;
 
   factory CardState.initial() {
     return CardState(
-      bets: [],
+      spots: [],
       wager: 0,
-      winningBets: [],
-      numberOfBets: 1,
-      matchedBets: [],
+      winningSpots: [],
+      numberOfSpots: 1,
+      catches: [],
       largestNumber: 80,
       payout: null,
       isCalculating: false,
@@ -36,21 +36,21 @@ class CardState {
 
   CardState copyWith({
     int? largestNumber,
-    int? numberOfBets,
-    List<int>? bets,
+    int? numberOfSpots,
+    List<int>? spots,
     int? wager,
-    List<int>? winningBets,
-    List<int>? matchedBets,
+    List<int>? winningSpots,
+    List<int>? catches,
     double? payout,
     bool? isCalculating,
   }) {
     return CardState(
       largestNumber: largestNumber ?? this.largestNumber,
-      numberOfBets: numberOfBets ?? this.numberOfBets,
-      bets: bets ?? this.bets,
+      numberOfSpots: numberOfSpots ?? this.numberOfSpots,
+      spots: spots ?? this.spots,
       wager: wager ?? this.wager,
-      winningBets: winningBets ?? this.winningBets,
-      matchedBets: matchedBets ?? this.matchedBets,
+      winningSpots: winningSpots ?? this.winningSpots,
+      catches: catches ?? this.catches,
       payout: payout ?? this.payout,
       isCalculating: isCalculating ?? this.isCalculating,
     );

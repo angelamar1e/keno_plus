@@ -8,7 +8,7 @@ void showResultDialog(BuildContext context, List<CardBloc> tickets) {
   // Determine all numbers that are catches (drawn numbers) across all tickets
   final allCatches = <int>{};
   for (final ticket in tickets) {
-    allCatches.addAll(ticket.state.matchedBets);
+    allCatches.addAll(ticket.state.catches);
   }
 
   showDialog(
@@ -68,8 +68,8 @@ void showResultDialog(BuildContext context, List<CardBloc> tickets) {
                 ...tickets.asMap().entries.map((entry) {
                   final index = entry.key + 1;
                   final state = entry.value.state;
-                  final spots = state.bets;
-                  final catches = state.matchedBets;
+                  final spots = state.spots;
+                  final catches = state.catches;
                   final amountWon = state.payout ?? 0.0;
                   totalAmountWon += amountWon;
                   // For this ticket, show all spots in a row, color-coded
