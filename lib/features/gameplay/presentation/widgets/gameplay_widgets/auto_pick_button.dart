@@ -25,16 +25,13 @@ class AutoPickButton extends StatelessWidget {
               );
             },
             child: Container(
-              width: 40,
-              height: 40,
-              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: AppColors.secondary,
                 border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Icon(
-                Icons.auto_awesome_sharp,
+                Icons.shuffle,
                 size: 30,
                 color: AppColors.primary,
               ),

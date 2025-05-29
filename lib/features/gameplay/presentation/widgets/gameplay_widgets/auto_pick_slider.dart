@@ -22,11 +22,11 @@ class AutoPickNumberSlider extends StatelessWidget {
         builder: (context, state) {
           final numberOfBets = state.numberOfBets;
 
-          return Column(
+          return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               KenoText(
-                text: 'Auto-Pick Bets: $numberOfBets',
+                text: 'Auto-Pick Bets:',
                 fontWeight: FontWeight.bold,
                 color: AppColors.white,
               ),

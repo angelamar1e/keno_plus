@@ -35,12 +35,12 @@ class CardWidget extends StatelessWidget {
           return LayoutBuilder(
             builder: (context, constraints) {
               return GridView.builder(
-                padding: EdgeInsets.zero,
+                padding: EdgeInsets.zero, // Remove all padding
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: columns,
-                  mainAxisSpacing: 6, // Reduced spacing
+                  mainAxisSpacing: 12,
                   crossAxisSpacing: 6,
                   childAspectRatio: 1.0,
                 ),

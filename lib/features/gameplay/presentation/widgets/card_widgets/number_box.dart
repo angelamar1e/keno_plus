@@ -44,7 +44,7 @@ class NumberBox extends StatelessWidget {
         child: KenoText(
           text: number.toString(),
           fontSize: 18.0,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w900,
           color: isSelected ? AppColors.primary : AppColors.white,
         ),
       ),

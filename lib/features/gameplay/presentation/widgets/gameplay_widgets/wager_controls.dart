@@ -20,11 +20,11 @@ class WagerControls extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               KenoText(
-                text: 'Wager: ₱${state.wager.toStringAsFixed(2)}',
-                fontSize: 16.0,
+                text: 'Wager',
+                fontSize: 20.0,
+                fontWeight: FontWeight.w700,
                 color: AppColors.white,
               ),
-              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -34,7 +34,7 @@ class WagerControls extends StatelessWidget {
                     onPressed:
                         () => context.read<WagerBloc>().add(WagerHalved()),
                     tooltip: 'Halve wager',
-                    color: AppColors.white,
+                    iconColor: AppColors.white,
                   ),
                   // Decrease wager button
                   KenoIconButton(
@@ -42,6 +42,12 @@ class WagerControls extends StatelessWidget {
                         () => context.read<WagerBloc>().add(DecreaseWager()),
                     icon: Icons.keyboard_arrow_down_rounded,
                     tooltip: 'Decrease wager',
+                    iconColor: AppColors.white,
+                  ),
+                  KenoText(
+                    text: '₱${state.wager.toStringAsFixed(2)}',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.white,
                   ),
                   // Increase wager button
@@ -50,7 +56,7 @@ class WagerControls extends StatelessWidget {
                         () => context.read<WagerBloc>().add(IncreaseWager()),
                     icon: Icons.keyboard_arrow_up_rounded,
                     tooltip: 'Increase wager',
-                    color: AppColors.white,
+                    iconColor: AppColors.white,
                   ),
                   // Double wager button
                   KenoIconButton(
@@ -58,7 +64,7 @@ class WagerControls extends StatelessWidget {
                         () => context.read<WagerBloc>().add(WagerDoubled()),
                     icon: Icons.keyboard_double_arrow_up_rounded,
                     tooltip: 'Double wager',
-                    color: AppColors.white,
+                    iconColor: AppColors.white,
                   ),
                 ],
               ),
@@ -69,4 +75,3 @@ class WagerControls extends StatelessWidget {
     );
   }
 }
-

@@ -511,36 +511,48 @@ class KenoIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final IconData? icon;
   final String? tooltip;
-  final Color? color;
+  final Color? iconColor;
+  final Color? backgroundColor;
   final double? iconSize;
   const KenoIconButton({
     super.key,
     this.onPressed,
     this.icon,
     this.tooltip,
-    this.color,
+    this.iconColor,
+    this.backgroundColor,
     this.iconSize,
   });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onPressed,
-      icon: Icon(icon),
-      iconSize: iconSize ?? 36.0,
-      tooltip: tooltip,
-      color: color,
+    // Get theme colors for defaults
+    final theme = Theme.of(context);
+    final defaultBackgroundColor =
+        backgroundColor ?? theme.colorScheme.secondary;
+    return Container(
+      decoration: BoxDecoration(
+        color: defaultBackgroundColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: IconButton(
+        onPressed: onPressed,
+        icon: Icon(icon),
+        iconSize: iconSize ?? 36.0,
+        tooltip: tooltip,
+        color: iconColor,
+      ),
     );
   }
 }
 
-
 /// Standard vertical spacing widget for consistent spacing in forms.
-class VerticalSpacer extends StatelessWidget {
-  const VerticalSpacer({super.key});
+class KenoVerticalSpacer extends StatelessWidget {
+  final double? spacing;
+  const KenoVerticalSpacer({super.key, this.spacing});
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(height: 16);
+    return SizedBox(height: spacing ?? 16);
   }
 }

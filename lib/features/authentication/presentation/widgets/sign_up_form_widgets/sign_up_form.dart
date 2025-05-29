@@ -74,7 +74,7 @@ class SignUpForm extends StatelessWidget {
                         ),
                     valueSelector: (_) => state.firstName.value,
                   ),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
                   NameField(
                     labelText: AppStrings.lastNameLabel,
                     hintText: AppStrings.lastNameHint,
@@ -84,7 +84,7 @@ class SignUpForm extends StatelessWidget {
                         ),
                     valueSelector: (_) => state.lastName.value,
                   ),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
 
                   // Demographic information
                   Row(
@@ -94,25 +94,25 @@ class SignUpForm extends StatelessWidget {
                       Flexible(flex: 1, child: AgeField()),
                     ],
                   ),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
 
                   // Contact information
                   const PhoneNumberField(),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
                   const EmailAddressField(),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
 
                   // Account information
                   const UserNameField(),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
                   const PasswordField(),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
 
                   // Action buttons
                   CTAButton(formType),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
                   LoadingIndicator(isSubmitting: state.isSubmitting),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
 
                   // Secondary actions
                   KenoDesciptiveTextButton(

@@ -140,21 +140,20 @@ class _GameplayPageState extends State<GameplayPage> {
 
                         // Wager controls
                         const WagerControls(),
-                        const SizedBox(height: 8.0),
-
+                        KenoVerticalSpacer(),
                         // Auto-pick button
                         AutoPickButton(
                           cardBlocInstance: currentCardBloc,
                           largestNumber: numbersCount,
                         ),
-
+                        KenoVerticalSpacer(),
                         // Auto-pick slider
                         AutoPickNumberSlider(
                           cardBlocInstance: currentCardBloc,
                           largestNumber: numbersCount,
                           max: gameMode.maxBets,
                         ),
-
+                        KenoVerticalSpacer(),
                         PlayButton(
                           cardBlocInstances: cardBlocInstances.values.toList(),
                           gameMode: gameMode,

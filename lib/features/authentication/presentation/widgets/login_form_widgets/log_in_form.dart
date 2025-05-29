@@ -70,15 +70,15 @@ class LogInForm extends StatelessWidget {
                 children: [
                   // Form fields
                   const UserNameField(),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
                   const PasswordField(),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
 
                   // Action buttons
                   CTAButton(formType),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
                   LoadingIndicator(isSubmitting: state.isSubmitting),
-                  const VerticalSpacer(),
+                  const KenoVerticalSpacer(),
 
                   // Secondary actions
                   KenoDesciptiveTextButton(
