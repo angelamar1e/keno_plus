@@ -7,36 +7,35 @@ import 'package:keno_plus/core/utils/game_modes.dart';
 import 'package:keno_plus/features/game_history/game_history_injections.dart';
 import 'package:keno_plus/features/gameplay/data/models/ticket_model.dart';
 import 'package:keno_plus/features/gameplay/domain/usecases/save_ticket_usecase.dart';
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_event.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_state.dart';
 
-part 'card_event.dart';
-
-class CardBloc extends Bloc<CardEvent, CardState> {
-  CardBloc() : super(CardState.initial()) {
-    on<BetsChanged>(_onBetsChanged);
-    on<AutoPickBets>(_onAutoPickBets);
+class TicketBloc extends Bloc<TicketEvent, TicketState> {
+  TicketBloc() : super(TicketState.initial()) {
+    on<SpotsChanged>(_onSpotsChanged);
+    on<AutoPickSpots>(_onAutoPickSpots);
     on<DeleteAutoPicks>(_onDeleteAutoPicks);
     on<PlayPressed>(_onPlayPressed);
   }
 
   final SaveTicketUsecase saveTicketUsecase = sl<SaveTicketUsecase>();
 
-  void _onBetsChanged(BetsChanged event, Emitter<CardState> emit) {
-    final bets = state.spots;
-    final selectedBet = event.bet;
-    final maxBets = event.maxBets;
+  void _onSpotsChanged(SpotsChanged event, Emitter<TicketState> emit) {
+    final spots = state.spots;
+    final selectedSpot = event.spot;
+    final maxSpots = event.maxSpots;
     final emptyList = List<int>.empty();
 
-    if (bets.contains(selectedBet)) {
-      bets.remove(selectedBet);
-    } else if (bets.length < maxBets) {
-      bets.add(selectedBet);
+    if (spots.contains(selectedSpot)) {
+      spots.remove(selectedSpot);
+    } else if (spots.length < maxSpots) {
+      spots.add(selectedSpot);
     }
 
     emit(
       state.copyWith(
-        spots: bets,
-        numberOfSpots: bets.length,
+        spots: spots,
+        numberOfSpots: spots.length,
         // reset result lists
         winningSpots: emptyList,
         catches: emptyList,
@@ -44,21 +43,21 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     );
   }
 
-  void _onAutoPickBets(AutoPickBets event, Emitter<CardState> emit) {
+  void _onAutoPickSpots(AutoPickSpots event, Emitter<TicketState> emit) {
     final largestNumber = event.largestNumber;
-    final numberOfBets = event.numberOfBets ?? state.numberOfSpots;
+    final numberOfSpots = event.numberOfSpots ?? state.numberOfSpots;
     final emptyList = List<int>.empty();
 
     // Generate unique random numbers
-    final randomBets = autoGenerateNumbersList(
+    final randomSpots = autoGenerateNumbersList(
       max: largestNumber,
-      size: numberOfBets,
+      size: numberOfSpots,
     );
 
     emit(
       state.copyWith(
-        numberOfSpots: numberOfBets,
-        spots: randomBets.toList(),
+        numberOfSpots: numberOfSpots,
+        spots: randomSpots.toList(),
         // reset result lists
         winningSpots: emptyList,
         catches: emptyList,
@@ -66,38 +65,38 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     );
   }
 
-  void _onDeleteAutoPicks(DeleteAutoPicks event, Emitter<CardState> emit) {
-    final currentBetsList = state.spots;
+  void _onDeleteAutoPicks(DeleteAutoPicks event, Emitter<TicketState> emit) {
+    final currentSpotsList = state.spots;
     final emptyList = List<int>.empty();
 
-    if (currentBetsList.isNotEmpty) {
+    if (currentSpotsList.isNotEmpty) {
       emit(state.copyWith(spots: emptyList));
     }
   }
 
   Future<void> _onPlayPressed(
     PlayPressed event,
-    Emitter<CardState> emit,
+    Emitter<TicketState> emit,
   ) async {
-    final bets = state.spots;
+    final spots = state.spots;
     final largestNumber = event.numbersCount;
-    final numberOfBets = state.numberOfSpots;
+    final numberOfSpots = state.numberOfSpots;
 
-    final randomWinningBets = autoGenerateNumbersList(
+    final randomWinningSpots = autoGenerateNumbersList(
       max: largestNumber,
-      size: numberOfBets,
+      size: numberOfSpots,
     );
 
-    final matchedBets = state.spots.fold<List<int>>([], (value, element) {
-      if (randomWinningBets.contains(element)) {
+    final catches = state.spots.fold<List<int>>([], (value, element) {
+      if (randomWinningSpots.contains(element)) {
         return [...value, element];
       }
       return value;
     });
 
     final payout = calculatePayout(
-      numberOfSpots: bets.length,
-      numberOfCatches: matchedBets.length,
+      numberOfSpots: spots.length,
+      numberOfCatches: catches.length,
       wager: event.wager,
       isClassicMode: event.gameMode == GameMode.classic,
     );
@@ -106,17 +105,17 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       TicketModel(
         id: null,
         gameHistoryId: event.gameHistoryId,
-        winningNumbers: jsonEncode(randomWinningBets),
+        winningNumbers: jsonEncode(randomWinningSpots),
         spots: jsonEncode(state.spots),
-        catches: jsonEncode(matchedBets),
+        catches: jsonEncode(catches),
         payout: payout,
       ),
     );
 
     emit(
       state.copyWith(
-        winningSpots: randomWinningBets,
-        catches: matchedBets,
+        winningSpots: randomWinningSpots,
+        catches: catches,
         payout: payout,
         isCalculating: false,
       ),

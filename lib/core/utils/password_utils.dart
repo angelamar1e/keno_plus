@@ -21,7 +21,7 @@ class PasswordUtils {
     return '$salt:${base64.encode(bytes)}';
   }
 
-  /// Verifies if a password matches the hashed password.
+  /// Verifies if a password catches the hashed password.
   static bool verifyPassword(
     String password,
     String hashedPassword, {

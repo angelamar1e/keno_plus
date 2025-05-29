@@ -7,35 +7,28 @@ import 'package:keno_plus/features/game_history/data/models/game_history_model.d
 import 'package:keno_plus/features/game_history/presentation/game_history_bloc/game_history_event.dart';
 import 'package:keno_plus/features/gameplay/gameplay_injections.dart';
 
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_bloc.dart';
 import 'package:keno_plus/features/game_history/presentation/game_history_bloc/game_history_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_event.dart';
 import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/result_dialog.dart';
 
 class PlayButton extends StatelessWidget {
   const PlayButton({
     super.key,
-    required this.cardBlocInstances,
+    required this.ticketBlocInstances,
     required this.gameMode,
   });
 
-  final List<CardBloc> cardBlocInstances;
+  final List<TicketBloc> ticketBlocInstances;
   final GameMode gameMode;
-
-  bool _hasEmptyBets(List<CardBloc> cardBlocs) {
-    return cardBlocs.any((bloc) => bloc.state.spots.isEmpty);
-  }
-
-  bool _isCalculating(List<CardBloc> cardBlocs) {
-    return cardBlocs.any((bloc) => bloc.state.isCalculating);
-  }
 
   @override
   Widget build(BuildContext context) {
-    final hasEmptyBets = cardBlocInstances.any(
+    final hasEmptyBets = ticketBlocInstances.any(
       (bloc) => bloc.state.spots.isEmpty,
     );
-    final isCalculating = cardBlocInstances.any(
+    final isCalculating = ticketBlocInstances.any(
       (bloc) => bloc.state.isCalculating,
     );
 
@@ -59,7 +52,7 @@ class PlayButton extends StatelessWidget {
             (GameHistoryBloc bloc) => bloc.state.newGameHistoryId,
           );
 
-          // Disable the button if any card is calculating or has empty bets
+          // Disable the button if any ticket is calculating or has empty bets
           final isDisabled = isCalculating || hasEmptyBets;
           final newGameHistory = GameHistoryModel(
             id: null,
@@ -79,8 +72,8 @@ class PlayButton extends StatelessWidget {
                         SaveGameHistory(gameHistory: newGameHistory),
                       );
 
-                      // Trigger play on all cards, draws winning numbers, and calculates payouts
-                      for (final bloc in cardBlocInstances) {
+                      // Trigger play on all tickets, draws winning numbers, and calculates payouts
+                      for (final bloc in ticketBlocInstances) {
                         bloc.add(
                           PlayPressed(
                             newGameHistoryId,
@@ -91,8 +84,12 @@ class PlayButton extends StatelessWidget {
                         );
                       }
 
-                      // Show the result dialog after all cards have been played
-                      showResultDialog(context, cardBlocInstances);
+                      // Wait for all tickets to complete calculations before showing dialog
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        if (context.mounted) {
+                          showResultDialog(context, ticketBlocInstances);
+                        }
+                      });
                     },
             child: Text('Play'),
           );

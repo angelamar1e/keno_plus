@@ -5,7 +5,7 @@ class NumberBox extends StatelessWidget {
   final int number;
   final bool isSelected;
   final bool isMatch;
-  final bool isWinningBet;
+  final bool isWinningSpot;
   final VoidCallback onTap;
 
   const NumberBox({
@@ -13,7 +13,7 @@ class NumberBox extends StatelessWidget {
     required this.number,
     required this.isSelected,
     required this.isMatch,
-    required this.isWinningBet,
+    required this.isWinningSpot,
     required this.onTap,
   });
 
@@ -26,12 +26,12 @@ class NumberBox extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               isMatch
-                  ? AppColors.cardWin
-                  : isWinningBet
-                  ? AppColors.cardLose
+                  ? AppColors.ticketWin
+                  : isWinningSpot
+                  ? AppColors.ticketLose
                   : (isSelected
-                      ? AppColors.cardSelected
-                      : AppColors.cardPrimary),
+                      ? AppColors.ticketSelected
+                      : AppColors.ticketPrimary),
           border: Border.all(color: AppColors.white, width: 1),
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [

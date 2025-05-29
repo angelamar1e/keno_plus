@@ -4,10 +4,10 @@ class GameConfigEvent {}
 
 class SetGameMode extends GameConfigEvent {}
 
-class SetNumberOfCards extends GameConfigEvent {}
+class SetNumberOfTickets extends GameConfigEvent {}
 
-class UpdateCurrentCard extends GameConfigEvent {
-  final int currentCard;
+class UpdateCurrentTicket extends GameConfigEvent {
+  final int currentTicket;
 
-  UpdateCurrentCard(this.currentCard);
+  UpdateCurrentTicket(this.currentTicket);
 }

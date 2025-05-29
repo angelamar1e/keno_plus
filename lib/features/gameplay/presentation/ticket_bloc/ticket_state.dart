@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-class CardState {
-  CardState({
+class TicketState {
+  TicketState({
     required this.largestNumber,
     required this.numberOfSpots,
     required this.spots,
@@ -21,8 +21,8 @@ class CardState {
   final double? payout;
   final bool isCalculating;
 
-  factory CardState.initial() {
-    return CardState(
+  factory TicketState.initial() {
+    return TicketState(
       spots: [],
       wager: 0,
       winningSpots: [],
@@ -34,7 +34,7 @@ class CardState {
     );
   }
 
-  CardState copyWith({
+  TicketState copyWith({
     int? largestNumber,
     int? numberOfSpots,
     List<int>? spots,
@@ -44,7 +44,7 @@ class CardState {
     double? payout,
     bool? isCalculating,
   }) {
-    return CardState(
+    return TicketState(
       largestNumber: largestNumber ?? this.largestNumber,
       numberOfSpots: numberOfSpots ?? this.numberOfSpots,
       spots: spots ?? this.spots,

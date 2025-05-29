@@ -6,10 +6,13 @@ part 'game_config_state.dart';
 
 class GameConfigBloc extends Bloc<GameConfigEvent, GameConfigState> {
   GameConfigBloc() : super(GameConfigState.initial()) {
-    on<UpdateCurrentCard>(_onUpdateCurrentCard);
+    on<UpdateCurrentTicket>(_onUpdateCurrentTicket);
   }
 
-  void _onUpdateCurrentCard(UpdateCurrentCard event, Emitter<GameConfigState> emit) {
-    emit(state.copyWith(currentCard: event.currentCard));
+  void _onUpdateCurrentTicket(
+    UpdateCurrentTicket event,
+    Emitter<GameConfigState> emit,
+  ) {
+    emit(state.copyWith(currentTicket: event.currentTicket));
   }
 }

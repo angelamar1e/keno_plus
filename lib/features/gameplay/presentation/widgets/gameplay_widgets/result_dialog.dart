@@ -1,47 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/widgets/card_widgets/number_box.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/widgets/ticket_widgets/number_box.dart';
 
-void showResultDialog(BuildContext context, List<CardBloc> tickets) {
+void showResultDialog(BuildContext context, List<TicketBloc> tickets) {
+  if (tickets.isEmpty) {
+    return;
+  }
+
   double totalAmountWon = 0;
 
-  // Determine all numbers that are catches (drawn numbers) across all tickets
-  final allCatches = <int>{};
+  // Calculate total amount won and check for errors
   for (final ticket in tickets) {
-    allCatches.addAll(ticket.state.catches);
+    final state = ticket.state;
+    totalAmountWon += state.payout ?? 0.0;
   }
 
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder:
         (context) => AlertDialog(
-          title: const Text('Game Results'),
+          title: Text('Game Results'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Legend
                 Row(
                   children: [
                     NumberBox(
                       number: 8,
                       isSelected: true,
                       isMatch: true,
-                      isWinningBet: true,
+                      isWinningSpot: true,
                       onTap: () {},
                     ),
                     const SizedBox(width: 4),
                     const Text(
-                      '= Catch (Winning Bet)',
+                      '= Catch (Winning Spot)',
                       style: TextStyle(fontSize: 12),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     NumberBox(
                       number: 12,
                       isSelected: true,
                       isMatch: false,
-                      isWinningBet: false,
+                      isWinningSpot: false,
                       onTap: () {},
                     ),
                     const SizedBox(width: 4),
@@ -49,12 +53,12 @@ void showResultDialog(BuildContext context, List<CardBloc> tickets) {
                       '= Spot (Non-winning)',
                       style: TextStyle(fontSize: 12),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     NumberBox(
                       number: 20,
                       isSelected: false,
                       isMatch: true,
-                      isWinningBet: false,
+                      isWinningSpot: false,
                       onTap: () {},
                     ),
                     const SizedBox(width: 4),
@@ -71,8 +75,7 @@ void showResultDialog(BuildContext context, List<CardBloc> tickets) {
                   final spots = state.spots;
                   final catches = state.catches;
                   final amountWon = state.payout ?? 0.0;
-                  totalAmountWon += amountWon;
-                  // For this ticket, show all spots in a row, color-coded
+
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Column(
@@ -86,7 +89,7 @@ void showResultDialog(BuildContext context, List<CardBloc> tickets) {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Text('Spots:'),
+                        const Text('Spots:'),
                         Wrap(
                           spacing: 4,
                           runSpacing: 4,
@@ -96,11 +99,10 @@ void showResultDialog(BuildContext context, List<CardBloc> tickets) {
                                 number: n,
                                 isSelected: true,
                                 isMatch: catches.contains(n),
-                                isWinningBet:
+                                isWinningSpot:
                                     amountWon > 0 && catches.contains(n),
                                 onTap: () {},
                               ),
-                            // Show catches that are not in spots (winning numbers not selected)
                             for (final n in catches.where(
                               (n) => !spots.contains(n),
                             ))
@@ -108,12 +110,11 @@ void showResultDialog(BuildContext context, List<CardBloc> tickets) {
                                 number: n,
                                 isSelected: false,
                                 isMatch: true,
-                                isWinningBet: false,
+                                isWinningSpot: false,
                                 onTap: () {},
                               ),
                           ],
                         ),
-
                         const SizedBox(height: 4),
                         Text(
                           'Amount Won: ₱${amountWon.toStringAsFixed(2)}',
@@ -129,7 +130,7 @@ void showResultDialog(BuildContext context, List<CardBloc> tickets) {
                 }),
                 const SizedBox(height: 16),
                 Text(
-                  'Total Won: ₱$totalAmountWon',
+                  'Total Won: ₱${totalAmountWon.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

@@ -2,32 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/core/utils/game_modes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_event.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_state.dart';
 
 class AutoPickNumberSlider extends StatelessWidget {
   final GameMode gameMode;
-  final CardBloc cardBlocInstance;
+  final TicketBloc ticketBlocInstance;
 
   const AutoPickNumberSlider(
     this.gameMode, {
-    required this.cardBlocInstance,
+    required this.ticketBlocInstance,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: cardBlocInstance, // Provide the passed CardBloc instance
-      child: BlocBuilder<CardBloc, CardState>(
+      value: ticketBlocInstance, // Provide the passed TicketBloc instance
+      child: BlocBuilder<TicketBloc, TicketState>(
         builder: (context, state) {
-          final numberOfBets = state.numberOfSpots;
+          final numberOfSpots = state.numberOfSpots;
 
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               KenoText(
-                text: 'Auto-Pick Bets: $numberOfBets',
+                text: 'Auto-Pick Spots: $numberOfSpots',
                 fontWeight: FontWeight.bold,
                 color: AppColors.white,
               ),
@@ -65,15 +66,15 @@ class AutoPickNumberSlider extends StatelessWidget {
                   ),
                 ),
                 child: Slider(
-                  value: numberOfBets.toDouble(),
+                  value: numberOfSpots.toDouble(),
                   min: 1.0,
-                  max: gameMode.maxBets.toDouble(),
-                  divisions: gameMode.maxBets, // Number of divisions
-                  label: numberOfBets.toString(),
+                  max: gameMode.maxSpots.toDouble(),
+                  divisions: gameMode.maxSpots, // Number of divisions
+                  label: numberOfSpots.toString(),
                   onChanged: (value) {
-                    context.read<CardBloc>().add(
-                      AutoPickBets(
-                        numberOfBets: value.toInt(),
+                    context.read<TicketBloc>().add(
+                      AutoPickSpots(
+                        numberOfSpots: value.toInt(),
                         largestNumber: gameMode.numbersCount,
                       ),
                     );

@@ -34,7 +34,7 @@ class AppTheme {
         secondaryContainer: AppColors.secondary.withOpacity(0.7),
         onSecondaryContainer: AppColors.white,
 
-        // Surface colors - used for cards, sheets, and menus
+        // Surface colors - used for tickets, sheets, and menus
         surface: AppColors.white,
         onSurface: AppColors.black,
         surfaceVariant: AppColors.white.withOpacity(0.8),
