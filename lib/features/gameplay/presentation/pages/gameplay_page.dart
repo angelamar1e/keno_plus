@@ -78,77 +78,66 @@ class _GameplayPageState extends State<GameplayPage> {
                           cardBlocInstances[index] = CardBloc();
                         }
 
-                          return BlocProvider.value(
-                            value: cardBlocInstances[index]!,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CardWidget(
-                                columns: gameMode.columns,
-                                numbersCount: numbersCount,
-                                maxBets: gameMode.maxBets,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        KenoButton(
-                          onPressed:
-                              state.currentCard > 0
-                                  ? () {
-                                    // Navigate to the previous card
-                                    context.read<GameConfigBloc>().add(
-                                      UpdateCurrentCard(state.currentCard - 1),
-                                    );
-                                  }
-                                  : null,
-                          icon: Icons.arrow_back,
-                          iconColor: AppColors.black,
-                        ),
-                        const SizedBox(width: 16),
-                        KenoButton(
-                          onPressed:
-                              state.currentCard < numberOfCards - 1
-                                  ? () {
-                                    // Navigate to the next card
-                                    context.read<GameConfigBloc>().add(
-                                      UpdateCurrentCard(state.currentCard + 1),
-                                    );
-                                  }
-                                  : null,
-                          icon: Icons.arrow_forward,
-                          iconColor: AppColors.black,
-                        ),
-                      ],
-                    ),
-
-                        // Wager controls
-                        const WagerControls(),
-                        const SizedBox(height: 8.0),
-
-                    // button to auto-pick bets, according to number set in the slider
-                    AutoPickButton(
-                      cardBlocInstance: currentCardBloc,
-                      largestNumber: numbersCount,
-                    ),
-
-                    // automatically auto-picks bets on slider change
-                    AutoPickNumberSlider(
-                      cardBlocInstance: currentCardBloc,
-                      largestNumber: numbersCount,
-                      max: gameMode.maxBets,
-                    ),
-
-                        PlayButton(
-                          cardBlocInstances: cardBlocInstances.values.toList(),
-                          gameMode: gameMode,
-                        ),
-                      ],
+                        return BlocProvider.value(
+                          value: cardBlocInstances[index]!,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CardWidget(gameMode),
+                          ),
+                        );
+                      },
                     ),
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    KenoButton(
+                      onPressed:
+                          state.currentCard > 0
+                              ? () {
+                                // Navigate to the previous card
+                                context.read<GameConfigBloc>().add(
+                                  UpdateCurrentCard(state.currentCard - 1),
+                                );
+                              }
+                              : null,
+                      icon: Icons.arrow_back,
+                      iconColor: AppColors.black,
+                    ),
+                    const SizedBox(width: 16),
+                    KenoButton(
+                      onPressed:
+                          state.currentCard < numberOfCards - 1
+                              ? () {
+                                // Navigate to the next card
+                                context.read<GameConfigBloc>().add(
+                                  UpdateCurrentCard(state.currentCard + 1),
+                                );
+                              }
+                              : null,
+                      icon: Icons.arrow_forward,
+                      iconColor: AppColors.black,
+                    ),
+                  ],
+                ),
+
+                // Wager controls
+                const WagerControls(),
+                const SizedBox(height: 8.0),
+
+                // button to auto-pick bets, according to number set in the slider
+                AutoPickButton(cardBlocInstance: currentCardBloc, gameMode),
+
+                // automatically auto-picks bets on slider change
+                AutoPickNumberSlider(
+                  cardBlocInstance: currentCardBloc,
+                  gameMode,
+                ),
+
+                PlayButton(
+                  cardBlocInstances: cardBlocInstances.values.toList(),
+                  gameMode: gameMode,
                 ),
               ],
             ),

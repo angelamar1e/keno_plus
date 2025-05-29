@@ -39,7 +39,7 @@ class CardWidget extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: columns,
+                    crossAxisCount: gameMode.columns,
                     mainAxisSpacing: 6, // Reduced spacing
                     crossAxisSpacing: 6,
                     childAspectRatio: 1.0,
