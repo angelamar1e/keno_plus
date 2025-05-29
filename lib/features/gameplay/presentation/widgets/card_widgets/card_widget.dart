@@ -34,31 +34,29 @@ class CardWidget extends StatelessWidget {
           // Use LayoutBuilder to ensure proper sizing
           return LayoutBuilder(
             builder: (context, constraints) {
-              return Container(
-                padding: const EdgeInsets.all(12.0), // Reduced padding
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: columns,
-                    mainAxisSpacing: 6, // Reduced spacing
-                    crossAxisSpacing: 6,
-                    childAspectRatio: 1.0,
-                  ),
-                  itemCount: numbersCount,
-                  itemBuilder: (context, index) {
-                    final number = index + 1;
-                    return NumberBox(
-                      number: number,
-                      isWinningBet: winningBets.contains(number),
-                      isMatch: matches.contains(number),
-                      isSelected: bets.contains(number),
-                      onTap: () {
-                        bloc.add(BetsChanged(bet: number, maxBets: maxBets));
-                      },
-                    );
-                  },
+              return GridView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  mainAxisSpacing: 6, // Reduced spacing
+                  crossAxisSpacing: 6,
+                  childAspectRatio: 1.0,
                 ),
+                itemCount: numbersCount,
+                itemBuilder: (context, index) {
+                  final number = index + 1;
+                  return NumberBox(
+                    number: number,
+                    isWinningBet: winningBets.contains(number),
+                    isMatch: matches.contains(number),
+                    isSelected: bets.contains(number),
+                    onTap: () {
+                      bloc.add(BetsChanged(bet: number, maxBets: maxBets));
+                    },
+                  );
+                },
               );
             },
           );
