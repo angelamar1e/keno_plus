@@ -10,6 +10,8 @@ import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_state.
 class WagerControls extends StatelessWidget {
   const WagerControls({super.key});
 
+  // TODO: add buttons to multiply wager to 2x, 3x, 5x, 10x, reset to 20, make wager a text field, remove halve wager button
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -55,7 +57,7 @@ class WagerControls extends StatelessWidget {
                   // Double wager button
                   KenoIconButton(
                     onPressed:
-                        () => context.read<WagerBloc>().add(WagerDoubled()),
+                        () => context.read<WagerBloc>().add(WagerMultiplied(2)),
                     icon: Icons.keyboard_double_arrow_up_rounded,
                     tooltip: 'Double wager',
                     color: AppColors.white,
@@ -69,4 +71,3 @@ class WagerControls extends StatelessWidget {
     );
   }
 }
-

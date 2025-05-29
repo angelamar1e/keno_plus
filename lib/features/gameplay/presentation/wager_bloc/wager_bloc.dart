@@ -6,7 +6,8 @@ import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_state.
 class WagerBloc extends Bloc<WagerEvent, WagerState> {
   WagerBloc() : super(WagerState.initial()) {
     on<WagerHalved>(_onWagerHalved);
-    on<WagerDoubled>(_onWagerDoubled);
+    on<WagerReset>(_onWagerReset);
+    on<WagerMultiplied>(_onWagerMultiplied);
     on<IncreaseWager>(_onIncreaseWager);
     on<DecreaseWager>(_onDecreaseWager);
   }
@@ -15,27 +16,43 @@ class WagerBloc extends Bloc<WagerEvent, WagerState> {
     final newWager = state.wager / 2;
     if (newWager >= WagerState.minWager) {
       emit(state.copyWith(wager: newWager));
+    } else {
+      emit(state.copyWith(wager: WagerState.minWager));
     }
   }
 
-  void _onWagerDoubled(WagerDoubled event, Emitter<WagerState> emit) {
-    final newWager = state.wager * 2;
+  // reset to minimum wager
+  void _onWagerReset(WagerReset event, Emitter<WagerState> emit) {
+    emit(state.copyWith(wager: WagerState.minWager));
+  }
+
+  // multiply wager
+  void _onWagerMultiplied(WagerMultiplied event, Emitter<WagerState> emit) {
+    final newWager = state.wager * event.multiplier;
     if (newWager <= WagerState.maxWager) {
       emit(state.copyWith(wager: newWager));
+    } else {
+      emit(state.copyWith(wager: WagerState.maxWager));
     }
   }
 
+  // increase wager by 1
   void _onIncreaseWager(IncreaseWager event, Emitter<WagerState> emit) {
     final newWager = state.wager + 1;
     if (newWager <= WagerState.maxWager) {
       emit(state.copyWith(wager: newWager));
+    } else {
+      emit(state.copyWith(wager: WagerState.maxWager));
     }
   }
 
+  // decrease wager by 1
   void _onDecreaseWager(DecreaseWager event, Emitter<WagerState> emit) {
     final newWager = state.wager - 1;
     if (newWager >= WagerState.minWager) {
       emit(state.copyWith(wager: newWager));
+    } else {
+      emit(state.copyWith(wager: WagerState.minWager));
     }
   }
-} 
+}
