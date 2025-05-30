@@ -2,33 +2,33 @@
 part of 'game_config_bloc.dart';
 
 class GameConfigState {
-  final int numberOfCards;
+  final int numberOfTickets;
   final GameMode gameMode;
-  final int currentCard; // Add currentCard property
+  final int currentTicket; // Add currentTicket property
 
   GameConfigState({
-    required this.numberOfCards,
+    required this.numberOfTickets,
     required this.gameMode,
-    required this.currentCard,
+    required this.currentTicket,
   });
 
   factory GameConfigState.initial() {
     return GameConfigState(
-      numberOfCards: 2,
+      numberOfTickets: 2,
       gameMode: GameMode.classic,
-      currentCard: 0, // Default to the first card
+      currentTicket: 0, // Default to the first ticket
     );
   }
 
   GameConfigState copyWith({
-    int? numberOfCards,
+    int? numberOfTickets,
     GameMode? gameMode,
-    int? currentCard,
+    int? currentTicket,
   }) {
     return GameConfigState(
-      numberOfCards: numberOfCards ?? this.numberOfCards,
+      numberOfTickets: numberOfTickets ?? this.numberOfTickets,
       gameMode: gameMode ?? this.gameMode,
-      currentCard: currentCard ?? this.currentCard,
+      currentTicket: currentTicket ?? this.currentTicket,
     );
   }
 }

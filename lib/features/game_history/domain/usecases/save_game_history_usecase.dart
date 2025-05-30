@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:keno_plus/features/game_history/data/models/game_history_model.dart';
 import 'package:keno_plus/features/game_history/domain/repositories/game_history_repository.dart';
 
 class SaveGameHistoryUseCase {
@@ -5,17 +7,7 @@ class SaveGameHistoryUseCase {
 
   SaveGameHistoryUseCase(this.gameHistoryRepository);
 
-  Future<void> call({
-    required DateTime timestamp,
-    required String gameMode,
-    required double wager,
-    required Map<String, dynamic> cardPayouts,
-  }) async {
-    await gameHistoryRepository.saveGameHistory(
-      timestamp: timestamp,
-      gameMode: gameMode,
-      wager: wager,
-      cardPayouts: cardPayouts,
-    );
+  Future<Either<Fail, int>> call(GameHistoryModel gameHistory) async {
+    return await gameHistoryRepository.saveGameHistory(gameHistory);
   }
 }

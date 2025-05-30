@@ -5,37 +5,51 @@ import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_state.
 // Bloc
 class WagerBloc extends Bloc<WagerEvent, WagerState> {
   WagerBloc() : super(WagerState.initial()) {
-    on<WagerHalved>(_onWagerHalved);
-    on<WagerDoubled>(_onWagerDoubled);
-    on<IncreaseWager>(_onIncreaseWager);
-    on<DecreaseWager>(_onDecreaseWager);
+    on<WagerTwo>(_onWagerTwo);
+    on<WagerReset>(_onWagerReset);
+    on<WagerTen>(_onWagerTen);
+    on<WagerFive>(_onWagerFive);
+    on<WagerThree>(_onWagerThree);
   }
 
-  void _onWagerHalved(WagerHalved event, Emitter<WagerState> emit) {
-    final newWager = state.wager / 2;
-    if (newWager >= WagerState.minWager) {
-      emit(state.copyWith(wager: newWager));
-    }
-  }
-
-  void _onWagerDoubled(WagerDoubled event, Emitter<WagerState> emit) {
+  void _onWagerTwo(WagerTwo event, Emitter<WagerState> emit) {
     final newWager = state.wager * 2;
-    if (newWager <= WagerState.maxWager) {
-      emit(state.copyWith(wager: newWager));
-    }
-  }
-
-  void _onIncreaseWager(IncreaseWager event, Emitter<WagerState> emit) {
-    final newWager = state.wager + 1;
-    if (newWager <= WagerState.maxWager) {
-      emit(state.copyWith(wager: newWager));
-    }
-  }
-
-  void _onDecreaseWager(DecreaseWager event, Emitter<WagerState> emit) {
-    final newWager = state.wager - 1;
     if (newWager >= WagerState.minWager) {
       emit(state.copyWith(wager: newWager));
+    } else {
+      emit(state.copyWith(wager: WagerState.minWager));
     }
   }
-} 
+
+  void _onWagerThree(WagerThree event, Emitter<WagerState> emit) {
+    final newWager = state.wager * 3;
+    if (newWager >= WagerState.minWager) {
+      emit(state.copyWith(wager: newWager));
+    } else {
+      emit(state.copyWith(wager: WagerState.minWager));
+    }
+  }
+
+  void _onWagerFive(WagerFive event, Emitter<WagerState> emit) {
+    final newWager = state.wager * 5;
+    if (newWager <= WagerState.maxWager) {
+      emit(state.copyWith(wager: newWager));
+    } else {
+      emit(state.copyWith(wager: WagerState.maxWager));
+    }
+  }
+
+  void _onWagerTen(WagerTen event, Emitter<WagerState> emit) {
+    final newWager = state.wager * 10;
+    if (newWager <= WagerState.maxWager) {
+      emit(state.copyWith(wager: newWager));
+    } else {
+      emit(state.copyWith(wager: WagerState.maxWager));
+    }
+  }
+
+  // reset to minimum wager
+  void _onWagerReset(WagerReset event, Emitter<WagerState> emit) {
+    emit(state.copyWith(wager: WagerState.minWager));
+  }
+}

@@ -1,8 +1,3 @@
 include: package:flutter_lints/flutter.yaml
 analyzer:
-  errors:
-    deprecated_member_use: ignore
-    public_member_api_docs: ignore 
-    sort_constructors_first: ignore
-    file_names: ignore
-    unused_element: ignore
+

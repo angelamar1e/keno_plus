@@ -1,41 +1,35 @@
+import 'package:keno_plus/core/utils/game_modes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_state.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_event.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_state.dart';
 
 class AutoPickButton extends StatelessWidget {
-  const AutoPickButton({
+  const AutoPickButton(
+    this.gameMode, {
     super.key,
-    required this.cardBlocInstance,
-    required this.largestNumber,
+    required this.ticketBlocInstance,
   });
 
-  final CardBloc cardBlocInstance;
-  final int largestNumber;
+  final TicketBloc ticketBlocInstance;
+  final GameMode gameMode;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: cardBlocInstance, // Provide the passed CardBloc instance
-      child: BlocBuilder<CardBloc, CardState>(
+      value: ticketBlocInstance, // Provide the passed TicketBloc instance
+      child: BlocBuilder<TicketBloc, TicketState>(
         builder: (context, state) {
-          return GestureDetector(
-            onTap: () {
-              context.read<CardBloc>().add(
-                AutoPickBets(largestNumber: largestNumber),
+          return IconButton(
+            onPressed: () {
+              context.read<TicketBloc>().add(
+                AutoPickSpots(largestNumber: gameMode.numbersCount),
               );
             },
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.secondary,
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(
-                Icons.shuffle,
-                size: 30,
-                color: AppColors.primary,
-              ),
-            ),
+            icon: const Icon(Icons.casino_rounded),
+            iconSize: 32,
+            splashRadius: 32,
+            color: AppColors.secondary,
           );
         },
       ),

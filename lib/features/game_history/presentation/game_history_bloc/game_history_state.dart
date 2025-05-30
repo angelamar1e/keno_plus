@@ -1,28 +1,28 @@
 class GameHistoryState {
   final bool isSaving;
-  final String? error;
   final bool isSaved;
+  final int? newGameHistoryId;
 
   const GameHistoryState({
+    this.newGameHistoryId,
     required this.isSaving,
-    this.error,
     required this.isSaved,
   });
 
   factory GameHistoryState.initial() => const GameHistoryState(
-        isSaving: false,
-        isSaved: false,
-      );
-
+    newGameHistoryId: null,
+    isSaving: false,
+    isSaved: false,
+  );
   GameHistoryState copyWith({
+    int? newGameHistoryId,
     bool? isSaving,
-    String? error,
     bool? isSaved,
   }) {
     return GameHistoryState(
+      newGameHistoryId: newGameHistoryId ?? this.newGameHistoryId,
       isSaving: isSaving ?? this.isSaving,
-      error: error,
       isSaved: isSaved ?? this.isSaved,
     );
   }
-} 
+}

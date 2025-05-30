@@ -1,9 +1,11 @@
 abstract class WagerEvent {}
 
-class WagerHalved extends WagerEvent {}
+class WagerTwo extends WagerEvent {}
 
-class WagerDoubled extends WagerEvent {}
+class WagerTen extends WagerEvent {}
 
-class IncreaseWager extends WagerEvent {}
+class WagerReset extends WagerEvent {}
 
-class DecreaseWager extends WagerEvent {} 
+class WagerFive extends WagerEvent {}
+
+class WagerThree extends WagerEvent {}

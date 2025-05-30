@@ -181,11 +181,11 @@ class KenoPageIndicator extends StatelessWidget {
 }
 
 class KenoTopBar extends StatelessWidget {
-  final String text;
+  final String? text;
   final Color? color;
   final double? fontSize;
 
-  const KenoTopBar({super.key, required this.text, this.color, this.fontSize});
+  const KenoTopBar({super.key, this.text, this.color, this.fontSize});
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +196,7 @@ class KenoTopBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             KenoText(
-              text: text,
+              text: text ?? '',
               fontFamily: AppFonts.grandstander,
               textAlign: TextAlign.start,
               fontWeight: FontWeight.w900,

@@ -1,8 +1,7 @@
-import 'package:keno_plus/core/utils/game_modes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
-import 'package:keno_plus/features/gameplay/presentation/card_bloc/card_bloc.dart';
+import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/game_config_bloc/game_config_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/widgets/card_widgets/card_widget.dart';
+import 'package:keno_plus/features/gameplay/presentation/widgets/ticket_widgets/ticket_widget.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/auto_pick_button.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/auto_pick_slider.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/play_button.dart';
@@ -17,7 +16,7 @@ class GameplayPage extends StatefulWidget {
 
 class _GameplayPageState extends State<GameplayPage> {
   late final PageController pageController;
-  final Map<int, CardBloc> cardBlocInstances = {};
+  final Map<int, TicketBloc> ticketBlocInstances = {};
 
   @override
   void initState() {
@@ -36,131 +35,104 @@ class _GameplayPageState extends State<GameplayPage> {
     return BlocListener<GameConfigBloc, GameConfigState>(
       listener: (context, state) {
         pageController.animateToPage(
-          state.currentCard,
+          state.currentTicket,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       },
       child: BlocBuilder<GameConfigBloc, GameConfigState>(
         builder: (context, state) {
-          // Ensure the currentCardBloc is retrieved from the map
-          if (!cardBlocInstances.containsKey(state.currentCard)) {
-            cardBlocInstances[state.currentCard] = CardBloc();
+          // Ensure the currentTicketBloc is retrieved from the map
+          if (!ticketBlocInstances.containsKey(state.currentTicket)) {
+            ticketBlocInstances[state.currentTicket] = TicketBloc();
           }
 
-          final currentCardBloc = cardBlocInstances[state.currentCard]!;
-          final numberOfCards =
-              state.numberOfCards; // number of purchased cards
-          final GameMode gameMode = state.gameMode;
-          final numbersCount =
-              gameMode
-                  .numbersCount; // largest number in a card, count of numbers in a card
+          final currentTicketBloc =
+              ticketBlocInstances[state.currentTicket] ?? TicketBloc();
+          final numberOfTickets =
+              state.numberOfTickets; // number of purchased tickets
+          final gameMode = state.gameMode;
 
           return KenoMainLayout(
             background: KenoGameBackground(),
+            topBar: KenoTopBar(text: 'Classic Keno'),
             content: Column(
               children: [
-                // Fixed header
-                KenoTopBar(text: 'Classic Keno'),
-
-                // Expanded PageView to take available space
                 Expanded(
-                  flex: 3, // Give more space to the cards
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: PageView.builder(
-                      controller: pageController,
-                      itemCount: state.numberOfCards,
-                      onPageChanged: (index) {
-                        context.read<GameConfigBloc>().add(
-                          UpdateCurrentCard(index),
-                        );
-                      },
-                      itemBuilder: (context, index) {
-                        if (!cardBlocInstances.containsKey(index)) {
-                          cardBlocInstances[index] = CardBloc();
-                        }
+                  child: PageView.builder(
+                    controller: pageController,
+                    itemCount: state.numberOfTickets,
+                    onPageChanged: (index) {
+                      context.read<GameConfigBloc>().add(
+                        UpdateCurrentTicket(index),
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      if (!ticketBlocInstances.containsKey(index)) {
+                        ticketBlocInstances[index] = TicketBloc();
+                      }
 
-                        return BlocProvider.value(
-                          value: cardBlocInstances[index]!,
-                          child: CardWidget(
-                            columns: gameMode.columns,
-                            numbersCount: numbersCount,
-                            maxBets: gameMode.maxBets,
-                          ),
-                        );
-                      },
-                    ),
+                      return BlocProvider.value(
+                        value: ticketBlocInstances[index]!,
+                        child: TicketWidget(gameMode),
+                      );
+                    },
                   ),
                 ),
 
-                // Fixed bottom controls with less space
-                Expanded(
-                  flex: 1, // Give less space to controls
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Navigation buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            KenoButton(
-                              onPressed:
-                                  state.currentCard > 0
-                                      ? () {
-                                        context.read<GameConfigBloc>().add(
-                                          UpdateCurrentCard(
-                                            state.currentCard - 1,
-                                          ),
-                                        );
-                                      }
-                                      : null,
-                              icon: Icons.arrow_back,
-                              iconColor: AppColors.black,
-                            ),
-                            const SizedBox(width: 16),
-                            KenoButton(
-                              onPressed:
-                                  state.currentCard < numberOfCards - 1
-                                      ? () {
-                                        context.read<GameConfigBloc>().add(
-                                          UpdateCurrentCard(
-                                            state.currentCard + 1,
-                                          ),
-                                        );
-                                      }
-                                      : null,
-                              icon: Icons.arrow_forward,
-                              iconColor: AppColors.black,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8.0),
-
-                        // Wager controls
-                        const WagerControls(),
-                        KenoVerticalSpacer(),
-                        // Auto-pick button
-                        AutoPickButton(
-                          cardBlocInstance: currentCardBloc,
-                          largestNumber: numbersCount,
-                        ),
-                        KenoVerticalSpacer(),
-                        // Auto-pick slider
-                        AutoPickNumberSlider(
-                          cardBlocInstance: currentCardBloc,
-                          largestNumber: numbersCount,
-                          max: gameMode.maxBets,
-                        ),
-                        KenoVerticalSpacer(),
-                        PlayButton(
-                          cardBlocInstances: cardBlocInstances.values.toList(),
-                          gameMode: gameMode,
-                        ),
-                      ],
+                // Bottom controls - now in a SafeArea to avoid overflow
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    KenoButton(
+                      onPressed:
+                          state.currentTicket > 0
+                              ? () {
+                                // Navigate to the previous ticket
+                                context.read<GameConfigBloc>().add(
+                                  UpdateCurrentTicket(state.currentTicket - 1),
+                                );
+                              }
+                              : null,
+                      icon: Icons.arrow_back,
                     ),
-                  ),
+                    const SizedBox(width: 16),
+                    KenoButton(
+                      onPressed:
+                          state.currentTicket < numberOfTickets - 1
+                              ? () {
+                                // Navigate to the next ticket
+                                context.read<GameConfigBloc>().add(
+                                  UpdateCurrentTicket(state.currentTicket + 1),
+                                );
+                              }
+                              : null,
+                      icon: Icons.arrow_forward,
+                    ),
+                  ],
+                ),
+                // Wager controls
+                const WagerControls(),
+                Row(
+                  children: [
+                    // AutoPickNumberSlider takes most of the space
+                    Expanded(
+                      child: AutoPickNumberSlider(
+                        ticketBlocInstance: currentTicketBloc,
+                        gameMode,
+                      ),
+                    ),
+                    // Button takes less space
+                    AutoPickButton(
+                      ticketBlocInstance: currentTicketBloc,
+                      gameMode,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                PlayButton(
+                  ticketBlocInstances: ticketBlocInstances.values.toList(),
+                  gameMode: gameMode,
                 ),
               ],
             ),

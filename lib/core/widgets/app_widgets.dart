@@ -7,13 +7,27 @@ import 'package:keno_plus/core/values/app_imports.dart';
 /// Main layout for app screens with background and content.
 class KenoMainLayout extends StatelessWidget {
   final Widget? background;
+  final Widget? topBar;
   final Widget content;
 
-  const KenoMainLayout({super.key, this.background, required this.content});
+  const KenoMainLayout({
+    super.key,
+    this.background,
+    this.topBar,
+    required this.content,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [background ?? KenoMainBackground(), content]);
+    return Stack(
+      children: [
+        background ?? const KenoMainBackground(),
+        Scaffold(
+          appBar: AppBar(title: topBar, backgroundColor: AppColors.transparent),
+          body: SafeArea(child: content),
+        ),
+      ],
+    );
   }
 }
 
@@ -25,7 +39,7 @@ class KenoMainLayout extends StatelessWidget {
 /// - Border customization
 /// - Icon support
 /// - Theme-aware defaults
-class KenoButton extends StatefulWidget {
+class KenoButton extends StatelessWidget {
   // Content
   final String? text;
   final IconData? icon;
@@ -46,7 +60,6 @@ class KenoButton extends StatefulWidget {
   final double? iconSize;
   final Color? iconColor;
   final double? margin;
-  final String? tooltip;
 
   // Effects
   final bool isGlow;
@@ -75,7 +88,6 @@ class KenoButton extends StatefulWidget {
     this.iconSize,
     this.iconColor,
     this.margin,
-    this.tooltip,
 
     // Effects
     this.isGlow = false,
@@ -86,144 +98,91 @@ class KenoButton extends StatefulWidget {
   });
 
   @override
-  State<KenoButton> createState() => _KenoButtonState();
-}
-
-class _KenoButtonState extends State<KenoButton>
-    with SingleTickerProviderStateMixin {
-  // Animation controllers and animations
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _shadowAlphaAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-
-    // Scale animation: normal to expanded
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.05,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-
-    // Shadow alpha animation: increase visibility when pressed
-    _shadowAlphaAnimation = Tween<double>(
-      begin: 100,
-      end: 200,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // Get theme colors for defaults
     final theme = Theme.of(context);
     final defaultBackgroundColor =
-        widget.backgroundColor ?? theme.colorScheme.secondary;
-    final defaultTextColor = widget.textColor ?? theme.colorScheme.primary;
-    final defaultIconColor = widget.iconColor ?? theme.colorScheme.secondary;
-    final defaultForegroundColor =
-        widget.foregroundColor ?? theme.colorScheme.primary;
-    final defaultBorderColor = widget.borderColor ?? theme.colorScheme.primary;
-    final defaultGlowColor = widget.glowColor ?? theme.colorScheme.onPrimary;
+        backgroundColor ?? theme.colorScheme.secondary;
+    final defaultTextColor = textColor ?? theme.colorScheme.primary;
+    final defaultIconColor = iconColor ?? theme.colorScheme.primary;
+    final defaultForegroundColor = foregroundColor ?? theme.colorScheme.primary;
+    final defaultBorderColor = borderColor ?? theme.colorScheme.primary;
+    final defaultGlowColor = glowColor ?? theme.colorScheme.onPrimary;
 
-    return Listener(
-      onPointerDown: (_) => _controller.forward(),
-      onPointerUp: (_) => _controller.reverse(),
-      onPointerCancel: (_) => _controller.reverse(),
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: widget.margin ?? 0.0),
-              decoration:
-                  widget.isGlow
-                      ? BoxDecoration(
-                        borderRadius: BorderRadius.circular(24.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: defaultGlowColor.withAlpha(
-                              _shadowAlphaAnimation.value.toInt(),
-                            ),
-                            blurRadius: 8.0,
-                            spreadRadius: 1.0,
-                            offset: Offset.zero,
-                          ),
-                        ],
-                      )
-                      : null,
-              child: SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: widget.onPressed,
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                      defaultBackgroundColor,
-                    ),
-                    foregroundColor: WidgetStateProperty.all(
-                      defaultForegroundColor,
-                    ),
-                    padding: WidgetStateProperty.all(
-                      widget.padding ??
-                          EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 24.0,
-                          ),
-                    ),
-                    shape: WidgetStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        side:
-                            widget.hasBorder
-                                ? BorderSide(
-                                  color: defaultBorderColor,
-                                  width: widget.borderWidth ?? 2.0,
-                                )
-                                : BorderSide.none,
-                      ),
-                    ),
-                    elevation: WidgetStateProperty.all(0),
+    // Define disabled colors
+    final disabledBackgroundColor = defaultBackgroundColor.withOpacity(0.5);
+    final disabledTextColor = defaultTextColor.withOpacity(0.5);
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: margin ?? 0.0),
+      decoration:
+          isGlow
+              ? BoxDecoration(
+                borderRadius: BorderRadius.circular(24.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: defaultGlowColor,
+                    blurRadius: 8.0,
+                    spreadRadius: 1.0,
+                    offset: Offset.zero,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (widget.icon != null) ...[
-                        Icon(
-                          widget.icon,
-                          size: widget.iconSize ?? 26.0,
-                          color: defaultIconColor,
-                        ),
-                        SizedBox(width: 8.0),
-                      ],
-                      KenoText(
-                        text: widget.text ?? '',
-                        fontFamily:
-                            widget.fontFamily ??
-                            theme.textTheme.labelLarge?.fontFamily ??
-                            AppFonts.inter,
-                        fontSize: widget.fontSize ?? 16.0,
-                        color: defaultTextColor,
-                        fontWeight: widget.fontWeight ?? FontWeight.w600,
-                      ),
-                    ],
-                  ),
-                ),
+                ],
+              )
+              : null,
+      child: SizedBox(
+        height: 50,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return disabledBackgroundColor;
+              }
+              return defaultBackgroundColor;
+            }),
+            foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return disabledTextColor;
+              }
+              return defaultForegroundColor;
+            }),
+            padding: MaterialStateProperty.all(padding ?? EdgeInsets.zero),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24.0),
+                side:
+                    hasBorder
+                        ? BorderSide(
+                          color: defaultBorderColor,
+                          width: borderWidth ?? 2.0,
+                        )
+                        : BorderSide.none,
               ),
             ),
-          );
-        },
+            elevation: MaterialStateProperty.all(0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (icon != null) ...[
+                Icon(icon, size: iconSize ?? 26.0, color: defaultIconColor),
+                if (text != null && text!.isNotEmpty) SizedBox(width: 8.0),
+              ],
+              if (text != null && text!.isNotEmpty)
+                KenoText(
+                  text: text!,
+                  fontFamily:
+                      fontFamily ??
+                      theme.textTheme.labelLarge?.fontFamily ??
+                      AppFonts.inter,
+                  fontSize: fontSize ?? 16.0,
+                  color: defaultTextColor,
+                  fontWeight: fontWeight ?? FontWeight.w600,
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -506,53 +465,24 @@ class KenoGameBackground extends StatelessWidget {
   }
 }
 
-/// Icon button with consistent styling and theming.
-class KenoIconButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final IconData? icon;
-  final String? tooltip;
-  final Color? iconColor;
-  final Color? backgroundColor;
-  final double? iconSize;
-  const KenoIconButton({
-    super.key,
-    this.onPressed,
-    this.icon,
-    this.tooltip,
-    this.iconColor,
-    this.backgroundColor,
-    this.iconSize,
-  });
+/// Standard vertical spacing widget for consistent spacing in forms.
+class KenoVerticalSpacer extends StatelessWidget {
+  final double? spacer;
+  const KenoVerticalSpacer({super.key, this.spacer});
 
   @override
   Widget build(BuildContext context) {
-    // Get theme colors for defaults
-    final theme = Theme.of(context);
-    final defaultBackgroundColor =
-        backgroundColor ?? theme.colorScheme.secondary;
-    return Container(
-      decoration: BoxDecoration(
-        color: defaultBackgroundColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: IconButton(
-        onPressed: onPressed,
-        icon: Icon(icon),
-        iconSize: iconSize ?? 36.0,
-        tooltip: tooltip,
-        color: iconColor,
-      ),
-    );
+    return SizedBox(height: spacer ?? 16);
   }
 }
 
-/// Standard vertical spacing widget for consistent spacing in forms.
-class KenoVerticalSpacer extends StatelessWidget {
-  final double? spacing;
-  const KenoVerticalSpacer({super.key, this.spacing});
+/// Standard horizontal spacing widget for consistent spacing in forms.
+class KenoHorizontalSpacer extends StatelessWidget {
+  final double? spacer;
+  const KenoHorizontalSpacer({super.key, this.spacer});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(height: spacing ?? 16);
+    return SizedBox(width: spacer ?? 16);
   }
 }

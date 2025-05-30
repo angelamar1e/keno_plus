@@ -15,7 +15,6 @@ class AppStrings {
   static const String miniKeno = 'Mini Keno';
   static const String miniKenoDesc =
       'Pick up to 10 numbers from 40 for quick play and better odds. A perfect choice for rapid-fire fun!';
-  static const String playMiniKeno = 'Play Mini Keno';
   static const String emailLabel = 'Email';
   static const String emailHint = 'Enter you email';
   static const String passLabel = 'Password';
@@ -42,5 +41,23 @@ class AppStrings {
   static const String firstNameLabel = 'First Name';
   static const String firstNameHint = 'Enter your first name';
   static const String getReady = 'Get Ready to Dive in!';
-  static const String signUpToAccess = 'Sign up to access exclusive game modes, and earn rewards!';
+  static const String signUpToAccess =
+      'Sign up to access exclusive game modes, and earn rewards!';
+
+  // Game mode related strings
+  static const String playMiniKeno = 'Play Mini Keno';
+
+  // Wager Control strings
+  static const String wager = 'Wager: ₱';
+  static const String wagerMultiplierTwo = '2x';
+  static const String wagerMultiplierThree = '3x';
+  static const String wagerMultiplierFive = '5x';
+  static const String wagerMultiplierTen = '10x';
+  static const String wagerMultiplierLabel = 'Wager Multiplier';
+
+  // Play Button strings
+  static const String playButtonText = 'Play';
+
+  // Auto Pick Slider strings
+  static const String autoPickSpots = 'Auto-Pick Spots';
 }

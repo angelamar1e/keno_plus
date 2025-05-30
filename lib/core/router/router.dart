@@ -21,7 +21,7 @@ final GoRouter router = GoRouter(
 
     ShellRoute(
       builder: (context, state, child) {
-        return KenoMainLayout( content: child);
+        return KenoMainLayout(content: child);
       },
       routes: [
         GoRoute(
@@ -68,12 +68,7 @@ final GoRouter router = GoRouter(
           default:
         }
 
-        return Scaffold(
-          body: KenoMainLayout(
-            content: child,
-          ),
-          bottomNavigationBar: KenoBottomNavBar(currentIndex: currentIndex),
-        );
+        return KenoMainLayout(content: child);
       },
       routes: [
         GoRoute(
