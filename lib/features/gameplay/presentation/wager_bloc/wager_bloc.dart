@@ -14,19 +14,19 @@ class WagerBloc extends Bloc<WagerEvent, WagerState> {
 
   void _onWagerTwo(WagerTwo event, Emitter<WagerState> emit) {
     final newWager = state.wager * 2;
-    if (newWager >= WagerState.minWager) {
+    if (newWager <= WagerState.maxWager) {
       emit(state.copyWith(wager: newWager));
     } else {
-      emit(state.copyWith(wager: WagerState.minWager));
+      emit(state.copyWith(wager: WagerState.maxWager));
     }
   }
 
   void _onWagerThree(WagerThree event, Emitter<WagerState> emit) {
     final newWager = state.wager * 3;
-    if (newWager >= WagerState.minWager) {
+    if (newWager <= WagerState.maxWager) {
       emit(state.copyWith(wager: newWager));
     } else {
-      emit(state.copyWith(wager: WagerState.minWager));
+      emit(state.copyWith(wager: WagerState.maxWager));
     }
   }
 
