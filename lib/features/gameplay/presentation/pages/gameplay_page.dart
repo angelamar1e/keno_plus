@@ -1,12 +1,12 @@
 import 'package:keno_plus/core/values/app_imports.dart';
 import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/game_config_bloc/game_config_bloc.dart';
-import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/result_dialog.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/ticket_widgets/ticket_widget.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/auto_pick_button.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/auto_pick_slider.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/play_button.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/wager_controls.dart';
+import 'package:keno_plus/features/wallet/presentation/widgets/wallet_widget.dart';
 
 class GameplayPage extends StatefulWidget {
   const GameplayPage({super.key});
@@ -60,6 +60,9 @@ class _GameplayPageState extends State<GameplayPage> {
               children: [
                 // Fixed header
                 KenoTopBar(text: 'Classic Keno'),
+
+                // Wallet widget to display the user's balance
+                WalletWidget(),
 
                 // Expanded PageView to take available space
                 Expanded(
@@ -139,6 +142,7 @@ class _GameplayPageState extends State<GameplayPage> {
                 PlayButton(
                   ticketBlocInstances: ticketBlocInstances.values.toList(),
                   gameMode: gameMode,
+                  numberOfTickets: numberOfTickets,
                 ),
               ],
             ),
