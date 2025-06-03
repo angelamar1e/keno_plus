@@ -8,6 +8,7 @@ import 'package:keno_plus/features/authentication/presentation/widgets/auth_form
 import 'package:keno_plus/features/authentication/presentation/widgets/login_form_widgets/password_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/login_form_widgets/username_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/auth_form_widgets/loading_indicator.dart';
+import 'package:keno_plus/features/wallet/presentation/bloc/wallet_bloc.dart';
 
 /// Login form widget that handles user authentication.
 ///
@@ -16,11 +17,13 @@ import 'package:keno_plus/features/authentication/presentation/widgets/auth_form
 class LogInForm extends StatelessWidget {
   // Dependencies
   final AuthenticationBloc authBloc;
+  final WalletBloc walletBloc;
   final AuthFormType formType;
 
   /// Creates a login form with the necessary dependencies.
   LogInForm({super.key})
     : authBloc = sl<AuthenticationBloc>(),
+      walletBloc = sl<WalletBloc>(),
       formType = AuthFormType.login;
 
   @override
@@ -50,7 +53,12 @@ class LogInForm extends StatelessWidget {
             },
             // Handle success case
             (user) => {
+              // Dispatch event to update authentication state
               authBloc.add(AuthenticationSucceeded(user: user)),
+
+              // Dispatch event to get the user's wallet
+              walletBloc.add(GetBalance(user.username)),
+
               // Navigate to home if login is successful
               context.goNamed(AppRoutes.home),
             },
