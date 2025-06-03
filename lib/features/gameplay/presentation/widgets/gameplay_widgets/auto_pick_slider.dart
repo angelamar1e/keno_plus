@@ -2,7 +2,6 @@
 // import 'dart:math';
 import 'package:keno_plus/core/utils/game_modes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
-import 'package:keno_plus/core/values/app_strings.dart';
 import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_event.dart';
 import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_state.dart';
