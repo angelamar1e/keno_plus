@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keno_plus/features/game_history/game_history_injections.dart';
 import 'package:keno_plus/features/wallet/data/models/wallet_model.dart';
+import 'package:keno_plus/features/wallet/domain/entities/wallet_entity.dart';
 import 'package:keno_plus/features/wallet/domain/usecases/create_wallet_usecase.dart';
 import 'package:keno_plus/features/wallet/domain/usecases/get_balance_usecase.dart';
 import 'package:keno_plus/features/wallet/domain/usecases/update_balance_usecase.dart';
@@ -36,13 +37,32 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       },
       (newWallet) {
         // Handle success case
+        emit(state.copyWith(status: WalletStatus.loaded, wallet: newWallet));
+      },
+    );
+  }
+
+  Future<void> _onGetBalance(
+    GetBalance event,
+    Emitter<WalletState> emit,
+  ) async {
+    emit(state.copyWith(status: WalletStatus.loading));
+
+    final result = await getBalanceUsecase.call(event.username);
+
+    result.fold(
+      (failure) {
+        // Handle failure case
         emit(
           state.copyWith(
-            status: WalletStatus.loaded,
-            username: newWallet.username,
-            balance: newWallet.balance,
+            errorMessage: failure.toString(),
+            status: WalletStatus.error,
           ),
         );
+      },
+      (wallet) {
+        // Handle success case
+        emit(state.copyWith(status: WalletStatus.loaded, wallet: wallet));
       },
     );
   }
@@ -51,10 +71,21 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     DecreaseBalance event,
     Emitter<WalletState> emit,
   ) async {
-    final updatedBalance = state.balance - event.amountToDecrease;
-    final updatedWallet = WalletModel(
-      username: state.username,
-      balance: updatedBalance,
+    final currentWallet = state.wallet;
+
+    if (currentWallet == null) {
+      emit(
+        state.copyWith(
+          errorMessage: 'Wallet not found',
+          status: WalletStatus.error,
+        ),
+      );
+      return; // Early return if wallet is null
+    }
+
+    final updatedWallet = WalletEntity(
+      username: currentWallet.username,
+      balance: currentWallet.balance - event.amountToDecrease,
     );
 
     emit(state.copyWith(status: WalletStatus.loading));
@@ -74,7 +105,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       (_) {
         // Handle success case
         emit(
-          state.copyWith(status: WalletStatus.loaded, balance: updatedBalance),
+          state.copyWith(status: WalletStatus.loaded, wallet: updatedWallet),
         );
       },
     );
@@ -84,10 +115,21 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     IncreaseBalance event,
     Emitter<WalletState> emit,
   ) async {
-    final updatedBalance = state.balance + event.amountToIncrease;
-    final updatedWallet = WalletModel(
-      username: state.username,
-      balance: updatedBalance,
+    final currentWallet = state.wallet;
+
+    if (currentWallet == null) {
+      emit(
+        state.copyWith(
+          errorMessage: 'Wallet not found',
+          status: WalletStatus.error,
+        ),
+      );
+      return; // Early return if wallet is null
+    }
+
+    final updatedWallet = WalletEntity(
+      username: currentWallet.username,
+      balance: currentWallet.balance + event.amountToIncrease,
     );
 
     emit(state.copyWith(status: WalletStatus.loading));
@@ -107,7 +149,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       (_) {
         // Handle success case
         emit(
-          state.copyWith(status: WalletStatus.loaded, balance: updatedBalance),
+          state.copyWith(status: WalletStatus.loaded, wallet: updatedWallet),
         );
       },
     );
