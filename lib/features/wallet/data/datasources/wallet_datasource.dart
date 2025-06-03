@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:keno_plus/features/wallet/data/models/wallet_model.dart';
+import 'package:keno_plus/features/wallet/domain/entities/wallet_entity.dart';
 import 'package:sqflite/sqflite.dart';
 
 class WalletDataSource {
@@ -8,21 +9,23 @@ class WalletDataSource {
   WalletDataSource(this.database);
 
   Future<Either<Fail<String>, WalletModel>> createWallet(
-    WalletModel wallet,
+    WalletEntity wallet,
   ) async {
     try {
+      final walletObject = WalletModel.fromEntity(wallet);
+
       await database.insert(
         'wallets',
-        wallet.toMap(),
+        walletObject.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      return Right(wallet);
+      return Right(WalletModel.fromEntity(wallet));
     } catch (e) {
       return Left(Fail('Failed to create wallet: $e'));
     }
   }
 
-  Future<Either<Fail<String>, double>> getBalance(String username) async {
+  Future<Either<Fail<String>, WalletModel>> getBalance(String username) async {
     final result = await database.query(
       'wallets',
       columns: ['balance'],
@@ -32,14 +35,14 @@ class WalletDataSource {
 
     if (result.isNotEmpty) {
       final wallet = WalletModel.fromMap(result.first);
-      return Right(wallet.balance);
+      return Right(wallet);
     } else {
       return Left(Fail('Wallet not found for username: $username'));
     }
   }
 
   Future<Either<Fail<String>, WalletModel>> updateBalance(
-    WalletModel wallet,
+    WalletEntity wallet,
   ) async {
     try {
       final result = await database.update(
@@ -50,7 +53,8 @@ class WalletDataSource {
       );
 
       if (result > 0) {
-        return Right(wallet);
+        final updatedWallet = WalletModel.fromEntity(wallet);
+        return Right(updatedWallet);
       } else {
         return Left(
           Fail('Failed to update balance for username: ${wallet.username}'),
