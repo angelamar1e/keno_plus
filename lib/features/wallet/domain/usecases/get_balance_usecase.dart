@@ -6,7 +6,7 @@ class GetBalanceUsecase {
 
   GetBalanceUsecase(this.walletRepository);
 
-  Future<Either<Fail, double>> call(String username) async {
+  Future<Either<Fail<String>, double>> call(String username) async {
     return await walletRepository.getBalance(username);
   }
 }

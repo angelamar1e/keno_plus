@@ -1,3 +1,6 @@
+import 'package:dartz/dartz.dart';
+import 'package:keno_plus/features/wallet/data/models/wallet_model.dart';
+import 'package:keno_plus/features/wallet/domain/entities/wallet_entity.dart';
 import 'package:keno_plus/features/wallet/domain/repository/wallet_repository.dart';
 
 class UpdateBalanceUsecase {
@@ -5,7 +8,7 @@ class UpdateBalanceUsecase {
 
   UpdateBalanceUsecase(this.walletRepository);
 
-  Future<void> call(String username, double newBalance) async {
-    await walletRepository.updateBalance(username, newBalance);
+  Future<Either<Fail<String>, WalletEntity>> call(WalletModel wallet) async {
+    return await walletRepository.updateBalance(wallet);
   }
 }
