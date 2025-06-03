@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:keno_plus/features/wallet/data/models/wallet_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class WalletDataSource {
@@ -6,19 +7,22 @@ class WalletDataSource {
 
   WalletDataSource(this.database);
 
-  Future<Either<Fail, void>> createWallet(String username) async {
+  Future<Either<Fail<String>, WalletModel>> createWallet(
+    WalletModel wallet,
+  ) async {
     try {
-      await database.insert('wallets', {
-        'username': username,
-        'balance': 0.0,
-      }, conflictAlgorithm: ConflictAlgorithm.replace);
-      return Right(null);
+      await database.insert(
+        'wallets',
+        wallet.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      return Right(wallet);
     } catch (e) {
       return Left(Fail('Failed to create wallet: $e'));
     }
   }
 
-  Future<Either<Fail, double>> getBalance(String username) async {
+  Future<Either<Fail<String>, double>> getBalance(String username) async {
     final result = await database.query(
       'wallets',
       columns: ['balance'],
@@ -27,28 +31,30 @@ class WalletDataSource {
     );
 
     if (result.isNotEmpty) {
-      return Right(result.first['balance'] as double);
+      final wallet = WalletModel.fromMap(result.first);
+      return Right(wallet.balance);
     } else {
       return Left(Fail('Wallet not found for username: $username'));
     }
   }
 
-  Future<Either<Fail, void>> updateBalance(
-    String username,
-    double amount,
+  Future<Either<Fail<String>, WalletModel>> updateBalance(
+    WalletModel wallet,
   ) async {
     try {
       final result = await database.update(
         'wallets',
-        {'balance': amount},
+        {'balance': wallet.balance},
         where: 'username = ?',
-        whereArgs: [username],
+        whereArgs: [wallet.username],
       );
 
       if (result > 0) {
-        return Right(null);
+        return Right(wallet);
       } else {
-        return Left(Fail('Failed to update balance for username: $username'));
+        return Left(
+          Fail('Failed to update balance for username: ${wallet.username}'),
+        );
       }
     } catch (e) {
       return Left(Fail('Failed to update balance: $e'));
