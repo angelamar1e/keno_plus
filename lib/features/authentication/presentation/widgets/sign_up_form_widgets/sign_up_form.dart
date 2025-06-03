@@ -12,6 +12,8 @@ import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_f
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/password_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/phone_number_field.dart';
 import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_form_widgets/username_field.dart';
+import 'package:keno_plus/features/wallet/data/models/wallet_model.dart';
+import 'package:keno_plus/features/wallet/presentation/bloc/wallet_bloc.dart';
 
 /// Sign up form widget that handles user registration.
 ///
@@ -20,11 +22,13 @@ import 'package:keno_plus/features/authentication/presentation/widgets/sign_up_f
 class SignUpForm extends StatelessWidget {
   // Dependencies
   final AuthenticationBloc authBloc;
+  final WalletBloc walletBloc;
   final AuthFormType formType;
 
   /// Creates a sign up form with the necessary dependencies.
   SignUpForm({super.key})
     : authBloc = sl<AuthenticationBloc>(),
+      walletBloc = sl<WalletBloc>(),
       formType = AuthFormType.signUp;
 
   @override
@@ -45,6 +49,17 @@ class SignUpForm extends StatelessWidget {
             // Handle success case
             (newUser) => {
               authBloc.add(AuthenticationSucceeded(user: newUser)),
+
+              // dispatch the event to create a new wallet
+              walletBloc.add(
+                CreateWallet(
+                  WalletModel(
+                    username: newUser.username,
+                    balance: 0.0, // Initial balance set to 0
+                  ),
+                ),
+              ),
+
               // Navigate to home if sign up is successful
               context.goNamed(AppRoutes.home),
             },
