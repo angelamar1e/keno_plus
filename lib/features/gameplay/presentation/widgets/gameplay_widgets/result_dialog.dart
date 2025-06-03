@@ -99,9 +99,10 @@ class _ResultDialogState extends State<ResultDialog> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: widget.totalAmountWon > 0
-                  ? Colors.green.withOpacity(0.1)
-                  : Colors.red.withOpacity(0.1),
+              color:
+                  widget.totalAmountWon > 0
+                      ? Colors.green.withOpacity(0.1)
+                      : Colors.red.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -109,17 +110,15 @@ class _ResultDialogState extends State<ResultDialog> {
               children: [
                 const Text(
                   'Total Won: ',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   '₱${widget.totalAmountWon.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: widget.totalAmountWon > 0 ? Colors.green : Colors.red,
+                    color:
+                        widget.totalAmountWon > 0 ? Colors.green : Colors.red,
                   ),
                 ),
               ],
@@ -187,16 +186,17 @@ class _ResultDialogState extends State<ResultDialog> {
                     Wrap(
                       spacing: 4,
                       runSpacing: 4,
-                      children: spots
-                          .map(
-                            (n) => ResultNumberBox(
-                              number: n,
-                              isSelected: true,
-                              isCatch: catches.contains(n),
-                              isWinningSpot: catches.contains(n),
-                            ),
-                          )
-                          .toList(),
+                      children:
+                          spots
+                              .map(
+                                (n) => ResultNumberBox(
+                                  number: n,
+                                  isSelected: true,
+                                  isCatch: catches.contains(n),
+                                  isWinningSpot: catches.contains(n),
+                                ),
+                              )
+                              .toList(),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -207,16 +207,17 @@ class _ResultDialogState extends State<ResultDialog> {
                     Wrap(
                       spacing: 4,
                       runSpacing: 4,
-                      children: winningNumbers
-                          .map(
-                            (n) => ResultNumberBox(
-                              number: n,
-                              isSelected: spots.contains(n),
-                              isCatch: spots.contains(n),
-                              isWinningSpot: true,
-                            ),
-                          )
-                          .toList(),
+                      children:
+                          winningNumbers
+                              .map(
+                                (n) => ResultNumberBox(
+                                  number: n,
+                                  isSelected: spots.contains(n),
+                                  isCatch: spots.contains(n),
+                                  isWinningSpot: true,
+                                ),
+                              )
+                              .toList(),
                     ),
                   ],
                 );
@@ -235,22 +236,20 @@ class _ResultDialogState extends State<ResultDialog> {
   }
 }
 
-void showResultDialog(BuildContext context, List<TicketBloc> tickets) {
+void showResultDialog(
+  BuildContext context,
+  List<TicketBloc> tickets,
+  double totalAmountWon,
+) {
   if (tickets.isEmpty) {
     return;
-  }
-
-  double totalAmountWon = 0;
-  for (final ticket in tickets) {
-    totalAmountWon += ticket.state.payout ?? 0.0;
   }
 
   showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (context) => ResultDialog(
-      tickets: tickets,
-      totalAmountWon: totalAmountWon,
-    ),
+    builder:
+        (context) =>
+            ResultDialog(tickets: tickets, totalAmountWon: totalAmountWon),
   );
 }

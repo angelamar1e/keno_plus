@@ -12,15 +12,18 @@ import 'package:keno_plus/features/game_history/presentation/game_history_bloc/g
 import 'package:keno_plus/features/gameplay/presentation/ticket_bloc/ticket_event.dart';
 import 'package:keno_plus/features/gameplay/presentation/wager_bloc/wager_bloc.dart';
 import 'package:keno_plus/features/gameplay/presentation/widgets/gameplay_widgets/result_dialog.dart';
+import 'package:keno_plus/features/wallet/presentation/bloc/wallet_bloc.dart';
 
 class PlayButton extends StatelessWidget {
   const PlayButton({
     super.key,
     required this.ticketBlocInstances,
+    required this.numberOfTickets,
     required this.gameMode,
   });
 
   final List<TicketBloc> ticketBlocInstances;
+  final int numberOfTickets;
   final GameMode gameMode;
 
   @override
@@ -41,6 +44,7 @@ class PlayButton extends StatelessWidget {
         BlocProvider<AuthenticationBloc>(
           create: (context) => sl<AuthenticationBloc>(),
         ),
+        BlocProvider<WalletBloc>(create: (context) => sl<WalletBloc>()),
       ],
       child: Builder(
         builder: (context) {
@@ -87,7 +91,27 @@ class PlayButton extends StatelessWidget {
                       // Wait for all tickets to complete calculations before showing dialog
                       Future.delayed(const Duration(milliseconds: 500), () {
                         if (context.mounted) {
-                          showResultDialog(context, ticketBlocInstances);
+                          double totalAmountWon = 0;
+
+                          for (final ticket in ticketBlocInstances) {
+                            totalAmountWon += ticket.state.payout ?? 0.0;
+                          }
+
+                          context.read<WalletBloc>().add(
+                            DecreaseBalance(wager * numberOfTickets),
+                          );
+
+                          if (totalAmountWon > 0) {
+                            context.read<WalletBloc>().add(
+                              IncreaseBalance(totalAmountWon),
+                            );
+                          }
+
+                          showResultDialog(
+                            context,
+                            ticketBlocInstances,
+                            totalAmountWon,
+                          );
                         }
                       });
                     },
