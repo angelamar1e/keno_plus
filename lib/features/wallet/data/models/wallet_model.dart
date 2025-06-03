@@ -13,4 +13,8 @@ class WalletModel extends WalletEntity {
       balance: (map['balance'] as num).toDouble(),
     );
   }
+
+  factory WalletModel.fromEntity(WalletEntity entity) {
+    return WalletModel(username: entity.username, balance: entity.balance);
+  }
 }
