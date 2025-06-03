@@ -8,6 +8,12 @@ class CreateWallet extends WalletEvent {
   CreateWallet(this.wallet);
 }
 
+class GetBalance extends WalletEvent {
+  String username;
+
+  GetBalance(this.username);
+}
+
 class DecreaseBalance extends WalletEvent {
   double amountToDecrease;
 
