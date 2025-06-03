@@ -6,4 +6,11 @@ class WalletModel extends WalletEntity {
   Map<String, dynamic> toMap() {
     return {'username': username, 'balance': balance};
   }
+
+  factory WalletModel.fromMap(Map<String, dynamic> map) {
+    return WalletModel(
+      username: map['username'] as String,
+      balance: (map['balance'] as num).toDouble(),
+    );
+  }
 }
