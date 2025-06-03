@@ -1,6 +1,6 @@
 class WalletEntity {
   final String username;
-  final String balance;
+  final double balance;
 
   WalletEntity({required this.username, required this.balance});
 }
