@@ -59,7 +59,7 @@ class WagerControls extends StatelessWidget {
                   ),
                 ],
               ),
-              KenoVerticalSpacer(spacer: 4.0),
+              KenoVerticalSpacer(spacer: 8.0),
               KenoText(
                 text: AppStrings.wagerMultiplierLabel,
                 color: AppColors.white,

@@ -13,23 +13,21 @@ class AutoPickButton extends StatelessWidget {
 
   final TicketBloc ticketBlocInstance;
   final GameMode gameMode;
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: ticketBlocInstance, // Provide the passed TicketBloc instance
+      value: ticketBlocInstance,
       child: BlocBuilder<TicketBloc, TicketState>(
         builder: (context, state) {
-          return IconButton(
+          return KenoIconButton(
+            icon: Icons.casino_rounded,
             onPressed: () {
               context.read<TicketBloc>().add(
                 AutoPickSpots(largestNumber: gameMode.numbersCount),
               );
             },
-            icon: const Icon(Icons.casino_rounded),
-            iconSize: 32,
-            splashRadius: 32,
-            color: AppColors.secondary,
+            iconSize: 42.0,
+            iconColor: AppColors.secondary,
           );
         },
       ),

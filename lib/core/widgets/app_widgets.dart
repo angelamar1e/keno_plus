@@ -2,7 +2,7 @@ import 'package:keno_plus/core/router/app_routes.dart';
 import 'package:keno_plus/core/values/app_imports.dart';
 
 /// A collection of common widgets used throughout the Keno Plus app.
-/// These widgets provide consistent styling and behavior.
+/// These widgets provide consistent styling and behavior
 
 /// Main layout for app screens with background and content.
 class KenoMainLayout extends StatelessWidget {
@@ -19,14 +19,31 @@ class KenoMainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        background ?? const KenoMainBackground(),
-        Scaffold(
-          appBar: AppBar(title: topBar, backgroundColor: AppColors.transparent),
-          body: SafeArea(child: content),
-        ),
-      ],
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          background ?? const KenoMainBackground(),
+          Column(
+            children: [
+              if (topBar != null) ...[
+                SafeArea(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: topBar,
+                  ),
+                ),
+              ],
+              Expanded(
+                child: SafeArea(
+                  top: topBar == null, // Only apply top SafeArea if no topBar
+                  child: content,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -183,6 +200,75 @@ class KenoButton extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Icon button with consistent theming and styling.
+///
+/// Features:
+/// - Theme-aware defaults
+/// - Customizable icon, size, and colors
+/// - Press effects with splash radius
+/// - Disabled state handling
+class KenoIconButton extends StatelessWidget {
+  // Content
+  final IconData icon;
+
+  // Event handling
+  final VoidCallback? onPressed;
+
+  // Styling
+  final double? iconSize;
+  final Color? iconColor;
+
+  // Effects
+  final bool isGlow;
+  final Color? glowColor;
+
+  const KenoIconButton({
+    super.key,
+    required this.icon,
+    this.onPressed,
+    this.iconSize,
+    this.iconColor,
+    this.isGlow = false,
+    this.glowColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Get theme colors for defaults
+    final theme = Theme.of(context);
+    final defaultIconColor = iconColor ?? theme.colorScheme.secondary;
+    final defaultGlowColor = glowColor ?? theme.colorScheme.onPrimary;
+
+    // Define disabled colors
+    final disabledIconColor = defaultIconColor.withOpacity(0.5);
+
+    return Container(
+      decoration:
+          isGlow
+              ? BoxDecoration(
+                borderRadius: BorderRadius.circular(24.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: defaultGlowColor.withOpacity(0.3),
+                    blurRadius: 8.0,
+                    spreadRadius: 1.0,
+                    offset: Offset.zero,
+                  ),
+                ],
+              )
+              : null,
+      child: IconButton(
+        onPressed: onPressed,
+        icon: Icon(icon),
+        iconSize: iconSize ?? 32.0,
+        splashRadius: 32.0,
+        padding: const EdgeInsets.all(8.0),
+        color: onPressed != null ? defaultIconColor : disabledIconColor,
       ),
     );
   }

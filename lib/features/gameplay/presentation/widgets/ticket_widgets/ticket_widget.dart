@@ -32,29 +32,24 @@ class TicketWidget extends StatelessWidget {
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            clipBehavior: Clip.none, // Remove clipping that adds spacing
+            clipBehavior: Clip.none,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: gameMode.columns,
-              mainAxisSpacing: 1.0,
-              crossAxisSpacing: 1.0,
+              mainAxisSpacing: 8.0,
+              crossAxisSpacing: 8.0,
               childAspectRatio: 1.0,
             ),
             itemCount: numbersCount,
             itemBuilder: (context, index) {
               final number = index + 1;
-              return Container(
-                margin: const EdgeInsets.all(
-                  2.0,
-                ),
-                child: NumberBox(
-                  number: number,
-                  isWinningSpot: winningSpots.contains(number),
-                  isMatch: catches.contains(number),
-                  isSelected: spots.contains(number),
-                  onTap: () {
-                    bloc.add(SpotsChanged(spot: number, maxSpots: maxSpots));
-                  },
-                ),
+              return NumberBox(
+                number: number,
+                isWinningSpot: winningSpots.contains(number),
+                isMatch: catches.contains(number),
+                isSelected: spots.contains(number),
+                onTap: () {
+                  bloc.add(SpotsChanged(spot: number, maxSpots: maxSpots));
+                },
               );
             },
           );

@@ -41,26 +41,7 @@ class AutoPickNumberSlider extends StatelessWidget {
               Expanded(
                 // Wrap slider in Expanded to make it take remaining space
                 child: SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    // Styling remains the same
-                    activeTrackColor: AppColors.tertiary,
-                    inactiveTrackColor: AppColors.white.withOpacity(0.3),
-                    thumbColor: AppColors.secondary,
-                    overlayColor: AppColors.secondary.withOpacity(0.2),
-                    valueIndicatorColor: AppColors.secondary,
-                    valueIndicatorTextStyle: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    activeTickMarkColor: AppColors.secondary,
-                    inactiveTickMarkColor: AppColors.white.withOpacity(0.5),
-                    thumbShape: const RoundSliderThumbShape(
-                      enabledThumbRadius: 12.0,
-                    ),
-                    overlayShape: const RoundSliderOverlayShape(
-                      overlayRadius: 20.0,
-                    ),
-                  ),
+                  data: AppTheme.sliderTheme,
                   child: Slider(
                     value: numberOfSpots.toDouble(),
                     min: 0.0,

@@ -346,4 +346,32 @@ class AppTheme {
       child: child!,
     );
   }
+
+  /// Slider theme data for consistent slider styling
+  static SliderThemeData get sliderTheme {
+    return SliderThemeData(
+      // Track colors
+      activeTrackColor: AppColors.tertiary,
+      inactiveTrackColor: AppColors.white.withOpacity(0.3),
+
+      // Thumb styling
+      thumbColor: AppColors.secondary,
+      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12.0),
+
+      // Overlay styling
+      overlayColor: AppColors.secondary.withOpacity(0.2),
+      overlayShape: const RoundSliderOverlayShape(overlayRadius: 20.0),
+
+      // Value indicator styling
+      valueIndicatorColor: AppColors.secondary,
+      valueIndicatorTextStyle: const TextStyle(
+        color: AppColors.primary,
+        fontWeight: FontWeight.bold,
+      ),
+
+      // Tick mark colors
+      activeTickMarkColor: AppColors.secondary,
+      inactiveTickMarkColor: AppColors.white.withOpacity(0.5),
+    );
+  }
 }
