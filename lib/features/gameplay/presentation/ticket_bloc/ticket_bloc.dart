@@ -105,7 +105,7 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
       TicketModel(
         id: null,
         gameHistoryId: event.gameHistoryId,
-        winningNumbers: jsonEncode(randomWinningSpots),
+        winningNumbers: jsonEncode(randomWinningSpots.toList()),
         spots: jsonEncode(state.spots),
         catches: jsonEncode(catches),
         payout: payout,
@@ -114,7 +114,7 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
 
     emit(
       state.copyWith(
-        winningSpots: randomWinningSpots,
+        winningSpots: randomWinningSpots.toList(),
         catches: catches,
         payout: payout,
         isCalculating: false,
